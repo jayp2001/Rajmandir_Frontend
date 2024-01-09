@@ -54,6 +54,7 @@ function ProductDetails() {
     const [stockOutData, setStockOutData] = React.useState();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [suppiler, setSuppilerList] = React.useState();
+    const [unitPreference, setUnitPreference] = React.useState();
     const [stockInData, setStockInData] = React.useState();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -113,7 +114,7 @@ function ProductDetails() {
         productId: id,
         productQty: 0,
         productUnit: unit,
-        stockOutCategory: 0,
+        stockOutCategory: 'Regular',
         stockOutComment: "",
         reason: "",
         stockOutDate: dayjs()
@@ -213,9 +214,11 @@ function ProductDetails() {
             reason: '',
             productQty: 0,
             productUnit: unit,
-            stockOutCategory: null,
+            stockOutCategory: 'Regular',
             stockOutComment: "",
-            stockOutDate: dayjs()
+            stockOutDate: dayjs(),
+            remainingStock: statisticsCount && statisticsCount.remainingStock ? statisticsCount.remainingStock : 0,
+            remainingStockArray: statisticsCount && statisticsCount.allUnitConversation ? statisticsCount.allUnitConversation : []
         })
         setStockOutFormDataError({
             productQty: false,
@@ -234,6 +237,16 @@ function ProductDetails() {
                 setSuppilerList(['No Data'])
             })
     }
+    const getUnitPreferenceById = async (id) => {
+        await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getUnitPreferenceById?productId=${id}`, config)
+            .then((res) => {
+                setUnitPreference(res.data);
+                console.log('Length', res.data, Math.ceil(res.data.length / 2))
+            })
+            .catch((error) => {
+                setError(error.response ? error.response.data : "Network Error ...!!!")
+            })
+    }
     const handleStockInDate = (date) => {
         console.log("stockIn", date, date && date['$d'] ? date['$d'] : null)
         setStockInFormData((prevState) => ({
@@ -248,29 +261,29 @@ function ProductDetails() {
         }))
     };
     const onChangeStockOut = (e) => {
-        if (e.target.name === 'productQty') {
-            if (e.target.value > (isEdit ? stockOutFormData.stockRemaining : statisticsCount?.remainingStock)) {
-                setStockOutFormDataError((perv) => ({
-                    ...perv,
-                    [e.target.name]: true
-                }))
-            }
-            else {
-                setStockOutFormDataError((perv) => ({
-                    ...perv,
-                    [e.target.name]: false
-                }))
-            }
-            setStockOutFormData((prevState) => ({
-                ...prevState,
-                [e.target.name]: e.target.value,
-            }))
-        } else {
-            setStockOutFormData((prevState) => ({
-                ...prevState,
-                [e.target.name]: e.target.value,
-            }))
-        }
+        // if (e.target.name === 'productQty') {
+        //     if (e.target.value > (isEdit ? stockOutFormData.stockRemaining : statisticsCount?.remainingStock)) {
+        //         setStockOutFormDataError((perv) => ({
+        //             ...perv,
+        //             [e.target.name]: true
+        //         }))
+        //     }
+        //     else {
+        //         setStockOutFormDataError((perv) => ({
+        //             ...perv,
+        //             [e.target.name]: false
+        //         }))
+        //     }
+        //     setStockOutFormData((prevState) => ({
+        //         ...prevState,
+        //         [e.target.name]: e.target.value,
+        //     }))
+        // } else {
+        setStockOutFormData((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.value,
+        }))
+        // }
     }
     const submitStockIn = () => {
         console.log('submitStockIn')
@@ -647,6 +660,11 @@ function ProductDetails() {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getProductCountDetailsById?productId=${id}`, config)
             .then((res) => {
                 setStatisticsCounts(res.data);
+                setStockOutFormData((perv) => ({
+                    ...perv,
+                    remainingStock: res.data.remainingStock,
+                    remainingStockArray: res.data.allUnitConversation
+                }))
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -656,6 +674,11 @@ function ProductDetails() {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getProductCountDetailsById?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productId=${id}`, config)
             .then((res) => {
                 setStatisticsCounts(res.data);
+                setStockOutFormData((perv) => ({
+                    ...perv,
+                    remainingStock: res.data.remainingStock,
+                    remainingStockArray: res.data.allUnitConversation
+                }))
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -726,10 +749,12 @@ function ProductDetails() {
             productId: id,
             productQty: 0,
             productUnit: unit,
-            stockOutCategory: 0,
+            stockOutCategory: 'Regular',
             stockOutComment: "",
             reason: "",
-            stockOutDate: dayjs()
+            stockOutDate: dayjs(),
+            remainingStock: statisticsCount && statisticsCount.remainingStock ? statisticsCount.remainingStock : 0,
+            remainingStockArray: statisticsCount && statisticsCount.allUnitConversation ? statisticsCount.allUnitConversation : []
         });
         setStockOutFormDataError({
             productQty: false,
@@ -780,7 +805,9 @@ function ProductDetails() {
                     stockOutCategory: res.data.stockOutCategory,
                     stockOutComment: res.data.stockOutComment,
                     stockRemaining: statisticsCount.remainingStock + res.data.productQty,
-                    stockOutDate: dayjs(res.data.stockOutDate)
+                    stockOutDate: dayjs(res.data.stockOutDate),
+                    remainingStock: statisticsCount.remainingStock,
+                    remainingStockArray: statisticsCount.allUnitConversation
                 }))
             })
             .catch((error) => {
@@ -931,6 +958,7 @@ function ProductDetails() {
         getStatistics();
         getCategoryNameAndCount();
         getSuppilerNameAndCount();
+        getUnitPreferenceById(id);
         // getCountData();
     }, [])
 
@@ -1092,55 +1120,90 @@ function ProductDetails() {
                     {tab === 1 || tab === '1' ?
                         <div className='grid gap-4 mt-12'>
                             <div className='grid grid-cols-12 gap-6'>
-                                <div className='col-span-3'>
+                                <div className='col-span-7'>
+                                    <CountCard color={'orange'} count={statisticsCount && statisticsCount.remainingStock ? statisticsCount.remainingStock : 0} desc={'Remaining Stock'} productDetail={true} unitDesc={unit} />
+                                </div> <div className='col-span-5'>
+                                    <CountCard color={'orange'} count={statisticsCount && statisticsCount.remainUsedPrice ? statisticsCount.remainUsedPrice : 0} desc={'Remaining Value'} productDetail={true} unitDesc={0} />
+                                </div>
+                                <div className='col-span-7'>
                                     <CountCard color={'black'} count={statisticsCount && statisticsCount.totalPurchase ? statisticsCount.totalPurchase : 0} desc={'Total Purchase'} productDetail={true} unitDesc={unit} />
                                 </div>
-                                <div className='col-span-3'>
+                                <div className='col-span-5'>
                                     <CountCard color={'pink'} count={statisticsCount && statisticsCount.totalRs ? statisticsCount.totalRs : 0} desc={'Total Cost'} productDetail={true} unitDesc={0} />
-                                </div>
-                                <div className='col-span-3'>
-                                    <CountCard color={'blue'} count={statisticsCount && statisticsCount.totalUsed ? statisticsCount.totalUsed : 0} desc={'Total Used'} productDetail={true} unitDesc={unit} />
-                                </div>
-                                <div className='col-span-3'>
-                                    <CountCard color={'blue'} count={statisticsCount && statisticsCount.totalUsedPrice ? statisticsCount.totalUsedPrice : 0} desc={'Used Value'} productDetail={true} unitDesc={0} />
                                 </div>
                             </div>
                             <div className='grid grid-cols-12 gap-6'>
-                                <div className='col-span-3'>
-                                    <CountCard color={'orange'} count={statisticsCount && statisticsCount.remainingStock ? statisticsCount.remainingStock : 0} desc={'Remaining Stock'} productDetail={true} unitDesc={unit} />
-                                </div> <div className='col-span-3'>
-                                    <CountCard color={'orange'} count={statisticsCount && statisticsCount.remainUsedPrice ? statisticsCount.remainUsedPrice : 0} desc={'Remaining Value'} productDetail={true} unitDesc={0} />
+                                <div className='col-span-7'>
+                                    <CountCard color={'blue'} count={statisticsCount && statisticsCount.totalUsed ? statisticsCount.totalUsed : 0} desc={'Total Used'} productDetail={true} unitDesc={unit} />
                                 </div>
-                                <div className='col-span-3'>
-                                    <CountCard color={'green'} count={statisticsCount && statisticsCount.lastPrice ? statisticsCount.lastPrice : 0} desc={'Last Purchase Price'} productDetail={true} unitDesc={0} />
+                                <div className='col-span-5'>
+                                    <CountCard color={'blue'} count={statisticsCount && statisticsCount.totalUsedPrice ? statisticsCount.totalUsedPrice : 0} desc={'Used Value'} productDetail={true} unitDesc={0} />
                                 </div>
-                                <div className='col-span-3'>
-                                    <CountCard color={'yellow'} count={statisticsCount && statisticsCount.minProductQty ? statisticsCount.minProductQty : 0} desc={'Min Product Qty'} productDetail={true} unitDesc={unit} />
+                            </div>
+                            <div className='w-full flex gap-6'>
+                                <div className='grid grid-cols-12 w-1/2 gap-6'>
+                                    <div className='col-span-12'>
+                                        <CountCard color={'green'} count={statisticsCount && statisticsCount.lastPrice ? statisticsCount.lastPrice : 0} desc={'Last Purchase Price'} productDetail={true} unitDesc={0} />
+                                    </div>
+                                    <div className='col-span-12'>
+                                        <CountCard color={'yellow'} count={statisticsCount && statisticsCount.minProductQty ? statisticsCount.minProductQty : 0} desc={'Min Product Qty'} productDetail={true} unitDesc={unit} />
+                                    </div>
                                 </div>
-                                {/* <div className='col-span-3'>
-                                    <CountCard color={'green'} count={statisticsCount && statisticsCount.totalBusinessOfCash ? statisticsCount.totalBusinessOfCash : 0} desc={'Total Cash'} />
+                                <div className='w-1/2'>
+                                    {/* <div className={`unitCard grid-flow-col grid ${unitPreference && unitPreference.json1 && unitPreference.json1.length ? `grid-rows-${Math.ceil(unitPreference.json1.length / 2)}` : ''} `} key={'1x'}>
+                                        {unitPreference && unitPreference.json1?.map((data, index) => (
+                                            <div key={`units${index}`}>
+                                                {data.preference}
+                                            </div>
+                                        ))
+                                        }
+                                    </div>
+                                    <div className={`unitCard mt-4 grid ${unitPreference && unitPreference.json2 && unitPreference.json2.length ? `grid-rows-${Math.ceil(unitPreference.json2.length / 2)}` : ''} grid-flow-col`} key={'2x'}>
+                                        {unitPreference && unitPreference.json2?.map((data, index) => (
+                                            <div key={`unitBase${index}`}>
+                                                {data.preference}
+                                            </div>
+                                        ))
+                                        }
+                                    </div> */}
+                                    {unitPreference && unitPreference.json2 && unitPreference.json2.length > 0 ? <>
+                                        <div className=' unitCard grid grid-cols-2'>
+                                            {unitPreference && unitPreference.json1?.map((data, index) => (
+                                                <div key={`units${index}`}>
+                                                    {data.preference}
+                                                </div>
+                                            ))
+                                            }
+                                        </div>
+                                        <div className='unitCard mt-4 grid grid-cols-2'>
+                                            {unitPreference && unitPreference.json2?.map((data, index) => (
+                                                <div key={`unitBase${index}`}>
+                                                    {data.preference}
+                                                </div>
+                                            ))
+                                            }
+                                        </div></>
+                                        : <></>
+                                    }
                                 </div>
-                                <div className='col-span-3'>
-                                    <CountCard color={'yellow'} count={statisticsCount && statisticsCount.totalProduct ? statisticsCount.totalProduct : 0} desc={'Total Product'} />
-                                </div> */}
                             </div>
                         </div> :
                         tab === 2 || tab === '2' ?
                             <div className='grid gap-4 mt-12' style={{ minHeight: '216px', maxHeight: '216px', overflowY: 'scroll' }}>
-                                <div className='grid grid-cols-3 gap-6 pb-3'>
+                                <div className='grid grid-cols-1 pb-3'>
                                     {
                                         suppilerNameAndCount && suppilerNameAndCount?.map((row, index) => (
-                                            <ProductQtyCountCard productQtyUnit={unit} productQty={row.Quantity} productPrice={row.expense} productName={row.supplierNickName} index={index} />
+                                            <ProductQtyCountCard productQtyUnit={unit} productQty={row.remainingStock} productPrice={row.expense} productName={row.supplierNickName} index={index} />
                                         ))
                                     }
                                 </div>
                             </div>
                             :
                             <div className='grid gap-4 mt-12' style={{ minHeight: '216px', maxHeight: '332px', overflowY: 'scroll' }}>
-                                <div className='grid grid-cols-3 gap-6 pb-3'>
+                                <div className='grid grid-cols-1 gap-3 pb-3'>
                                     {
                                         categoryNameAndCount && categoryNameAndCount?.map((row, index) => (
-                                            <ProductQtyCountCard productQtyUnit={unit} productQty={row.usedQty} productPrice={row.usedPrice} productName={row.stockOutCategoryName} index={index} />
+                                            <ProductQtyCountCard productQtyUnit={unit} productQty={row.remainingStock} productPrice={row.usedPrice} productName={row.stockOutCategoryName} index={index} />
                                         ))
                                     }
                                 </div>
@@ -1205,6 +1268,19 @@ function ProductDetails() {
                     </AccordionSummary>
                     <AccordionDetails>
                         <div className='stockInOutContainer'>
+                            {tabStockInOut === '2' || tabStockInOut === 2 ? <>
+                                <hr className='mb-3' />
+                                <div className='grid gap-6 grid-cols-12'>
+                                    {
+                                        stockOutFormData.remainingStockArray ? stockOutFormData.remainingStockArray?.map((row, index) => (
+                                            <div className='col-span-2 unitName'>
+                                                {row.unitName} : {row.value}
+                                            </div>
+                                        )) : <></>
+                                    }
+                                </div>
+                                <hr className='mt-3 mb-8' />
+                            </> : <></>}
                             {tabStockInOut === '1' || tabStockInOut === 1 ?
                                 <div className='mt-6 grid grid-cols-12 gap-6'>
                                     <div className='col-span-3'>
@@ -1241,7 +1317,7 @@ function ProductDetails() {
                                             fullWidth
                                             onChange={onChangeStockIn}
                                             disabled={isEdit ? stockInFormData.isFullEdit ? false : true : false}
-                                            value={stockInFormData.productQty}
+                                            value={stockInFormData.productQty ? stockInFormData.productQty : 0}
                                             error={stockInFormDataError.productQty}
                                             helperText={stockInFormDataError.productQty ? "Enter Qty" : ''}
                                             name="productQty"
@@ -1458,7 +1534,7 @@ function ProductDetails() {
                                     <div className='col-span-2'>
                                         <TextField
                                             onBlur={(e) => {
-                                                if (e.target.value < 0 || (isEdit ? e.target.value > stockOutFormData.stockRemaining : e.target.value > statisticsCount?.remainingStock)) {
+                                                if (e.target.value <= 0) {
                                                     setStockOutFormDataError((perv) => ({
                                                         ...perv,
                                                         productQty: true
@@ -1475,7 +1551,7 @@ function ProductDetails() {
                                             label="Qty"
                                             fullWidth
                                             onChange={onChangeStockOut}
-                                            value={stockOutFormData.productQty}
+                                            value={stockOutFormData.productQty ? stockOutFormData.productQty : 0}
                                             error={stockOutFormDataError.productQty}
                                             helperText={stockOutFormDataError.productQty ? 'Please enter Qty' : ''}
                                             name="productQty"
@@ -1526,7 +1602,7 @@ function ProductDetails() {
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
-                                                value={stockOutFormData.stockOutCategory}
+                                                value={stockOutFormData.stockOutCategory ? stockOutFormData.stockOutCategory : ''}
                                                 error={stockOutFormDataError.stockOutCategory}
                                                 name="stockOutCategory"
                                                 label="Category"

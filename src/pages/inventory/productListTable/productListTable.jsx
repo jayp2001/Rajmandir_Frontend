@@ -8,7 +8,9 @@ import axios from 'axios';
 // import ProductCard from './component/productCard/productCard';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import Typography from '@mui/material/Typography';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import CloseIcon from '@mui/icons-material/Close';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -64,7 +66,7 @@ const styleStockIn = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 900,
+    width: 1000,
     bgcolor: 'background.paper',
     boxShadow: 24,
     paddingLeft: '20px',
@@ -135,6 +137,7 @@ function ProductListTable() {
         'cartoon',
     ])
     const [searchWord, setSearchWord] = React.useState('');
+    const [openViewDetail, setOpenViewDetail] = React.useState(false);
     const [filter, setFilter] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [unitConversation, setUnitConversation] = React.useState([]);
@@ -145,6 +148,7 @@ function ProductListTable() {
     const [totalRowsOut, setTotalRowsOut] = React.useState(0);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const navigate = useNavigate();
+    const [viewData, setViewData] = React.useState({});
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
@@ -192,7 +196,7 @@ function ProductListTable() {
         productId: "",
         productQty: 0,
         productUnit: "",
-        stockOutCategory: 0,
+        stockOutCategory: 'Regular',
         stockOutComment: "",
         stockOutDate: dayjs()
     })
@@ -278,6 +282,10 @@ function ProductListTable() {
             .catch((error) => {
                 setCategories(['No Data'])
             })
+    }
+    const handleCloseViewDatail = () => {
+        setOpenViewDetail(false);
+        setViewData({});
     }
     const onChange = (e) => {
         console.log('unitConversation', unitConversation)
@@ -491,7 +499,7 @@ function ProductListTable() {
             productId: "",
             productQty: 0,
             productUnit: "",
-            stockOutCategory: 0,
+            stockOutCategory: 'Regular',
             stockOutComment: "",
             stockOutDate: dayjs()
         })
@@ -509,6 +517,10 @@ function ProductListTable() {
             ["stockOutDate"]: date && date['$d'] ? date['$d'] : null,
         }))
     };
+    const handleOpenViewDetail = (data) => {
+        setOpenViewDetail(true);
+        setViewData(data)
+    }
     const getAllData = async () => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getProductDetailsTable?productStatus=${tab}&page=${1}&numPerPage=${10}`, config)
             .then((res) => {
@@ -551,6 +563,15 @@ function ProductListTable() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
+    const autoStockOut = async () => {
+        await axios.get(`${BACKEND_BASE_URL}inventoryrouter/addAutoStoctOutDetails`, config)
+            .then((res) => {
+                console.log('success')
+            })
+            .catch((error) => {
+                console.log(error.response ? error.response.data : "Network Error ...!!!")
+            })
+    }
     const deleteData = async (id) => {
         await axios.delete(`${BACKEND_BASE_URL}inventoryrouter/removeProduct?productId=${id}`, config)
             .then((res) => {
@@ -578,6 +599,7 @@ function ProductListTable() {
         getAllData();
         getMainCategory();
         getCountData();
+        autoStockOut();
     }, [])
     const handleDeleteProduct = (id) => {
         if (window.confirm("Are you sure you want to delete Product?")) {
@@ -710,7 +732,7 @@ function ProductListTable() {
         } else {
             const isValidate = fields.filter(element => {
                 if (element === 'isExpired') {
-                    if (formData.isExpired && (!formData.expiredDays < 0)) {
+                    if (formData.isExpired && (formData.expiredDays <= 0 || !formData.expiredDays)) {
                         setFormDataError((perv) => ({
                             ...perv,
                             expiredDays: true
@@ -791,7 +813,7 @@ function ProductListTable() {
         } else {
             const isValidate = fields.filter(element => {
                 if (element === 'isExpired') {
-                    if (formData.isExpired && (!formData.expiredDays < 0)) {
+                    if (formData.isExpired && (formData.expiredDays <= 0 || !formData.expiredDays)) {
                         setFormDataError((perv) => ({
                             ...perv,
                             expiredDays: true
@@ -895,9 +917,21 @@ function ProductListTable() {
             .then((res) => {
                 const { priorityArray, ...updatedData } = res.data;
                 const transformedArray = priorityArray.map(() => ({ unitNumber: false }));
+
+
+                // let qtySmall = qtyUnit.filter((data) => (data !== e.target.value));
+                // console.log('leftArray', qtySmall)
+                const elementsToRemove = res.data && res.data.unitArr ? res.data.unitArr : []
+                const qtySmall = units.filter(item => !elementsToRemove.includes(item));
+                setQtyUnit(qtySmall)
+
+                setFormData({
+                    ...updatedData,
+                    smallUnitName: res.data && res.data.unitArr ? res.data.unitArr[res.data.unitArr.length - 1] : '',
+                })
+
                 setUnitConversation(res.data.priorityArray);
                 setUnitConversationError(transformedArray);
-                setFormData(updatedData);
                 setOpenM(true);
                 setIsEdit(true);
             })
@@ -1261,11 +1295,11 @@ function ProductListTable() {
                                                 <TableCell >No.</TableCell>
                                                 <TableCell>Product Name</TableCell>
                                                 <TableCell align="left">Remaining Stock</TableCell>
-                                                <TableCell align="left">Last StockedIn</TableCell>
-                                                <TableCell align="left">Last Price</TableCell>
+                                                {/* <TableCell align="left">Last StockedIn</TableCell> */}
+                                                {/* <TableCell align="left">Last Price</TableCell> */}
                                                 <TableCell align="left">Min. Product Qty</TableCell>
                                                 <TableCell align="left">Status</TableCell>
-                                                <TableCell align="left">LastIn Date</TableCell>
+                                                {/* <TableCell align="left">LastIn Date</TableCell> */}
                                                 <TableCell align="left"></TableCell>
                                             </TableRow>
                                         </TableHead>
@@ -1286,11 +1320,11 @@ function ProductListTable() {
                                                         </TableCell>
                                                         {/* </Tooltip> */}
                                                         <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{row.remainingStock}</TableCell>
-                                                        <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{row.lastUpdatedQty}</TableCell>
-                                                        <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{parseFloat(row.lastPrice ? row.lastPrice : 0).toLocaleString('en-IN')}</TableCell>
+                                                        {/* <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{row.lastUpdatedQty}</TableCell> */}
+                                                        {/* <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{parseFloat(row.lastPrice ? row.lastPrice : 0).toLocaleString('en-IN')}</TableCell> */}
                                                         <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{row.minProductQty}</TableCell>
-                                                        <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}><div className={row.remainingStock >= row.minProductQty ? 'greenStatus' : row.remainingStock < row.minProductQty && row.remainingStock !== 0 ? 'orangeStatus' : 'redStatus'}>{row.stockStatus}</div></TableCell>
-                                                        <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{row.lastUpdatedStockInDate}</TableCell>
+                                                        <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}><div className={row.stockStatus == 'In-Stock' ? 'greenStatus' : row.stockStatus == 'Low-Stock' ? 'orangeStatus' : 'redStatus'}>{row.stockStatus}</div></TableCell>
+                                                        {/* <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{row.lastUpdatedStockInDate}</TableCell> */}
                                                         <TableCell align="right">
                                                             <Menutemp productId={row.productId} data={row} handleOpenStockOut={handleOpenStockOut} handleOpenStockIn={handleOpenStockIn} handleDeleteProduct={handleDeleteProduct} handleEditClick={handleEditClick} />
                                                         </TableCell>
@@ -1324,14 +1358,14 @@ function ProductListTable() {
                                                 <TableCell>No.</TableCell>
                                                 <TableCell>Product Name</TableCell>
                                                 <TableCell align="left">Total StockIn</TableCell>
-                                                <TableCell align="left">Total Expense</TableCell>
+                                                {/* <TableCell align="left">Total Expense</TableCell> */}
                                                 <TableCell align="left">Total Used</TableCell>
-                                                <TableCell align="left">Value of used</TableCell>
+                                                {/* <TableCell align="left">Value of used</TableCell> */}
                                                 <TableCell align="left">Remaining Stock</TableCell>
-                                                <TableCell align="left">Value of Remaining</TableCell>
-                                                <TableCell align="left">Min ProductQty</TableCell>
-                                                <TableCell align="center">Status</TableCell>
-                                                <TableCell align="left">LastIn Date</TableCell>
+                                                {/* <TableCell align="left">Value of Remaining</TableCell> */}
+                                                {/* <TableCell align="left">Min ProductQty</TableCell> */}
+                                                <TableCell align="start">Status</TableCell>
+                                                {/* <TableCell align="left">LastIn Date</TableCell> */}
                                                 <TableCell align="left"></TableCell>
                                             </TableRow>
                                         </TableHead>
@@ -1345,23 +1379,23 @@ function ProductListTable() {
                                                         style={{ cursor: "pointer" }}
                                                         className='tableRow'
                                                     >
-                                                        <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{(index + 1) + (page * rowsPerPage)}</TableCell>
+                                                        <TableCell align="left" onClick={() => handleOpenViewDetail(row)}>{(index + 1) + (page * rowsPerPage)}</TableCell>
                                                         {/* <Tooltip title={row.productName} placement="top-start" arrow> */}
-                                                        <TableCell component="th" scope="row" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>
+                                                        <TableCell component="th" scope="row" onClick={() => handleOpenViewDetail(row)}>
                                                             {row.productName}
                                                         </TableCell>
                                                         {/* </Tooltip> */}
                                                         <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{row.purchese} </TableCell>
-                                                        <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{parseFloat(row.totalExpense ? row.totalExpense : 0).toLocaleString('en-IN')}</TableCell>
+                                                        {/* <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{parseFloat(row.totalExpense ? row.totalExpense : 0).toLocaleString('en-IN')}</TableCell> */}
                                                         {/* <Tooltip title={row.stockOutComment} placement="top-start" arrow> */}
                                                         <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}><div className='Comment'>{row.totalUsed} </div></TableCell>
-                                                        <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{parseFloat(row.totalStockOutPrice ? row.totalStockOutPrice : 0).toLocaleString('en-IN')}</TableCell>
+                                                        {/* <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{parseFloat(row.totalStockOutPrice ? row.totalStockOutPrice : 0).toLocaleString('en-IN')}</TableCell> */}
                                                         {/* </Tooltip> */}
                                                         <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{row.remainingStock} </TableCell>
-                                                        <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{parseFloat(row.remainPrice ? row.remainPrice : 0).toLocaleString('en-IN')}</TableCell>
-                                                        <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{row.minProductQty} </TableCell>
-                                                        <TableCell align="center" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}><div className={row.remainingStock >= row.minProductQty ? 'greenStatus' : row.remainingStock < row.minProductQty && row.remainingStock !== 0 ? 'orangeStatus' : 'redStatus'}>{row.stockStatus}</div></TableCell>
-                                                        <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{row.lastUpdatedStockInDate}</TableCell>
+                                                        {/* <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{parseFloat(row.remainPrice ? row.remainPrice : 0).toLocaleString('en-IN')}</TableCell> */}
+                                                        {/* <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{row.minProductQty} </TableCell> */}
+                                                        <TableCell align="center" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}><div className={row.stockStatus == 'In-Stock' ? 'greenStatus' : row.stockStatus == 'Low-Stock' ? 'orangeStatus' : 'redStatus'}>{row.stockStatus}</div></TableCell>
+                                                        {/* <TableCell align="left" onClick={() => handleViewDetail(row.productId, row.productName, row.minProductUnit, row.remainingStock)}>{row.lastUpdatedStockInDate}</TableCell> */}
                                                         <TableCell align="right">
                                                             <Menutemp productId={row.productId} data={row} handleOpenStockOut={handleOpenStockOut} handleOpenStockIn={handleOpenStockIn} handleDeleteProduct={handleDeleteProduct} handleEditClick={handleEditClick} />
                                                         </TableCell>
@@ -1691,10 +1725,10 @@ function ProductListTable() {
                                             />
                                         </div>
                                         {index + 1 == unitConversation.length &&
-                                            <div className='col-span-2'>
-                                                <button className='addCategoryCancleBtn' onClick={() => {
+                                            <div className='col-span-2 flex'>
+                                                <button className='redDeleteBtn self-center' onClick={() => {
                                                     deleteUnitConvrsation(index);
-                                                }}>Delete</button>
+                                                }}><DeleteForeverIcon fontSize='large' /></button>
                                             </div>
                                         }
                                     </div>
@@ -1704,7 +1738,7 @@ function ProductListTable() {
                     </div>
                     <hr className='mt-6' />
                     <div className='mt-6 grid grid-cols-12 gap-6'>
-                        <div className='col-span-3'>
+                        <div className='col-start-7 col-span-3'>
                             <button className='addCategorySaveBtn' onClick={() => {
                                 isEdit ? submitEdit() : submitAdd()
                             }}>{isEdit ? 'Save' : 'Add'}</button>
@@ -1950,7 +1984,7 @@ function ProductListTable() {
                         </div>
                     </div>
                     <div className='mt-4 grid grid-cols-12 gap-6'>
-                        <div className='col-span-3'>
+                        <div className='col-start-7 col-span-3'>
                             <button className='addCategorySaveBtn' onClick={() => {
                                 submitStockIn()
                             }}>Stock In</button>
@@ -2012,7 +2046,7 @@ function ProductListTable() {
                         <div className='col-span-3'>
                             <TextField
                                 onBlur={(e) => {
-                                    if (e.target.value < 0 || e.target.value > stockOutFormData.remainingStock) {
+                                    if (e.target.value < 0) {
                                         setStockOutFormDataError((perv) => ({
                                             ...perv,
                                             productQty: true
@@ -2143,7 +2177,7 @@ function ProductListTable() {
 
                     </div>
                     <div className='mt-4 grid grid-cols-12 gap-6'>
-                        <div className='col-span-3'>
+                        <div className='col-start-7 col-span-3'>
                             <button className='addCategorySaveBtn' onClick={() => {
                                 submitStockOut()
                             }}>Stock Out</button>
@@ -2152,6 +2186,104 @@ function ProductListTable() {
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleCloseStockOut();
                             }}>Cancle</button>
+                        </div>
+                    </div>
+                </Box >
+            </Modal >
+            <Modal
+                open={openViewDetail}
+                onClose={handleCloseViewDatail}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={styleStockIn}>
+                    <div className='flex justify-between'>
+                        <div className='productNameDetail'>
+                            {viewData.productName}
+                        </div>
+                        <button className='closeBtnModal' onClick={handleCloseViewDatail}><CloseIcon /></button>
+                    </div>
+                    <hr className='mt-3' />
+                    <div className='detailsData grid grid-cols-12 gap-6'>
+                        <div className='col-span-6 grid grid-cols-12'>
+                            <div className='col-span-4 headerNameTxt'>
+                                Min Product Qty :
+                            </div>
+                            <div className='col-span-8'>
+                                {viewData.minProductQty} {viewData.minProductUnit}
+                            </div>
+                        </div>
+                        <div className='col-span-6 grid grid-cols-12'>
+                            <div className='col-span-4 headerNameTxt'>
+                                Lead Time :
+                            </div>
+                            <div className='col-span-8'>
+                                {viewData.leadTime}
+                            </div>
+                        </div>
+                        <div className='col-span-6 grid grid-cols-12'>
+                            <div className='col-span-4 headerNameTxt'>
+                                Last StockIn Price:
+                            </div>
+                            <div className='col-span-8'>
+                                <CurrencyRupeeIcon /> {parseFloat(viewData.lastPrice ? viewData.lastPrice : 0).toLocaleString('en-IN')}
+                            </div>
+                        </div>
+                        <div className='col-span-6 grid grid-cols-12'>
+                            <div className='col-span-4 headerNameTxt'>
+                                Last StockIn At:
+                            </div>
+                            <div className='col-span-8'>
+                                {viewData.lastUpdatedStockInDate}
+                            </div>
+                        </div>
+                        <div className='col-span-6 grid grid-cols-12'>
+                            <div className='col-span-4 headerNameTxt'>
+                                StockIn :
+                            </div>
+                            <div className='col-span-8'>
+                                {viewData.purchese}
+                            </div>
+                        </div>
+                        <div className='col-span-6 grid grid-cols-12'>
+                            <div className='col-span-4 headerNameTxt'>
+                                Cost :
+                            </div>
+                            <div className='col-span-8'>
+                                <CurrencyRupeeIcon /> {parseFloat(viewData.totalExpense ? viewData.totalExpense : 0).toLocaleString('en-IN')}
+                            </div>
+                        </div>
+                        <div className='col-span-6 grid grid-cols-12'>
+                            <div className='col-span-4 headerNameTxt'>
+                                Used :
+                            </div>
+                            <div className='col-span-8'>
+                                {viewData.totalUsed}
+                            </div>
+                        </div>
+                        <div className='col-span-6 grid grid-cols-12'>
+                            <div className='col-span-4 headerNameTxt'>
+                                Cost :
+                            </div>
+                            <div className='col-span-8'>
+                                <CurrencyRupeeIcon /> {parseFloat(viewData.totalStockOutPrice ? viewData.totalStockOutPrice : 0).toLocaleString('en-IN')}
+                            </div>
+                        </div>
+                        <div className='col-span-6 grid grid-cols-12'>
+                            <div className='col-span-4 headerNameTxt'>
+                                Remaining :
+                            </div>
+                            <div className='col-span-8'>
+                                {viewData.remainingStock}
+                            </div>
+                        </div>
+                        <div className='col-span-6 grid grid-cols-12'>
+                            <div className='col-span-4 headerNameTxt'>
+                                Cost :
+                            </div>
+                            <div className='col-span-8'>
+                                <CurrencyRupeeIcon /> {parseFloat(viewData.remainPrice ? viewData.remainPrice : 0).toLocaleString('en-IN')}
+                            </div>
                         </div>
                     </div>
                 </Box >

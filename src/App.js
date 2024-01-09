@@ -28,6 +28,18 @@ import ProductDetailsManager from './pages/inventory/stockOut/productDetailsMana
 import StockOutByCategory from './pages/inventory/categoryDetail/categoryDetail';
 import ProtectedOwnerRoutes from './protectedOwnerRoutes';
 import BranchDashboard from './pages/branschDashboard/branchDashboard';
+import UserTableOwner from './pages/branschDashboard/userTable/userTableBranch';
+import StockOutByCategoryStockIn from './pages/branschDashboard/categoryDetailStockIn/categoryDetailStockIn';
+import SuppilerDetailOwner from './pages/branschDashboard/suppilerDetails/suppilerDetailOwner';
+import ProtectedInOutRoutes from './protactedInOutRoutes';
+import ProductDetailsInOut from './pages/inventory/roleWisePage/InOut/productDetails/productDetails';
+import ProductListTableInOut from './pages/inventory/roleWisePage/InOut/productListTable/productListTable';
+import StockInOutInOut from './pages/inventory/roleWisePage/InOut/stockManagement/stockInOut';
+import AddSuppilerInOutNpayment from './pages/inventory/roleWisePage/InOutNPayment/addSuppiler/addSuppiler';
+import EditSuppilerInOutNpayment from './pages/inventory/roleWisePage/InOutNPayment/editSuppiler/editSuppiler';
+import SuppilerDetailInOutNpayment from './pages/inventory/roleWisePage/InOutNPayment/suppilerDetails/suppilerDetail';
+import SuppilerTableInOutNpayment from './pages/inventory/roleWisePage/InOutNPayment/suppilerTable/suppilerTable';
+import ProtactedInOutNpaymentRoutes from './protactedInOutNpaymentRoutes';
 // import SetPrinter from './setPrinter';
 function App() {
   return (
@@ -39,10 +51,22 @@ function App() {
                 <Route path="/" element={<ProtectedStockManagerRoutes/>}>
                   <Route path="/stockOut" element={<StockOut />}/>
                   <Route path="/stockManager/productDetail/:id/:name/:unit/:remainingQty" element={<ProductDetailsManager />}/>
-                  {/* <Route path='list' exact element={<AgentList />}/> */}
                   <Route path='*' element={<PageNotFoundRedirect/>}/>
                 </Route>
-                <Route path="/" element={<ProtectedOwnerRoutes/>}>
+                 <Route path="/" element={<ProtectedInOutRoutes/>}>
+                  <Route path="/InOut/productTable" element={<ProductListTableInOut />}/>
+                  <Route path="/InOut/productDetail/:id/:name/:unit/:remainingQty" element={<ProductDetailsInOut />}/>
+                  <Route path="/InOut/stockInOut" element={<StockInOutInOut />}/>
+                  <Route path='*' element={<PageNotFoundRedirect/>}/>
+                </Route>
+                <Route path="/" element={<ProtactedInOutNpaymentRoutes/>}>
+                  <Route path="/InOutNpayment/addSuppiler" element={<AddSuppilerInOutNpayment />}/>
+                  <Route path="/InOutNpayment/suppilerTable" element={<SuppilerTableInOutNpayment />}/>
+                  <Route path="/InOutNpayment/editSuppiler/:id" element={<EditSuppilerInOutNpayment/>}/>
+                  <Route path="/InOutNpayment/suppilerDetails/:id" element={<SuppilerDetailInOutNpayment/>}/>
+                  <Route path='*' element={<PageNotFoundRedirect/>}/>
+                </Route>
+                <Route path="/" element={<ProtectedOwnerRoutes/>}>x
                   <Route path="/dashboardOwner" element={<BranchDashboard/>}/>
                 </Route>
                  {/* <Route path="/" element={<ProtectedAdminRoutes />}>
@@ -59,7 +83,8 @@ function App() {
                   <Route path="/addUser" element={<AddUser />}/>
                   <Route path="/addSuppiler" element={<AddSuppiler />}/>
                   <Route path="/userTable" element={<UserTable />}/>
-                  <Route path="/productList" element={<ProductList />}/>
+                  <Route path="/userTableOwner" element={<UserTableOwner />}/>
+                  {/* <Route path="/productList" element={<ProductList />}/> */}
                   <Route path="/productTable" element={<ProductListTable />}/>
                   <Route path="/stockInOut" element={<StockInOut />}/>
                   <Route path="/transactionTable" element={<TransactionTable />}/>
@@ -69,7 +94,9 @@ function App() {
                   <Route path="/editHistory/:id" element={<EditHistory/>}/>
                   <Route path="/editSuppiler/:id" element={<EditSuppiler/>}/>
                   <Route path="/suppilerDetails/:id" element={<SuppilerDetail/>}/>
+                  <Route path="/suppilerDetailsOwner/:id" element={<SuppilerDetailOwner/>}/>
                   <Route path="/stockOutByCategory/:category/:categoryId" element={<StockOutByCategory/>}/>
+                  <Route path="/stockInByCategory/:category/:categoryId" element={<StockOutByCategoryStockIn/>}/>
                   <Route path="/productDetails/:id/:name/:unit/:remainingQty" element={<ProductDetails/>}/>
                 </Route>
                 {/* <Route path='/thermal' exact element={<PrintButton />}/> */}

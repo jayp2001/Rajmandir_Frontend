@@ -14,7 +14,7 @@ import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css';
 import Box from '@mui/material/Box';
-import ProductQtyCountCard from '../productQtyCard/productQtyCard';
+import ProductQtyCountCard from './productQtyCard/productQtyCard';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -781,10 +781,10 @@ function SuppilerDetail() {
                             </div>
                         </div> :
                         <div className='grid gap-4 mt-12' style={{ maxHeight: '332px', overflowY: 'scroll' }}>
-                            <div className='grid grid-cols-2 gap-6 pb-3'>
+                            <div className='grid grid-cols-1 gap-6 pb-3'>
                                 {
                                     productQtyCount && productQtyCount?.map((row, index) => (
-                                        <ProductQtyCountCard productQtyUnit={row.productUnit} productQty={row.productQuantity} productName={row.productName} index={index} />
+                                        <ProductQtyCountCard productQtyUnit={row.productUnit} productPrice={row.productPrice} productQty={row.remainingStock} productName={row.productName} index={index} />
                                     ))
                                 }
                             </div>
@@ -1057,7 +1057,7 @@ function SuppilerDetail() {
                                                         <TableCell component="th" scope="row">
                                                             {row.productName}
                                                         </TableCell>
-                                                        <TableCell align="left" >{row.productQuantity} {row.productUnit}</TableCell>
+                                                        <TableCell align="left" >{row.remainingStock}</TableCell>
                                                         <TableCell align="left" >{parseFloat(row.totalExpense ? row.totalExpense : 0).toLocaleString('en-IN')}</TableCell>
                                                         <TableCell align="left" >{row.lastStockIN} {row.productUnit}</TableCell>
                                                         <TableCell align="left" ><div >{parseFloat(row.lastUpdatedPrice ? row.lastUpdatedPrice : 0).toLocaleString('en-IN')}</div></TableCell>

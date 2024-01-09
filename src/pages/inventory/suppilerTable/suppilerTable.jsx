@@ -189,6 +189,7 @@ function SuppilerTable() {
                 setLoading(false)
                 setSuccess(true)
                 getData();
+                getDebitCounts();
                 handleClose();
             })
             .catch((error) => {

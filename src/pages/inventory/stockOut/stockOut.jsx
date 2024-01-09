@@ -49,6 +49,7 @@ function StockOut() {
     const [categories, setCategories] = React.useState();
     const [productList, setProductList] = React.useState();
     const [page, setPage] = React.useState(0);
+    const [unitsForProduct, setUnitsForProduct] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [totalRows, setTotalRows] = React.useState(0);
     const [totalRowsProduct, setTotalRowsProduct] = React.useState(0);
@@ -77,7 +78,7 @@ function StockOut() {
             productQty: 0,
             productName: null,
             productUnit: "",
-            stockOutCategory: 0,
+            stockOutCategory: 'Regular',
             stockOutComment: "",
             stockOutDate: dayjs()
         });
@@ -104,14 +105,27 @@ function StockOut() {
                     stockOutCategory: res.data.stockOutCategory,
                     stockOutComment: res.data.stockOutComment,
                     stockOutDate: dayjs(res.data.stockOutDate)
-                }))
+                }));
+                getUnitForProduct(res.data.productId);
             })
             .catch((error) => {
                 //  setError(error.response && error.response.data ? error.response.data : "Network Error ...!!!");
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-
+    const getUnitForProduct = async (id) => {
+        await axios.get(`${BACKEND_BASE_URL}inventoryrouter/ddlUnitById?productId=${id}`, config)
+            .then((res) => {
+                setUnitsForProduct(res.data);
+                setStockOutFormDataError((perv) => ({
+                    ...perv,
+                    productUnit: false
+                }))
+            })
+            .catch((error) => {
+                setError(error.response ? error.response.data : "Network Error ...!!!")
+            })
+    }
     const handleAccordionOpenOnEdit = (data) => {
         console.log('edit', data)
         fillStockOutEdit(data)
@@ -122,14 +136,26 @@ function StockOut() {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
+    const getStatistics = async (id) => {
+        await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getProductCountDetailsById?productId=${id}`, config)
+            .then((res) => {
+                setStockOutFormData((perv) => ({
+                    ...perv,
+                    remainingStock: res.data.remainingStock,
+                    remainingStockArray: res.data.allUnitConversation
+                }))
+            })
+            .catch((error) => {
+                setError(error.response ? error.response.data : "Network Error ...!!!")
+            })
+    }
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
     const [stockOutFormData, setStockOutFormData] = React.useState({
         productId: "",
         productQty: 0,
         productUnit: "",
-        stockOutCategory: 0,
+        stockOutCategory: 'Regular',
         stockOutComment: "",
         reason: "",
         stockOutDate: dayjs()
@@ -196,8 +222,11 @@ function StockOut() {
             ['productName']: value,
             productId: value && value.productId ? value.productId : '',
             productUnit: value && value.productUnit ? value.productUnit : '',
-            remainingStock: value && value.remainingStock ? value.remainingStock : ''
+            remainingStock: value && value.remainingStock ? value.remainingStock : 0,
+            remainingStockArray: value && value.allConversation ? value.allConversation : [],
         }))
+        value && value.productId && getUnitForProduct(value.productId);
+        value && value.productId && getStatistics(value.productId);
     }
     const handleResetStockOut = () => {
         setStockOutFormData({
@@ -206,7 +235,7 @@ function StockOut() {
             productId: "",
             productQty: 0,
             productUnit: "",
-            stockOutCategory: null,
+            stockOutCategory: 'Regular',
             stockOutComment: "",
             stockOutDate: dayjs()
         })
@@ -251,6 +280,7 @@ function StockOut() {
                 setSuccess(true);
                 setFilter(false);
                 getStockOutData();
+                getProductList();
                 handleResetStockOut();
                 focus();
             })
@@ -581,25 +611,50 @@ function StockOut() {
                             id="panel1a-header"
                             onClick={() => { setExpanded(!expanded); resetStockOutEdit(); }}
                         >
-                            <div className='stockAccordinHeader'>Stock Out</div>
+                            <div className='grid grid-cols-12 pr-2' style={{ width: '100%' }}>
+                                <div className='col-span-3 stockAccordinHeader'>Stock Out</div>
+                                {expanded && stockOutFormData.productName ?
+                                    <div className='col-span-8 flex justify-end'>
+                                        <Typography id="modal-modal" variant="h6" component="h2">
+                                            Remaining Stock :- {stockOutFormData.remainingStock ? stockOutFormData.remainingStock : ''}
+                                        </Typography>
+                                    </div>
+                                    : <></>
+                                }
+                            </div>
                         </AccordionSummary>
                         <AccordionDetails>
                             <div className='stockInOutContainer'>
+                                {expanded && stockOutFormData.productName ? <>
+                                    <hr className='mb-3' />
+                                    <div className='grid gap-6 grid-cols-12'>
+                                        {
+                                            stockOutFormData.remainingStockArray ? stockOutFormData.remainingStockArray?.map((row, index) => (
+                                                <div className='col-span-2 unitName'>
+                                                    {row.unitName} : {row.value}
+                                                </div>
+                                            )) : <></>
+                                        }
+                                    </div>
+                                    <hr className='mt-3 mb-8' />
+                                </>
+                                    : <></>
+                                }
                                 <div className='mt-6 grid grid-cols-12 gap-6'>
                                     <div className='col-span-3'>
                                         {!isEdit ?
                                             <FormControl fullWidth>
                                                 <Autocomplete
                                                     disablePortal
-                                                    id='stockOut'
                                                     defaultValue={null}
+                                                    id='stockOut'
                                                     disabled={isEdit}
                                                     sx={{ width: '100%' }}
                                                     value={stockOutFormData.productName ? stockOutFormData.productName : null}
                                                     onChange={handleProductNameAutoCompleteOut}
                                                     options={productList ? productList : []}
                                                     getOptionLabel={(options) => options.productName}
-                                                    renderInput={(params) => <TextField inputRef={textFieldRef} {...params} label="Product Name" />}
+                                                    renderInput={(params) => <TextField {...params} inputRef={textFieldRef} label="Product Name" />}
                                                 />
                                             </FormControl>
                                             :
@@ -612,22 +667,22 @@ function StockOut() {
                                             />
                                         }
                                     </div>
-                                    <div className='col-span-3'>
+                                    <div className='col-span-2'>
                                         <TextField
-                                            onBlur={(e) => {
-                                                if (e.target.value < 0 || e.target.value > stockOutFormData?.remainingStock) {
-                                                    setStockOutFormDataError((perv) => ({
-                                                        ...perv,
-                                                        productQty: true
-                                                    }))
-                                                }
-                                                else {
-                                                    setStockOutFormDataError((perv) => ({
-                                                        ...perv,
-                                                        productQty: false
-                                                    }))
-                                                }
-                                            }}
+                                            // onBlur={(e) => {
+                                            //     if (e.target.value < 0 || e.target.value > stockOutFormData?.remainingStock) {
+                                            //         setStockOutFormDataError((perv) => ({
+                                            //             ...perv,
+                                            //             productQty: true
+                                            //         }))
+                                            //     }
+                                            //     else {
+                                            //         setStockOutFormDataError((perv) => ({
+                                            //             ...perv,
+                                            //             productQty: false
+                                            //         }))
+                                            //     }
+                                            // }}
                                             type="number"
                                             label="Qty"
                                             fullWidth
@@ -635,20 +690,57 @@ function StockOut() {
                                             onChange={onChangeStockOut}
                                             value={stockOutFormData.productQty}
                                             error={stockOutFormDataError.productQty}
-                                            helperText={stockOutFormData.productName && !stockOutFormDataError.productQty ? `Remaining Stock:-  ${stockOutFormData?.remainingStock}  ${stockOutFormData.productUnit}` : stockOutFormDataError.productQty ? stockOutFormDataError.productQty && stockOutFormData.productQty > stockOutFormData?.remainingStock ? `StockOut qty can't be more than ${stockOutFormData?.remainingStock}  ${stockOutFormData.productUnit}` : "Please Enter Qty" : ''}
+                                            helperText={stockOutFormDataError.productQty ? "Please Enter Qty" : ''}
                                             name="productQty"
-                                            InputProps={{
-                                                endAdornment: <InputAdornment position="end">{stockOutFormData.productUnit}</InputAdornment>,
-                                            }}
+                                        // InputProps={{
+                                        //     endAdornment: <InputAdornment position="end">{stockOutFormData.productUnit}</InputAdornment>,
+                                        // }}
                                         />
                                     </div>
-                                    <div className='col-span-4'>
+                                    <div className='col-span-2'>
+                                        <FormControl style={{ minWidth: '100%', maxWidth: '100%' }}>
+                                            <InputLabel id="demo-simple-select-label" error={stockOutFormDataError.productUnit}>StockIn Unit</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={stockOutFormData.productUnit ? stockOutFormData.productUnit : ''}
+                                                error={stockOutFormDataError.productUnit}
+                                                name="productUnit"
+                                                label="StockOut Unit"
+                                                disabled={!stockOutFormData.productName}
+                                                onBlur={(e) => {
+                                                    if (!e.target.value) {
+                                                        setStockOutFormDataError((perv) => ({
+                                                            ...perv,
+                                                            productUnit: true
+                                                        }))
+                                                    }
+                                                    else {
+                                                        setStockOutFormDataError((perv) => ({
+                                                            ...perv,
+                                                            productUnit: false
+                                                        }))
+                                                    }
+                                                }}
+                                                onChange={onChangeStockOut}
+                                            >
+                                                {
+                                                    unitsForProduct ? unitsForProduct?.map((data) => (
+                                                        <MenuItem key={data.priorityNum} value={data.unitName}>{data.unitName}</MenuItem>
+                                                    )) :
+                                                        <MenuItem key={''} value={''}>{''}</MenuItem>
+                                                }
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                    <div className='col-span-3'>
                                         <FormControl style={{ minWidth: '100%', maxWidth: '100%' }}>
                                             <InputLabel id="demo-simple-select-label" required error={stockOutFormDataError.stockOutCategory}>Category</InputLabel>
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
-                                                value={stockOutFormData.stockOutCategory}
+                                                defaultValue={null}
+                                                value={stockOutFormData.stockOutCategory ? stockOutFormData.stockOutCategory : ''}
                                                 error={stockOutFormDataError.stockOutCategory}
                                                 name="stockOutCategory"
                                                 label="Category"
@@ -680,25 +772,24 @@ function StockOut() {
                                     <div className='col-span-2'>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <DesktopDatePicker
-                                                sx={{ width: '100%' }}
+                                                textFieldStyle={{ width: '100%' }}
                                                 InputProps={{ style: { fontSize: 14, width: '100%' } }}
                                                 InputLabelProps={{ style: { fontSize: 14 } }}
                                                 label="Stock In Date"
                                                 format="DD/MM/YYYY"
                                                 required
-                                                fullWidth
                                                 error={stockOutFormDataError.stockOutDate}
                                                 value={stockOutFormData.stockOutDate}
                                                 onChange={handleStockOutDate}
                                                 name="stockOutDate"
-                                                renderInput={(params) => <TextField {...params} fullWidth sx={{ width: '100%' }} />}
+                                                renderInput={(params) => <TextField {...params} sx={{ width: '100%' }} />}
                                             />
                                         </LocalizationProvider>
                                     </div>
                                     <div className='col-span-6'>
                                         <TextField
                                             onChange={onChangeStockOut}
-                                            value={stockOutFormData.stockOutComment}
+                                            value={stockOutFormData.stockOutComment ? stockOutFormData.stockOutComment : ''}
                                             name="stockOutComment"
                                             id="outlined-required"
                                             label="Comment"
@@ -746,7 +837,9 @@ function StockOut() {
                                         <button className='addCategoryCancleBtn' onClick={() => {
                                             handleResetStockOut();
                                             setIsEdit(false);
-                                            { isEdit && setExpanded(false); }
+                                            {
+                                                isEdit && setExpanded(false);
+                                            }
                                         }}>{isEdit ? "cancle" : "reset"}</button>
                                     </div>
                                 </div>
@@ -835,7 +928,7 @@ function StockOut() {
                         :
                         <div className='userTableSubContainer'>
                             <div className='grid grid-cols-12 gap-6 pt-6'>
-                                <div className='ml-6 col-span-6 ' >
+                                <div className='ml-6 col-span-3' >
                                     {status != 1 && status != 2 && status != 3 ?
                                         <TextField
                                             className='sarchText'
@@ -855,14 +948,14 @@ function StockOut() {
                                     }
 
                                 </div>
-                                <div className='col-span-6 pr-4'>
+                                <div className='col-start-11 col-span-2 pr-4'>
                                     <FormControl fullWidth>
                                         <InputLabel id="demo-simple-select-label">Stock Status</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
                                             value={status}
-                                            label="Service Authority"
+                                            label="Stock Status"
                                             name="serviceAuthority"
                                             onChange={onChangeStatus}
                                         >
@@ -901,9 +994,9 @@ function StockOut() {
                                                         <TableCell component="th" scope="row"  >
                                                             {row.productName}
                                                         </TableCell>
-                                                        <TableCell align="left"  >{row.remainingStock} {row.minProductUnit}</TableCell>
+                                                        <TableCell align="left"  >{row.remainingStock}</TableCell>
                                                         <TableCell align="left"  >{row.minProductQty} {row.minProductUnit}</TableCell>
-                                                        <TableCell align="center"  ><div className={row.remainingStock >= row.minProductQty ? 'greenStatus' : row.remainingStock < row.minProductQty && row.remainingStock !== 0 ? 'orangeStatus' : 'redStatus'}>{row.stockStatus}</div></TableCell>
+                                                        <TableCell align="center"  ><div className={row.stockStatus == 'In-Stock' ? 'greenStatus' : row.stockStatus == 'Low-Stock' ? 'orangeStatus' : 'redStatus'}>{row.stockStatus}</div></TableCell>
                                                     </TableRow> :
                                                     <TableRow
                                                         key={row.userId}

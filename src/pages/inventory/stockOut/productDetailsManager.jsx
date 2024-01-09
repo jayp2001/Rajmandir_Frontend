@@ -4,6 +4,7 @@ import React from "react";
 import { BACKEND_BASE_URL } from '../../../url';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import Typography from '@mui/material/Typography';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { useParams, useNavigate } from 'react-router-dom';
 import CountCard from '../countCard/countCard';
@@ -46,6 +47,7 @@ function ProductDetailsManager() {
     dayjs.extend(customParseFormat)
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [unitPreference, setUnitPreference] = React.useState();
     const [success, setSuccess] = React.useState(false);
     const [expanded, setExpanded] = React.useState(false);
     let { id, name, unit } = useParams();
@@ -60,6 +62,7 @@ function ProductDetailsManager() {
     const [totalRowsDebit, setTotalRowsDebit] = React.useState(0);
     const [filter, setFilter] = React.useState(false);
     const [tab, setTab] = React.useState(1);
+    const [unitsForProduct, setUnitsForProduct] = React.useState([]);
     const [tabStockInOut, setTabStockInOut] = React.useState(1);
     const [statisticsCount, setStatisticsCounts] = useState();
     const [suppilerNameAndCount, setSuppilerNameAndCount] = useState();
@@ -112,8 +115,9 @@ function ProductDetailsManager() {
     const [stockOutFormData, setStockOutFormData] = React.useState({
         productId: id,
         productQty: 0,
+        productName: name,
         productUnit: unit,
-        stockOutCategory: 0,
+        stockOutCategory: 'Regular',
         stockOutComment: "",
         reason: "",
         stockOutDate: dayjs()
@@ -186,9 +190,9 @@ function ProductDetailsManager() {
     const handleResetStockIn = () => {
         setStockInFormData({
             productId: id,
-            productName: null,
+            productName: name,
             productQty: 0,
-            productUnit: "",
+            productUnit: unit,
             productPrice: 0,
             totalPrice: 0,
             billNumber: "",
@@ -208,15 +212,17 @@ function ProductDetailsManager() {
         })
     }
     const handleResetStockOut = () => {
-        setStockOutFormData({
+        setStockOutFormData((perv) => ({
+            ...perv,
             productId: id,
-            reason: '',
             productQty: 0,
-            productUnit: "",
-            stockOutCategory: null,
+            productName: name,
+            productUnit: unit,
+            stockOutCategory: 'Regular',
             stockOutComment: "",
+            reason: "",
             stockOutDate: dayjs()
-        })
+        }))
         setStockOutFormDataError({
             productQty: false,
             productUnit: false,
@@ -403,6 +409,16 @@ function ProductDetailsManager() {
             .then((res) => {
                 setStockInData(res.data.rows);
                 setTotalRows(res.data.numRows);
+            })
+            .catch((error) => {
+                setError(error.response ? error.response.data : "Network Error ...!!!")
+            })
+    }
+    const getUnitPreferenceById = async (id) => {
+        await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getUnitPreferenceById?productId=${id}`, config)
+            .then((res) => {
+                setUnitPreference(res.data);
+                console.log('Length', res.data, Math.ceil(res.data.length / 2))
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -647,6 +663,11 @@ function ProductDetailsManager() {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getProductCountDetailsById?productId=${id}`, config)
             .then((res) => {
                 setStatisticsCounts(res.data);
+                setStockOutFormData((perv) => ({
+                    ...perv,
+                    remainingStock: res.data.remainingStock,
+                    remainingStockArray: res.data.allUnitConversation
+                }))
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -656,6 +677,11 @@ function ProductDetailsManager() {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getProductCountDetailsById?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productId=${id}`, config)
             .then((res) => {
                 setStatisticsCounts(res.data);
+                setStockOutFormData((perv) => ({
+                    ...perv,
+                    remainingStock: res.data.remainingStock,
+                    remainingStockArray: res.data.allUnitConversation
+                }))
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -721,20 +747,24 @@ function ProductDetailsManager() {
         setIsEdit(false)
     }
     const resetStockOutEdit = () => {
-        setStockOutFormData({
-            productId: "",
+        setStockOutFormData((perv) => ({
+            ...perv,
+            productId: id,
             productQty: 0,
-            productUnit: "",
-            stockOutCategory: 0,
+            productName: name,
+            productUnit: unit,
+            stockOutCategory: 'Regular',
             stockOutComment: "",
+            reason: "",
             stockOutDate: dayjs()
-        });
+        }));
         setStockOutFormDataError({
             productQty: false,
             productUnit: false,
             stockOutCategory: false,
             stockOutDate: false
         })
+
         setIsEdit(false)
     }
 
@@ -770,7 +800,7 @@ function ProductDetailsManager() {
                 setStockOutFormData((perv) => ({
                     ...perv,
                     stockOutId: id,
-                    productName: res.data,
+                    productName: name,
                     productId: res.data.productId,
                     productQty: res.data.productQty,
                     productUnit: res.data.productUnit,
@@ -903,11 +933,26 @@ function ProductDetailsManager() {
             stockInEdit()
         }
     }
+    const getUnitForProduct = async (id) => {
+        await axios.get(`${BACKEND_BASE_URL}inventoryrouter/ddlUnitById?productId=${id}`, config)
+            .then((res) => {
+                setUnitsForProduct(res.data);
+                setStockOutFormDataError((perv) => ({
+                    ...perv,
+                    productUnit: false
+                }))
+            })
+            .catch((error) => {
+                setError(error.response ? error.response.data : "Network Error ...!!!")
+            })
+    }
     useEffect(() => {
-        getSuppilerList(id)
+        getSuppilerList(id);
+        getUnitForProduct(id);
         getCategoryList();
         getStockInData();
         getStatistics();
+        getUnitPreferenceById(id);
         getCategoryNameAndCount();
         getSuppilerNameAndCount();
         // getCountData();
@@ -1064,7 +1109,7 @@ function ProductDetailsManager() {
                     </div>
                     {tab === 1 || tab === '1' ?
                         <div className='grid gap-4 mt-12'>
-                            <div className='grid grid-cols-12 gap-6'>
+                            <div className='grid grid-cols-6 gap-6'>
                                 <div className='col-span-3'>
                                     <CountCard color={'black'} count={statisticsCount && statisticsCount.totalPurchase ? statisticsCount.totalPurchase : 0} desc={'Total Purchase'} productDetail={true} unitDesc={unit} />
                                 </div>
@@ -1075,13 +1120,45 @@ function ProductDetailsManager() {
                                     <CountCard color={'orange'} count={statisticsCount && statisticsCount.remainingStock ? statisticsCount.remainingStock : 0} desc={'Remaining Stock'} productDetail={true} unitDesc={unit} />
                                 </div>
                             </div>
+                            <div className='w-full flex gap-6'>
+                                <div className='w-full'>
+                                    {/* <div className={`unitCard grid grid-cols-5 gap-6`}>
+                                        {unitPreference && unitPreference?.map((data, index) => (
+                                            <div>
+                                                {data.preference}
+                                            </div>
+                                        ))
+                                        }
+                                    </div> */}
+                                    {
+                                        unitPreference && unitPreference.json2 && unitPreference.json2.length > 0 ? <>
+                                            <div className=' unitCard grid grid-cols-4'>
+                                                {unitPreference && unitPreference.json1?.map((data, index) => (
+                                                    <div key={`units${index}`}>
+                                                        {data.preference}
+                                                    </div>
+                                                ))
+                                                }
+                                            </div>
+                                            <div className='unitCard mt-4 grid grid-cols-4'>
+                                                {unitPreference && unitPreference.json2?.map((data, index) => (
+                                                    <div key={`unitBase${index}`}>
+                                                        {data.preference}
+                                                    </div>
+                                                ))
+                                                }
+                                            </div>
+                                        </>
+                                            : <></>}
+                                </div>
+                            </div>
                         </div>
                         :
                         <div className='grid gap-4 mt-12' style={{ minHeight: '216px', maxHeight: '332px', overflowY: 'scroll' }}>
-                            <div className='grid grid-cols-3 gap-6 pb-3'>
+                            <div className='grid grid-cols-1 gap-6 pb-3'>
                                 {
                                     categoryNameAndCount && categoryNameAndCount?.map((row, index) => (
-                                        <ProductQtyCountCard productQtyUnit={unit} productQty={row.usedQty} productPrice={row.usedPrice} productName={row.stockOutCategoryName} index={index} />
+                                        <ProductQtyCountCard productQtyUnit={unit} productQty={row.remainingStock} productPrice={row.usedPrice} productName={row.stockOutCategoryName} index={index} />
                                     ))
                                 }
                             </div>
@@ -1132,60 +1209,117 @@ function ProductDetailsManager() {
                             id="panel1a-header"
                             onClick={() => { setExpanded(!expanded); resetStockInEdit(); resetStockOutEdit(); }}
                         >
-                            <div className='stockAccordinHeader'>{"Stock Out"}</div>
+                            <div className='grid grid-cols-12 pr-2' style={{ width: '100%' }}>
+                                <div className='col-span-3 stockAccordinHeader'>Stock Out</div>
+                                {expanded && stockOutFormData.productName ?
+                                    <div className='col-span-8 flex justify-end'>
+                                        <Typography id="modal-modal" variant="h6" component="h2">
+                                            Remaining Stock :- {stockOutFormData.remainingStock ? stockOutFormData.remainingStock : ''}
+                                        </Typography>
+                                    </div>
+                                    : <></>
+                                }
+                            </div>
                         </AccordionSummary>
                         <AccordionDetails>
                             <div className='stockInOutContainer'>
+                                {expanded && stockOutFormData.productName ? <>
+                                    <hr className='mb-3' />
+                                    <div className='grid gap-6 grid-cols-12'>
+                                        {
+                                            stockOutFormData.remainingStockArray ? stockOutFormData.remainingStockArray?.map((row, index) => (
+                                                <div className='col-span-2 unitName'>
+                                                    {row.unitName} : {row.value}
+                                                </div>
+                                            )) : <></>
+                                        }
+                                    </div>
+                                    <hr className='mt-3 mb-8' />
+                                </>
+                                    : <></>
+                                }
                                 <div className='mt-6 grid grid-cols-12 gap-6'>
                                     <div className='col-span-3'>
-                                        <FormControl fullWidth>
-                                            <TextField
-                                                value={name}
-                                                name="productName"
-                                                id="outlined-required"
-                                                label="Product Name"
-                                                InputProps={{ style: { fontSize: 14 } }}
-                                                InputLabelProps={{ style: { fontSize: 14 } }}
-                                                fullWidth
-                                            />
-                                        </FormControl>
-                                    </div>
-                                    <div className='col-span-3'>
                                         <TextField
-                                            onBlur={(e) => {
-                                                if (e.target.value < 0 || (isEdit ? e.target.value > stockOutFormData.stockRemaining : e.target.value > statisticsCount?.remainingStock)) {
-                                                    setStockOutFormDataError((perv) => ({
-                                                        ...perv,
-                                                        productQty: true
-                                                    }))
-                                                }
-                                                else {
-                                                    setStockOutFormDataError((perv) => ({
-                                                        ...perv,
-                                                        productQty: false
-                                                    }))
-                                                }
-                                            }}
+                                            label="Product Name"
+                                            fullWidth
+                                            disabled
+                                            value={stockOutFormData.productName ? stockOutFormData.productName : ''}
+                                            name="productName"
+                                        />
+                                    </div>
+                                    <div className='col-span-2'>
+                                        <TextField
+                                            // onBlur={(e) => {
+                                            //     if (e.target.value < 0 || e.target.value > stockOutFormData?.remainingStock) {
+                                            //         setStockOutFormDataError((perv) => ({
+                                            //             ...perv,
+                                            //             productQty: true
+                                            //         }))
+                                            //     }
+                                            //     else {
+                                            //         setStockOutFormDataError((perv) => ({
+                                            //             ...perv,
+                                            //             productQty: false
+                                            //         }))
+                                            //     }
+                                            // }}
                                             type="number"
                                             label="Qty"
                                             fullWidth
                                             onChange={onChangeStockOut}
                                             value={stockOutFormData.productQty}
                                             error={stockOutFormDataError.productQty}
-                                            helperText={name && !stockOutFormDataError.productQty ? `Remaining Stock:-  ${isEdit ? stockOutFormData.stockRemaining : statisticsCount?.remainingStock}  ${stockOutFormData.productUnit}` : stockOutFormDataError.productQty ? stockOutFormDataError.productQty && stockOutFormData.productQty > (isEdit ? stockOutFormData.stockRemaining : statisticsCount?.remainingStock) ? `StockOut qty can't be more than ${isEdit ? stockOutFormData.stockRemaining : statisticsCount?.remainingStock}  ${stockOutFormData.productUnit}` : "Please Enter Qty" : ''}
+                                            helperText={stockOutFormDataError.productQty ? "Please Enter Qty" : ''}
                                             name="productQty"
-                                            InputProps={{
-                                                endAdornment: <InputAdornment position="end">{unit}</InputAdornment>,
-                                            }}
+                                        // InputProps={{
+                                        //     endAdornment: <InputAdornment position="end">{stockOutFormData.productUnit}</InputAdornment>,
+                                        // }}
                                         />
                                     </div>
-                                    <div className='col-span-4'>
+                                    <div className='col-span-2'>
+                                        <FormControl style={{ minWidth: '100%', maxWidth: '100%' }}>
+                                            <InputLabel id="demo-simple-select-label" error={stockOutFormDataError.productUnit}>StockIn Unit</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={stockOutFormData.productUnit ? stockOutFormData.productUnit : ''}
+                                                error={stockOutFormDataError.productUnit}
+                                                name="productUnit"
+                                                label="StockOut Unit"
+                                                onBlur={(e) => {
+                                                    if (!e.target.value) {
+                                                        setStockOutFormDataError((perv) => ({
+                                                            ...perv,
+                                                            productUnit: true
+                                                        }))
+                                                    }
+                                                    else {
+                                                        setStockOutFormDataError((perv) => ({
+                                                            ...perv,
+                                                            productUnit: false
+                                                        }))
+                                                    }
+                                                }}
+                                                onChange={onChangeStockOut}
+                                            >
+                                                {
+                                                    unitsForProduct ? unitsForProduct?.map((data) => (
+                                                        <MenuItem key={data.priorityNum} value={data.unitName}>{data.unitName}</MenuItem>
+                                                    )) :
+                                                        <MenuItem key={''} value={''}>{''}</MenuItem>
+                                                }
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                    <div className='col-span-3'>
                                         <FormControl style={{ minWidth: '100%', maxWidth: '100%' }}>
                                             <InputLabel id="demo-simple-select-label" required error={stockOutFormDataError.stockOutCategory}>Category</InputLabel>
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
-                                                value={stockOutFormData.stockOutCategory}
+                                                defaultValue={null}
+                                                value={stockOutFormData.stockOutCategory ? stockOutFormData.stockOutCategory : ''}
                                                 error={stockOutFormDataError.stockOutCategory}
                                                 name="stockOutCategory"
                                                 label="Category"
@@ -1220,7 +1354,7 @@ function ProductDetailsManager() {
                                                 textFieldStyle={{ width: '100%' }}
                                                 InputProps={{ style: { fontSize: 14, width: '100%' } }}
                                                 InputLabelProps={{ style: { fontSize: 14 } }}
-                                                label="Stock Out Date"
+                                                label="Stock In Date"
                                                 format="DD/MM/YYYY"
                                                 required
                                                 error={stockOutFormDataError.stockOutDate}
@@ -1234,7 +1368,7 @@ function ProductDetailsManager() {
                                     <div className='col-span-6'>
                                         <TextField
                                             onChange={onChangeStockOut}
-                                            value={stockOutFormData.stockOutComment}
+                                            value={stockOutFormData.stockOutComment ? stockOutFormData.stockOutComment : ''}
                                             name="stockOutComment"
                                             id="outlined-required"
                                             label="Comment"
@@ -1272,6 +1406,7 @@ function ProductDetailsManager() {
                                                 fullWidth
                                             />
                                         </div>}
+
                                     <div className='col-span-2 col-start-9'>
                                         <button className='addCategorySaveBtn' onClick={() => {
                                             isEdit ? editSubmitStockOut() : submitStockOut()
@@ -1281,7 +1416,9 @@ function ProductDetailsManager() {
                                         <button className='addCategoryCancleBtn' onClick={() => {
                                             handleResetStockOut();
                                             setIsEdit(false);
-                                            isEdit ? setExpanded(false) : setExpanded(true);
+                                            {
+                                                isEdit && setExpanded(false);
+                                            }
                                         }}>{isEdit ? "cancle" : "reset"}</button>
                                     </div>
                                 </div>

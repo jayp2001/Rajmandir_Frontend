@@ -522,6 +522,9 @@ function CategoriesTable() {
     const navigateToDetail = (name, id) => {
         navigate(`/stockOutByCategory/${name}/${id}`);
     }
+    const navigateToStockInDetail = (name, id) => {
+        navigate(`/stockInByCategory/${name}/${id}`);
+    }
     if (loading) {
         console.log('>>>>??')
         toast.loading("Please wait...", {
@@ -699,12 +702,12 @@ function CategoriesTable() {
                                                         style={{ cursor: "pointer" }}
                                                         className='tableRow'
                                                     >
-                                                        <TableCell align="left" onClick={() => navigateToDetail(row.stockInCategoryName, row.stockInCategoryId)}>{(index + 1) + (page * rowsPerPage)}</TableCell>
-                                                        <TableCell component="th" scope="row" onClick={() => navigateToDetail(row.stockInCategoryName, row.stockInCategoryId)}>
+                                                        <TableCell align="left" onClick={() => navigateToStockInDetail(row.stockInCategoryName, row.stockInCategoryId)}>{(index + 1) + (page * rowsPerPage)}</TableCell>
+                                                        <TableCell component="th" scope="row" onClick={() => navigateToStockInDetail(row.stockInCategoryName, row.stockInCategoryId)}>
                                                             {row.stockInCategoryName}
                                                         </TableCell>
-                                                        <TableCell align="right" onClick={() => navigateToDetail(row.stockInCategoryName, row.stockInCategoryId)}>{parseFloat(row.outPrice ? row.outPrice : 0).toLocaleString('en-IN')}</TableCell>
-                                                        <TableCell align="right" onClick={() => navigateToDetail(row.stockInCategoryName, row.stockInCategoryId)}>{row.percentage}</TableCell>
+                                                        <TableCell align="right" onClick={() => navigateToStockInDetail(row.stockInCategoryName, row.stockInCategoryId)}>{parseFloat(row.outPrice ? row.outPrice : 0).toLocaleString('en-IN')}</TableCell>
+                                                        <TableCell align="right" onClick={() => navigateToStockInDetail(row.stockInCategoryName, row.stockInCategoryId)}>{row.percentage}</TableCell>
                                                         <TableCell align="right" ><div className=''><button className='editCategoryBtn mr-6' onClick={() => handleEdit(row.stockInCategoryId, row.stockInCategoryName)}>Edit</button><button className='deleteCategoryBtn' onClick={() => handleDelete(row.stockInCategoryId)}>Delete</button></div></TableCell>
                                                         <TableCell align="right">
                                                         </TableCell>

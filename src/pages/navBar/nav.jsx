@@ -37,6 +37,7 @@ import CryptoJS from 'crypto-js';
 import { ToastContainer, toast } from 'react-toastify';
 import MoneyOffIcon from '@mui/icons-material/MoneyOff';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
+import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import { BACKEND_BASE_URL } from '../../url';
 import axios from 'axios';
 function NavBar() {
@@ -108,328 +109,6 @@ function NavBar() {
         setState({ ...state, [anchor]: open });
     };
     console.log("location", location.pathname, location.pathname.split('/').length)
-    const list = (anchor) => (
-        <Box
-            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, color: 'gray' }}
-            role="presentation"
-            onClick={toggleDrawer(anchor, false)}
-            onKeyDown={toggleDrawer(anchor, false)}
-        >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#333', color: '#fff' }}>
-                <div style={{ fontSize: 35 }}><InventoryIcon fontSize='large' />&nbsp;&nbsp;{role == 6 ? 'Manager' : location.pathname.split('/')[1] == 'staff' ? 'Employes' : location.pathname.split('/')[1] == 'expense' ? 'Expense' : location.pathname.split('/')[1] == 'bank' ? 'Banks' : location.pathname.split('/')[1] == 'businessReport' ? 'Business' : 'Inventory'}</div>
-                <Button onClick={toggleDrawer(anchor, false)} color="inherit">
-                    <ArrowBackIcon fontSize='small' />
-                </Button>
-            </Box>
-            <Divider />
-            <List>
-
-                {role == 6 ?
-                    <ListItem key={3}>
-                        <ListItemButton to="/stockOut">
-                            <ListItemIcon>
-                                <CompareArrowsIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={'Stock In/Out'} />
-                        </ListItemButton>
-                    </ListItem>
-                    :
-                    location.pathname.split('/')[1] == 'staff' ?
-                        <>
-                            <ListItem key={'staff1'}>
-                                <ListItemButton to="/dashboard">
-                                    <ListItemIcon>
-                                        <DashboardIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={'Dashboard'} />
-                                </ListItemButton>
-                            </ListItem>
-                            <ListItem key={'staff2'}>
-                                <ListItemButton to="/staff/staffList">
-                                    <ListItemIcon>
-                                        <StyleOutlinedIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={'Staff List'} />
-                                </ListItemButton>
-                            </ListItem>
-                            <ListItem key={'staff5'}>
-                                <ListItemButton to="/staff/addStaff">
-                                    <ListItemIcon>
-                                        <GroupAddIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={'Add Staff'} />
-                                </ListItemButton>
-                            </ListItem>
-                            <ListItem key={'staff6'}>
-                                <ListItemButton to="/staff/allPayments">
-                                    <ListItemIcon>
-                                        <AccountBalanceWalletIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={'All Payments'} />
-                                </ListItemButton>
-                            </ListItem>
-                            <ListItem key={'staff6'}>
-                                <ListItemButton to="/staff/leaves">
-                                    <ListItemIcon>
-                                        <EventBusyIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={'Leaves'} />
-                                </ListItemButton>
-                            </ListItem>
-                            <ListItem key={'staff3'}>
-                                <ListItemButton to="/staff/staffCategory">
-                                    <ListItemIcon>
-                                        <ListAltOutlinedIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={'Staff Categorires Table'} />
-                                </ListItemButton>
-                            </ListItem>
-                        </>
-                        :
-                        location.pathname.split('/')[1] == 'expense' && location.pathname.split('/')[2] == 'dashboard' ?
-                            <>
-                                <ListItem key={'staff1'}>
-                                    <ListItemButton to="/dashboard">
-                                        <ListItemIcon>
-                                            <DashboardIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary={'Dashboard'} />
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem key={'staff2'}>
-                                    <ListItemButton to="/bank/dashboard">
-                                        <ListItemIcon>
-                                            <AccountBalanceIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary={'Banks'} />
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem key={'staff5'}>
-                                    <ListItemButton to="/businessReport">
-                                        <ListItemIcon>
-                                            <AssessmentIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary={'Business Report'} />
-                                    </ListItemButton>
-                                </ListItem>
-                            </>
-                            :
-                            location.pathname.split('/')[1] == 'bank' && location.pathname.split('/')[2] == 'dashboard' ?
-                                <>
-                                    <ListItem key={'staff1'}>
-                                        <ListItemButton to="/dashboard">
-                                            <ListItemIcon>
-                                                <DashboardIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary={'Dashboard'} />
-                                        </ListItemButton>
-                                    </ListItem>
-                                    <ListItem key={'staff2'}>
-                                        <ListItemButton to="/expense/dashboard">
-                                            <ListItemIcon>
-                                                <AccountBalanceWalletIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary={'Expense'} />
-                                        </ListItemButton>
-                                    </ListItem>
-                                    <ListItem key={'staff5'}>
-                                        <ListItemButton to="/businessReport">
-                                            <ListItemIcon>
-                                                <AssessmentIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary={'Business Report'} />
-                                        </ListItemButton>
-                                    </ListItem>
-                                </>
-                                :
-                                location.pathname.split('/')[1] == 'businessReport' ?
-                                    <>
-                                        <ListItem key={'staff1'}>
-                                            <ListItemButton to="/dashboard">
-                                                <ListItemIcon>
-                                                    <DashboardIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary={'Dashboard'} />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem key={'staff2'}>
-                                            <ListItemButton to="/expense/dashboard">
-                                                <ListItemIcon>
-                                                    <AccountBalanceWalletIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary={'Expense'} />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <ListItem key={'staff3'}>
-                                            <ListItemButton to="/bank/dashboard">
-                                                <ListItemIcon>
-                                                    <AccountBalanceIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary={'Banks'} />
-                                            </ListItemButton>
-                                        </ListItem>
-                                    </>
-                                    :
-                                    location.pathname.split('/')[1] == 'expense' || location.pathname.split('/')[1] == 'bank' || location.pathname.split('/')[1] == 'businessReport' ? <>
-                                        <>
-                                            <ListItem key={'staff1'}>
-                                                <ListItemButton to="/dashboard">
-                                                    <ListItemIcon>
-                                                        <DashboardIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={'Dashboard'} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                            {/* <ListItem key={'staff2'}>
-                                                <ListItemButton to="/expense/dashboard">
-                                                    <ListItemIcon>
-                                                        <AccountBalanceWalletIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={'Expense'} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                            <ListItem key={'staff2'}>
-                                                <ListItemButton to="/bank/dashboard">
-                                                    <ListItemIcon>
-                                                        <AccountBalanceIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={'Banks'} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                            <ListItem key={'staff5'}>
-                                                <ListItemButton to="/businessReport">
-                                                    <ListItemIcon>
-                                                        <AssessmentIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={'Business Report'} />
-                                                </ListItemButton>
-                                            </ListItem> */}
-                                        </>
-                                        {location.pathname.split('/')[1] == 'expense' ?
-                                            <><ListItem key={'staff2'}>
-                                                <ListItemButton to="/expense/dashboard">
-                                                    <ListItemIcon>
-                                                        <AccountBalanceWalletIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={'Expense'} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                                {location.pathname.split('/').length == 8 ?
-                                                    <ListItem key={'common'}>
-                                                        <ListItemButton to={`/expense/mainCategory/${location.pathname.split('/')[3].replace(/20|%20/g, ' ')}/expenses/${location.pathname.split('/')[6]}`}>
-                                                            <ListItemIcon>
-                                                                <AllInboxIcon />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary={`${location.pathname.split('/')[3].replace(/20|%20/g, ' ') + ' ' + 'Expense'}`} />
-                                                        </ListItemButton>
-                                                    </ListItem> :
-                                                    <ListItem key={'common'}>
-                                                        <ListItemButton to={`/expense/mainCategory/${location.pathname.split('/')[3].replace(/20|%20/g, ' ')}/expenses/${location.pathname.split('/')[4]}`}>
-                                                            <ListItemIcon>
-                                                                <AllInboxIcon />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary={`${location.pathname.split('/')[3].replace(/20|%20/g, ' ') + ' ' + 'Expense'}`} />
-                                                        </ListItemButton>
-                                                    </ListItem>
-                                                }
-                                                {dashboardCategory?.map((data, index) => (
-                                                    <ListItem key={data.categoryId}>
-                                                        <ListItemButton to={`/expense/mainCategory/${data.categoryName}/${data.categoryId}`}>
-                                                            <ListItemIcon>
-                                                                <MoneyOffIcon />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary={data.categoryName} />
-                                                        </ListItemButton>
-                                                    </ListItem>
-                                                ))}
-                                            </>
-                                            : location.pathname.split('/')[1] == 'bank' ?
-                                                <>
-                                                    <ListItem key={'staff3'}>
-                                                        <ListItemButton to="/bank/dashboard">
-                                                            <ListItemIcon>
-                                                                <AccountBalanceIcon />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary={'Banks'} />
-                                                        </ListItemButton>
-                                                    </ListItem>
-                                                    {banks?.map((data, index) => (
-                                                        <ListItem key={data.bankId}>
-                                                            <ListItemButton to={`/bank/detail/${data.bankId}`}>
-                                                                <ListItemIcon>
-                                                                    <SavingsIcon />
-                                                                </ListItemIcon>
-                                                                <ListItemText primary={data.bankDisplayName} />
-                                                            </ListItemButton>
-                                                        </ListItem>
-                                                    ))}
-                                                </> :
-                                                <></>}
-                                    </>
-                                        :
-                                        <>
-                                            <ListItem key={1}>
-                                                <ListItemButton to="/dashboard">
-                                                    <ListItemIcon>
-                                                        <DashboardIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={'Dashboard'} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                            <ListItem key={2}>
-                                                <ListItemButton to="/productList">
-                                                    <ListItemIcon>
-                                                        <StyleOutlinedIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={'Products'} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                            <ListItem key={9}>
-                                                <ListItemButton to="/productTable">
-                                                    <ListItemIcon>
-                                                        <ListAltOutlinedIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={'Product Table'} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                            <ListItem key={3}>
-                                                <ListItemButton to="/stockInOut">
-                                                    <ListItemIcon>
-                                                        <CompareArrowsIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={'Stock In/Out'} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                            <ListItem key={4}>
-                                                <ListItemButton to="/suppilerTable">
-                                                    <ListItemIcon>
-                                                        <DomainAddIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={'Suppliers'} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                            <ListItem key={5}>
-                                                <ListItemButton to="/categories">
-                                                    <ListItemIcon>
-                                                        <CategoryIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={'Categories'} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                            <ListItem key={6}>
-                                                <ListItemButton to="/transactionTable">
-                                                    <ListItemIcon>
-                                                        <AccountBalanceWalletIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={'Transaction History'} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                        </>
-                }
-            </List>
-        </Box>
-    );
-
     const navigate = useNavigate();
     const logout = () => {
         if (window.confirm("Are you sure !,you want to logout")) {
@@ -444,6 +123,7 @@ function NavBar() {
         return (<Navigate to="/login" state={{ from: location }} replace />)
     }
     const role = user.userRights ? decryptData(user.userRights) : '';
+    console.log('rights??', role)
     if (loading) {
         console.log('>>>>??')
         toast.loading("Please wait...", {
@@ -489,6 +169,400 @@ function NavBar() {
         });
         setError(false);
     }
+    const list = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, color: 'gray' }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#333', color: '#fff' }}>
+                <div style={{ fontSize: 35 }}><InventoryIcon fontSize='large' />&nbsp;&nbsp;{role == 5 ? 'Manager' : location.pathname.split('/')[1] == 'staff' ? 'Employes' : location.pathname.split('/')[1] == 'expense' ? 'Expense' : location.pathname.split('/')[1] == 'bank' ? 'Banks' : location.pathname.split('/')[1] == 'businessReport' ? 'Business' : 'Inventory'}</div>
+                <Button onClick={toggleDrawer(anchor, false)} color="inherit">
+                    <ArrowBackIcon fontSize='small' />
+                </Button>
+            </Box>
+            <Divider />
+            <List>
+
+                {role == 5 ?
+                    <ListItem key={3}>
+                        <ListItemButton to="/stockOut">
+                            <ListItemIcon>
+                                <CompareArrowsIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={'Stock In/Out'} />
+                        </ListItemButton>
+                    </ListItem>
+                    : role == 4 ? <>
+                        <ListItem key={'inout9'}>
+                            <ListItemButton to="/InOut/productTable">
+                                <ListItemIcon>
+                                    <ListAltOutlinedIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'Product Table'} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem key={'inout3'}>
+                            <ListItemButton to="/InOut/stockInOut">
+                                <ListItemIcon>
+                                    <CompareArrowsIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'Stock In/Out'} />
+                            </ListItemButton>
+                        </ListItem>
+                    </> : role == 3 ? <>
+                        <ListItem key={'inout91'}>
+                            <ListItemButton to="/InOut/productTable">
+                                <ListItemIcon>
+                                    <ListAltOutlinedIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'Product Table'} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem key={'inout31'}>
+                            <ListItemButton to="/InOut/stockInOut">
+                                <ListItemIcon>
+                                    <CompareArrowsIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'Stock In/Out'} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem key={'inout32'}>
+                            <ListItemButton to="/InOutNpayment/suppilerTable">
+                                <ListItemIcon>
+                                    <DomainAddIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'Suppliers'} />
+                            </ListItemButton>
+                        </ListItem>
+                    </> :
+                        location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'suppilerDetailsOwner' || (location.pathname.split('/')[1] == 'addSuppiler' && role == 1) ? <>
+                            <ListItem key={'branchDashboard1'}>
+                                <ListItemButton to="/dashboard">
+                                    <ListItemIcon>
+                                        <DashboardIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={'Dashboard'} />
+                                </ListItemButton>
+                            </ListItem>
+                            {(location.pathname.split('/')[1] == 'suppilerDetailsOwner' || location.pathname.split('/')[1] == 'addSuppiler') &&
+                                <ListItem key={'ownerDashboard'}>
+                                    <ListItemButton to="/dashboardOwner">
+                                        <ListItemIcon>
+                                            <WorkspacesIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary={'Branches'} />
+                                    </ListItemButton>
+                                </ListItem>
+                            }
+                        </> :
+                            location.pathname.split('/')[1] == 'staff' ?
+                                <>
+                                    <ListItem key={'staff1'}>
+                                        <ListItemButton to="/dashboard">
+                                            <ListItemIcon>
+                                                <DashboardIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary={'Dashboard'} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                    <ListItem key={'staff2'}>
+                                        <ListItemButton to="/staff/staffList">
+                                            <ListItemIcon>
+                                                <StyleOutlinedIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary={'Staff List'} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                    <ListItem key={'staff5'}>
+                                        <ListItemButton to="/staff/addStaff">
+                                            <ListItemIcon>
+                                                <GroupAddIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary={'Add Staff'} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                    <ListItem key={'staff6'}>
+                                        <ListItemButton to="/staff/allPayments">
+                                            <ListItemIcon>
+                                                <AccountBalanceWalletIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary={'All Payments'} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                    <ListItem key={'staff6'}>
+                                        <ListItemButton to="/staff/leaves">
+                                            <ListItemIcon>
+                                                <EventBusyIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary={'Leaves'} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                    <ListItem key={'staff3'}>
+                                        <ListItemButton to="/staff/staffCategory">
+                                            <ListItemIcon>
+                                                <ListAltOutlinedIcon />
+                                            </ListItemIcon>
+                                            <ListItemText primary={'Staff Categorires Table'} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                </>
+                                :
+                                location.pathname.split('/')[1] == 'expense' && location.pathname.split('/')[2] == 'dashboard' ?
+                                    <>
+                                        <ListItem key={'staff1'}>
+                                            <ListItemButton to="/dashboard">
+                                                <ListItemIcon>
+                                                    <DashboardIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary={'Dashboard'} />
+                                            </ListItemButton>
+                                        </ListItem>
+                                        <ListItem key={'staff2'}>
+                                            <ListItemButton to="/bank/dashboard">
+                                                <ListItemIcon>
+                                                    <AccountBalanceIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary={'Banks'} />
+                                            </ListItemButton>
+                                        </ListItem>
+                                        <ListItem key={'staff5'}>
+                                            <ListItemButton to="/businessReport">
+                                                <ListItemIcon>
+                                                    <AssessmentIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary={'Business Report'} />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    </>
+                                    :
+                                    location.pathname.split('/')[1] == 'bank' && location.pathname.split('/')[2] == 'dashboard' ?
+                                        <>
+                                            <ListItem key={'staff1'}>
+                                                <ListItemButton to="/dashboard">
+                                                    <ListItemIcon>
+                                                        <DashboardIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText primary={'Dashboard'} />
+                                                </ListItemButton>
+                                            </ListItem>
+                                            <ListItem key={'staff2'}>
+                                                <ListItemButton to="/expense/dashboard">
+                                                    <ListItemIcon>
+                                                        <AccountBalanceWalletIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText primary={'Expense'} />
+                                                </ListItemButton>
+                                            </ListItem>
+                                            <ListItem key={'staff5'}>
+                                                <ListItemButton to="/businessReport">
+                                                    <ListItemIcon>
+                                                        <AssessmentIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText primary={'Business Report'} />
+                                                </ListItemButton>
+                                            </ListItem>
+                                        </>
+                                        :
+                                        location.pathname.split('/')[1] == 'businessReport' ?
+                                            <>
+                                                <ListItem key={'staff1'}>
+                                                    <ListItemButton to="/dashboard">
+                                                        <ListItemIcon>
+                                                            <DashboardIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={'Dashboard'} />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                                <ListItem key={'staff2'}>
+                                                    <ListItemButton to="/expense/dashboard">
+                                                        <ListItemIcon>
+                                                            <AccountBalanceWalletIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={'Expense'} />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                                <ListItem key={'staff3'}>
+                                                    <ListItemButton to="/bank/dashboard">
+                                                        <ListItemIcon>
+                                                            <AccountBalanceIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={'Banks'} />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            </>
+                                            :
+                                            location.pathname.split('/')[1] == 'expense' || location.pathname.split('/')[1] == 'bank' || location.pathname.split('/')[1] == 'businessReport' ? <>
+                                                <>
+                                                    <ListItem key={'staff1'}>
+                                                        <ListItemButton to="/dashboard">
+                                                            <ListItemIcon>
+                                                                <DashboardIcon />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary={'Dashboard'} />
+                                                        </ListItemButton>
+                                                    </ListItem>
+                                                    {/* <ListItem key={'staff2'}>
+                                                <ListItemButton to="/expense/dashboard">
+                                                    <ListItemIcon>
+                                                        <AccountBalanceWalletIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText primary={'Expense'} />
+                                                </ListItemButton>
+                                            </ListItem>
+                                            <ListItem key={'staff2'}>
+                                                <ListItemButton to="/bank/dashboard">
+                                                    <ListItemIcon>
+                                                        <AccountBalanceIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText primary={'Banks'} />
+                                                </ListItemButton>
+                                            </ListItem>
+                                            <ListItem key={'staff5'}>
+                                                <ListItemButton to="/businessReport">
+                                                    <ListItemIcon>
+                                                        <AssessmentIcon />
+                                                    </ListItemIcon>
+                                                    <ListItemText primary={'Business Report'} />
+                                                </ListItemButton>
+                                            </ListItem> */}
+                                                </>
+                                                {location.pathname.split('/')[1] == 'expense' ?
+                                                    <><ListItem key={'staff2'}>
+                                                        <ListItemButton to="/expense/dashboard">
+                                                            <ListItemIcon>
+                                                                <AccountBalanceWalletIcon />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary={'Expense'} />
+                                                        </ListItemButton>
+                                                    </ListItem>
+                                                        {location.pathname.split('/').length == 8 ?
+                                                            <ListItem key={'common'}>
+                                                                <ListItemButton to={`/expense/mainCategory/${location.pathname.split('/')[3].replace(/20|%20/g, ' ')}/expenses/${location.pathname.split('/')[6]}`}>
+                                                                    <ListItemIcon>
+                                                                        <AllInboxIcon />
+                                                                    </ListItemIcon>
+                                                                    <ListItemText primary={`${location.pathname.split('/')[3].replace(/20|%20/g, ' ') + ' ' + 'Expense'}`} />
+                                                                </ListItemButton>
+                                                            </ListItem> :
+                                                            <ListItem key={'common'}>
+                                                                <ListItemButton to={`/expense/mainCategory/${location.pathname.split('/')[3].replace(/20|%20/g, ' ')}/expenses/${location.pathname.split('/')[4]}`}>
+                                                                    <ListItemIcon>
+                                                                        <AllInboxIcon />
+                                                                    </ListItemIcon>
+                                                                    <ListItemText primary={`${location.pathname.split('/')[3].replace(/20|%20/g, ' ') + ' ' + 'Expense'}`} />
+                                                                </ListItemButton>
+                                                            </ListItem>
+                                                        }
+                                                        {dashboardCategory?.map((data, index) => (
+                                                            <ListItem key={data.categoryId}>
+                                                                <ListItemButton to={`/expense/mainCategory/${data.categoryName}/${data.categoryId}`}>
+                                                                    <ListItemIcon>
+                                                                        <MoneyOffIcon />
+                                                                    </ListItemIcon>
+                                                                    <ListItemText primary={data.categoryName} />
+                                                                </ListItemButton>
+                                                            </ListItem>
+                                                        ))}
+                                                    </>
+                                                    : location.pathname.split('/')[1] == 'bank' ?
+                                                        <>
+                                                            <ListItem key={'staff3'}>
+                                                                <ListItemButton to="/bank/dashboard">
+                                                                    <ListItemIcon>
+                                                                        <AccountBalanceIcon />
+                                                                    </ListItemIcon>
+                                                                    <ListItemText primary={'Banks'} />
+                                                                </ListItemButton>
+                                                            </ListItem>
+                                                            {banks?.map((data, index) => (
+                                                                <ListItem key={data.bankId}>
+                                                                    <ListItemButton to={`/bank/detail/${data.bankId}`}>
+                                                                        <ListItemIcon>
+                                                                            <SavingsIcon />
+                                                                        </ListItemIcon>
+                                                                        <ListItemText primary={data.bankDisplayName} />
+                                                                    </ListItemButton>
+                                                                </ListItem>
+                                                            ))}
+                                                        </> :
+                                                        <></>}
+                                            </>
+                                                :
+                                                <>
+                                                    <ListItem key={1}>
+                                                        <ListItemButton to="/dashboard">
+                                                            <ListItemIcon>
+                                                                <DashboardIcon />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary={'Dashboard'} />
+                                                        </ListItemButton>
+                                                    </ListItem>
+                                                    {
+                                                        role == 1 && <ListItem key={'ownerDashboard'}>
+                                                            <ListItemButton to="/dashboardOwner">
+                                                                <ListItemIcon>
+                                                                    <WorkspacesIcon />
+                                                                </ListItemIcon>
+                                                                <ListItemText primary={'Branches'} />
+                                                            </ListItemButton>
+                                                        </ListItem>
+                                                    }
+                                                    {/* <ListItem key={2}>
+                                                    <ListItemButton to="/productList">
+                                                        <ListItemIcon>
+                                                            <StyleOutlinedIcon />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={'Products'} />
+                                                    </ListItemButton>
+                                                </ListItem> */}
+                                                    <ListItem key={9}>
+                                                        <ListItemButton to="/productTable">
+                                                            <ListItemIcon>
+                                                                <ListAltOutlinedIcon />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary={'Product Table'} />
+                                                        </ListItemButton>
+                                                    </ListItem>
+                                                    <ListItem key={3}>
+                                                        <ListItemButton to="/stockInOut">
+                                                            <ListItemIcon>
+                                                                <CompareArrowsIcon />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary={'Stock In/Out'} />
+                                                        </ListItemButton>
+                                                    </ListItem>
+                                                    <ListItem key={4}>
+                                                        <ListItemButton to="/suppilerTable">
+                                                            <ListItemIcon>
+                                                                <DomainAddIcon />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary={'Suppliers'} />
+                                                        </ListItemButton>
+                                                    </ListItem>
+                                                    <ListItem key={5}>
+                                                        <ListItemButton to="/categories">
+                                                            <ListItemIcon>
+                                                                <CategoryIcon />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary={'Categories'} />
+                                                        </ListItemButton>
+                                                    </ListItem>
+                                                    <ListItem key={6}>
+                                                        <ListItemButton to="/transactionTable">
+                                                            <ListItemIcon>
+                                                                <AccountBalanceWalletIcon />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary={'Transaction History'} />
+                                                        </ListItemButton>
+                                                    </ListItem>
+                                                </>
+                }
+            </List>
+        </Box>
+    );
+
     return (
         <div className="navBar grid content-center">
             <div className='flex justify-between h-full'>
@@ -517,9 +591,17 @@ function NavBar() {
                         <img className='headerImg' src={LogoWithDate} alt='No Image Found' />
                     </div>
                 </div>
+                {
+                    !(location.pathname.split('/')[1] == 'dashboardOwner' || (location.pathname.split('/')[1] == 'dashboard' && role == 1)) ? <div className='BranchName flex'>
+                        <div className='self-center'>
+                            {userInfo.branchName}
+                        </div>
+                    </div> : ''
+                }
+
                 <div className='logoutWrp flex justify-end'>
                     <div className='greeting h-full grid content-center mr-24'>
-                        {role != 6 ? greetMsg + ', ' + user?.userName : ''}
+                        {role != 5 ? greetMsg + ', ' + user?.userName : ''}
                     </div>
                     <button className='h-full grid content-center' onClick={logout}>
                         <LogoutIcon fontSize='medium' />

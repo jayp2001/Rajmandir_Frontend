@@ -72,14 +72,14 @@ function LoginPage() {
                     res.data.userRights = res.data.userRights ? encryptData(res.data.userRights) : res.data.userRights;
                     localStorage.setItem("userInfo", JSON.stringify(res.data));
                     console.log("rightsLogin", rights);
-                    if (rights == 6) {
+                    if (rights == 5) {
                         navigate('/stockOut');
                     }
-                    else if (rights == 1) {
-                        navigate('/dashboardOwner');
-                    }
-                    else if (rights == 2) {
+                    else if (rights == 1 || rights == 2) {
                         navigate('/dashboard');
+                    }
+                    else if (rights == 4 || rights == 3) {
+                        navigate('/InOut/productTable');
                     }
                     else
                         navigate('/dashboard');

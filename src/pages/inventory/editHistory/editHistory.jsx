@@ -176,7 +176,7 @@ function EditHistory() {
             <div className='userTableSubContainer mt-8'>
                 <div className='grid grid-cols-12 pt-6'>
                     <div className='col-span-6 col-start-7 pr-5 flex justify-end'>
-                        <button className='exportExcelBtn' onClick={deleteData}><CloseIcon />&nbsp;&nbsp;Delete All History</button>
+                        <button className='DeleteHistoryBtn' onClick={deleteData}><CloseIcon />&nbsp;&nbsp;Delete All History</button>
                     </div>
                 </div>
                 <div className='tableContainerWrapper'>

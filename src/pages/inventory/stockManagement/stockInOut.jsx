@@ -123,7 +123,7 @@ function StockInOut() {
             productId: "",
             productQty: 0,
             productUnit: "",
-            stockOutCategory: 0,
+            stockOutCategory: 'Regular',
             stockOutComment: "",
             stockOutDate: dayjs()
         });
@@ -257,7 +257,7 @@ function StockInOut() {
         productId: "",
         productQty: 0,
         productUnit: "",
-        stockOutCategory: 0,
+        stockOutCategory: 'Regular',
         stockOutComment: "",
         reason: "",
         stockOutDate: dayjs()
@@ -438,6 +438,7 @@ function StockInOut() {
                 }
             })
             if (isValidate.length > 0) {
+                console.log('stockInError', isValidate, stockInFormData)
                 setError(
                     "Please Fill All Field"
                 )
@@ -481,8 +482,12 @@ function StockInOut() {
             supplierId: '',
             productUnit: value && value.productUnit ? value.productUnit : ''
         }))
-        getSuppilerList(value && value.productId ? value.productId : '');
-        getUnitForProduct(value && value.productId ? value.productId : '');
+        setStockInFormDataError((prevState) => ({
+            ...prevState,
+            productName: value && value.productId ? false : true
+        }))
+        value && value.productId && getSuppilerList(value.productId);
+        value && value.productId && getUnitForProduct(value.productId);
         // console.log('formddds', stockInFormData)
     }
     const handleProductNameAutoCompleteOut = (event, value) => {
@@ -494,7 +499,11 @@ function StockInOut() {
             remainingStock: value && value.remainingStock ? value.remainingStock : 0,
             remainingStockArray: value && value.allConversation ? value.allConversation : [],
         }))
-        getUnitForProduct(value && value.productId ? value.productId : '');
+        setStockOutFormDataError((prevState) => ({
+            ...prevState,
+            productName: value && value.productId ? false : true
+        }))
+        value && value.productId && getUnitForProduct(value.productId);
         console.log('formddds', stockInFormData)
     }
     const handleResetStockIn = () => {
@@ -528,7 +537,7 @@ function StockInOut() {
             productName: null,
             productQty: 0,
             productUnit: "",
-            stockOutCategory: null,
+            stockOutCategory: 'Regular',
             stockOutComment: "",
             stockOutDate: dayjs(),
             reason: ''
@@ -1607,7 +1616,7 @@ function StockInOut() {
                                 {tab != 3 ?
                                     <button className='exportExcelBtn' onClick={() => { tab === 1 || tab === '1' ? stockInExportExcel() : stockOutExportExcel() }}><FileDownloadIcon />&nbsp;&nbsp;Export Excle</button>
                                     :
-                                    <button className='exportExcelBtn' onClick={deleteData}><CloseIcon />&nbsp;&nbsp;Delete All Updated</button>
+                                    <button className='DeleteHistoryBtn' onClick={deleteData}><CloseIcon />&nbsp;&nbsp;Delete All Updated</button>
                                 }</div>
                         </div>
                         {tab === 1 || tab === '1' ?
