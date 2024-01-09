@@ -62,6 +62,13 @@ function Menutemp(props) {
                     }}>
                     Stock Out
                 </MenuItem>
+                <MenuItem key={'Edit'}
+                    onClick={() => {
+                        handleClose();
+                        props.handleEditClick(props.data)
+                    }}>
+                    Edit
+                </MenuItem>
             </Menu>
         </div >
     );

@@ -900,9 +900,16 @@ function ProductListTableStockIn(props) {
             .then((res) => {
                 const { priorityArray, ...updatedData } = res.data;
                 const transformedArray = priorityArray.map(() => ({ unitNumber: false }));
+                const elementsToRemove = res.data && res.data.unitArr ? res.data.unitArr : []
+                const qtySmall = units.filter(item => !elementsToRemove.includes(item));
+                setQtyUnit(qtySmall)
+
+                setFormData({
+                    ...updatedData,
+                    smallUnitName: res.data && res.data.unitArr ? res.data.unitArr[res.data.unitArr.length - 1] : '',
+                })
                 setUnitConversation(res.data.priorityArray);
                 setUnitConversationError(transformedArray);
-                setFormData(updatedData);
                 setOpenM(true);
                 setIsEdit(true);
             })
@@ -1441,6 +1448,18 @@ function ProductListTableStockIn(props) {
                                 fullWidth
                             />
                         </div>
+                        <div className='col-span-3'>
+                            <TextField
+                                onChange={onChange}
+                                value={formData.gujaratiProductName ? formData.gujaratiProductName : ''}
+                                name="gujaratiProductName"
+                                id="outlined-required"
+                                label="પ્રોડક્ટનું નામ"
+                                InputProps={{ style: { fontSize: 14 } }}
+                                InputLabelProps={{ style: { fontSize: 14 } }}
+                                fullWidth
+                            />
+                        </div>
                         <div className='col-span-2'>
                             <TextField
                                 onBlur={(e) => {
@@ -1505,6 +1524,19 @@ function ProductListTableStockIn(props) {
                                 </Select>
                             </FormControl>
                         </div>
+                        <div className='col-span-2'>
+                            <TextField
+                                type='number'
+                                onChange={onChange}
+                                value={formData.leadTime ? formData.leadTime : ''}
+                                name="leadTime"
+                                id="outlined-required"
+                                label="Lead Time"
+                                InputProps={{ style: { fontSize: 14 } }}
+                                InputLabelProps={{ style: { fontSize: 14 } }}
+                                fullWidth
+                            />
+                        </div>
                         <div className='col-span-3'>
                             {/* <FormControl style={{ minWidth: '100%' }}>
                                 <InputLabel id="demo-simple-select-label" required error={formDataError.productCategoryId}>Category</InputLabel>
@@ -1545,19 +1577,6 @@ function ProductListTableStockIn(props) {
                                 id="outlined-required"
                                 label="StockIn Category"
                                 disabled
-                                InputProps={{ style: { fontSize: 14 } }}
-                                InputLabelProps={{ style: { fontSize: 14 } }}
-                                fullWidth
-                            />
-                        </div>
-                        <div className='col-span-2'>
-                            <TextField
-                                type='number'
-                                onChange={onChange}
-                                value={formData.leadTime ? formData.leadTime : ''}
-                                name="leadTime"
-                                id="outlined-required"
-                                label="Lead Time"
                                 InputProps={{ style: { fontSize: 14 } }}
                                 InputLabelProps={{ style: { fontSize: 14 } }}
                                 fullWidth

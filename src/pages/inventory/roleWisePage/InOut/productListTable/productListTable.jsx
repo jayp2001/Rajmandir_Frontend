@@ -917,9 +917,16 @@ function ProductListTableInOut() {
             .then((res) => {
                 const { priorityArray, ...updatedData } = res.data;
                 const transformedArray = priorityArray.map(() => ({ unitNumber: false }));
+                const elementsToRemove = res.data && res.data.unitArr ? res.data.unitArr : []
+                const qtySmall = units.filter(item => !elementsToRemove.includes(item));
+                setQtyUnit(qtySmall)
+
+                setFormData({
+                    ...updatedData,
+                    smallUnitName: res.data && res.data.unitArr ? res.data.unitArr[res.data.unitArr.length - 1] : '',
+                })
                 setUnitConversation(res.data.priorityArray);
                 setUnitConversationError(transformedArray);
-                setFormData(updatedData);
                 setOpenM(true);
                 setIsEdit(true);
             })
@@ -1166,6 +1173,11 @@ function ProductListTableInOut() {
                                     }}>
                                         <div className='statusTabtext'>Out-Stock</div> &nbsp;&nbsp; <div className={`ProductCount ${tab === 3 || tab === '3' ? 'redCount' : ''} `}>{countData && countData.outOfStock ? countData.outOfStock : 0}</div>
                                     </div>
+                                </div>
+                            </div>
+                            <div className=' grid col-span-2 col-start-11 pr-3 flex h-full'>
+                                <div className='self-center justify-self-end'>
+                                    <button className='addProductBtn' onClick={handleOpen}>Add Product</button>
                                 </div>
                             </div>
                         </div>
@@ -1446,6 +1458,18 @@ function ProductListTableInOut() {
                                 fullWidth
                             />
                         </div>
+                        <div className='col-span-3'>
+                            <TextField
+                                onChange={onChange}
+                                value={formData.gujaratiProductName ? formData.gujaratiProductName : ''}
+                                name="gujaratiProductName"
+                                id="outlined-required"
+                                label="પ્રોડક્ટનું નામ"
+                                InputProps={{ style: { fontSize: 14 } }}
+                                InputLabelProps={{ style: { fontSize: 14 } }}
+                                fullWidth
+                            />
+                        </div>
                         <div className='col-span-2'>
                             <TextField
                                 onBlur={(e) => {
@@ -1510,6 +1534,19 @@ function ProductListTableInOut() {
                                 </Select>
                             </FormControl>
                         </div>
+                        <div className='col-span-2'>
+                            <TextField
+                                type='number'
+                                onChange={onChange}
+                                value={formData.leadTime ? formData.leadTime : ''}
+                                name="leadTime"
+                                id="outlined-required"
+                                label="Lead Time"
+                                InputProps={{ style: { fontSize: 14 } }}
+                                InputLabelProps={{ style: { fontSize: 14 } }}
+                                fullWidth
+                            />
+                        </div>
                         <div className='col-span-3'>
                             <FormControl style={{ minWidth: '100%' }}>
                                 <InputLabel id="demo-simple-select-label" required error={formDataError.productCategoryId}>Category</InputLabel>
@@ -1544,19 +1581,6 @@ function ProductListTableInOut() {
 
                                 </Select>
                             </FormControl>
-                        </div>
-                        <div className='col-span-2'>
-                            <TextField
-                                type='number'
-                                onChange={onChange}
-                                value={formData.leadTime ? formData.leadTime : ''}
-                                name="leadTime"
-                                id="outlined-required"
-                                label="Lead Time"
-                                InputProps={{ style: { fontSize: 14 } }}
-                                InputLabelProps={{ style: { fontSize: 14 } }}
-                                fullWidth
-                            />
                         </div>
                         <div className='col-span-2'>
                             <FormControlLabel control={<Checkbox name='isFactoryMade' checked={formData.isFactoryMade} value={formData.isFactoryMade} onChange={() => {

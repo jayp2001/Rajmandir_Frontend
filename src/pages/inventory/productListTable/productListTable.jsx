@@ -1466,6 +1466,18 @@ function ProductListTable() {
                                 fullWidth
                             />
                         </div>
+                        <div className='col-span-3'>
+                            <TextField
+                                onChange={onChange}
+                                value={formData.gujaratiProductName ? formData.gujaratiProductName : ''}
+                                name="gujaratiProductName"
+                                id="outlined-required"
+                                label="પ્રોડક્ટનું નામ"
+                                InputProps={{ style: { fontSize: 14 } }}
+                                InputLabelProps={{ style: { fontSize: 14 } }}
+                                fullWidth
+                            />
+                        </div>
                         <div className='col-span-2'>
                             <TextField
                                 onBlur={(e) => {
@@ -1529,6 +1541,19 @@ function ProductListTable() {
 
                                 </Select>
                             </FormControl>
+                        </div>
+                        <div className='col-span-2'>
+                            <TextField
+                                type='number'
+                                onChange={onChange}
+                                value={formData.leadTime ? formData.leadTime : ''}
+                                name="leadTime"
+                                id="outlined-required"
+                                label="Lead Time"
+                                InputProps={{ style: { fontSize: 14 } }}
+                                InputLabelProps={{ style: { fontSize: 14 } }}
+                                fullWidth
+                            />
                         </div>
                         <div className='col-span-3'>
                             <FormControl style={{ minWidth: '100%' }}>
