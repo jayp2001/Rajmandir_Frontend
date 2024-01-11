@@ -1592,19 +1592,6 @@ function ProductListTable() {
                             </FormControl>
                         </div>
                         <div className='col-span-2'>
-                            <TextField
-                                type='number'
-                                onChange={onChange}
-                                value={formData.leadTime ? formData.leadTime : ''}
-                                name="leadTime"
-                                id="outlined-required"
-                                label="Lead Time"
-                                InputProps={{ style: { fontSize: 14 } }}
-                                InputLabelProps={{ style: { fontSize: 14 } }}
-                                fullWidth
-                            />
-                        </div>
-                        <div className='col-span-2'>
                             <FormControlLabel control={<Checkbox name='isFactoryMade' checked={formData.isFactoryMade} value={formData.isFactoryMade} onChange={() => {
                                 setFormData((perv) => ({
                                     ...perv,
