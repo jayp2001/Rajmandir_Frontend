@@ -444,6 +444,7 @@ function ProductListTableStockIn(props) {
             expiredDays: false,
         });
         setUnitConversation([]);
+        setQtyUnit(units)
         setUnitConversationError([]);
         setIsEdit(false);
     }

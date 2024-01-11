@@ -450,6 +450,7 @@ function ProductListTableInOut() {
             productCategoryId: false,
         });
         setUnitConversation([]);
+        setQtyUnit(units)
         setUnitConversationError([]);
         setIsEdit(false);
     }

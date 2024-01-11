@@ -449,6 +449,7 @@ function ProductListTable() {
             expiredDays: false,
             productCategoryId: false,
         });
+        setQtyUnit(units)
         setUnitConversation([]);
         setUnitConversationError([]);
         setIsEdit(false);
