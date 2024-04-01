@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import { BACKEND_BASE_URL } from '../../../url';
 import axios from 'axios';
+import ExportMenu from './exportMenu';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { useParams, useNavigate } from 'react-router-dom';
 import CountCard from '../countCard/countCard';
@@ -473,7 +474,7 @@ function SuppilerDetail() {
     const getInvoice = async (tId, suppilerName) => {
         if (window.confirm('Are you sure you want to Download Invoice ... ?')) {
             await axios({
-                url: `${BACKEND_BASE_URL}inventoryrouter/exportTransactionInvoice?transactionId=${tId}`,
+                url: `${BACKEND_BASE_URL}inventoryrouter/exportTransactionInvoiceData?transactionId=${tId}`,
                 method: 'GET',
                 headers: { Authorization: `Bearer ${userInfo.token}` },
                 responseType: 'blob', // important
@@ -519,6 +520,30 @@ function SuppilerDetail() {
             });
         }
     }
+    const stockInExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForStockIn?startDate=${state[0].startDate}&endDate=${state[0].endDate}&supplierId=${id}&payType=${tabStockIn}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForStockIn?startDate=${''}&endDate=${''}&supplierId=${id}&payType=${tabStockIn}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = 'StockIn_' + new Date().toLocaleDateString() + '.pdf'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        }
+    }
 
     const allProductExportExcel = async () => {
         if (window.confirm('Are you sure you want to export Excel ... ?')) {
@@ -544,6 +569,30 @@ function SuppilerDetail() {
             });
         }
     }
+    const allProductExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForAllProductBySupplierId?startDate=${state[0].startDate}&endDate=${state[0].endDate}&supplierId=${id}&payType=${tabStockIn}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForAllProductBySupplierId?startDate=${''}&endDate=${''}&supplierId=${id}&payType=${tabStockIn}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = 'AllProducts_' + new Date().toLocaleDateString() + '.pdf'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        }
+    }
 
     const transactionExportExcel = async () => {
         if (window.confirm('Are you sure you want to export Excel ... ?')) {
@@ -557,7 +606,31 @@ function SuppilerDetail() {
                 const href = URL.createObjectURL(response.data);
                 // create "a" HTML element with href to file & click
                 const link = document.createElement('a');
-                const name = filter ? 'Transactions_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.xlsx' : 'Transactions_' + new Date().toLocaleDateString();
+                const name = filter ? 'Transactions_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.xlsx' : 'Transactions_' + new Date().toLocaleDateString() + '.xlsx';
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        }
+    }
+    const transactionExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForDebitTransactionList?startDate=${state[0].startDate}&endDate=${state[0].endDate}&supplierId=${id}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForDebitTransactionList?startDate=${''}&endDate=${''}&supplierId=${id}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = filter ? 'Transactions_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.pdf' : 'Transactions_' + new Date().toLocaleDateString() + '.pdf';
                 link.href = href;
                 link.setAttribute('download', name); //or any other extension
                 document.body.appendChild(link);
@@ -602,6 +675,7 @@ function SuppilerDetail() {
     }
     if (error) {
         toast.dismiss('loading');
+        setLoading(false);
         toast(error, {
             type: 'error',
             position: "top-right",
@@ -867,7 +941,7 @@ function SuppilerDetail() {
                                         label="Paid Amount"
                                         fullWidth
                                         onChange={onChange}
-                                        value={formData.paidAmount ? formData.paidAmount : 0}
+                                        value={formData.paidAmount ? formData.paidAmount : ""}
                                         error={formDataError.paidAmount}
                                         // helperText={formData.supplierName && !formDataError.productQty ? `Remain Payment  ${formData.remainingAmount}` : formDataError.paidAmount ? formData.paidAmount > formData.remainingAmount ? `Payment Amount can't be more than ${formData.remainingAmount}` : "Please Enter Amount" : ''}
                                         helperText={`Remaining Payment ${formData.remainingAmount}`}
@@ -956,9 +1030,11 @@ function SuppilerDetail() {
             <div className='userTableSubContainer mt-6'>
                 <div className='grid grid-cols-12 pt-6'>
                     <div className='col-span-6 col-start-7 pr-5 flex justify-end'>
-                        <button className='exportExcelBtn'
+                        {/* <button className='exportExcelBtn'
                             onClick={() => { tabStockIn !== 'transaction' && tabStockIn !== 'products' ? stockInExportExcel() : tabStockIn === 'products' ? allProductExportExcel() : transactionExportExcel() }}
-                        ><FileDownloadIcon />&nbsp;&nbsp;Export Excle</button>
+                        ><FileDownloadIcon />&nbsp;&nbsp;Export Excel</button> */}
+                        {tabStockIn !== 'transaction' && tabStockIn !== 'products' ? <ExportMenu exportExcel={stockInExportExcel} exportPdf={stockInExportPdf} /> : tabStockIn === 'products' ? <ExportMenu exportExcel={allProductExportExcel} exportPdf={allProductExportPdf} /> : <ExportMenu exportExcel={transactionExportExcel} exportPdf={transactionExportPdf} />}
+
                     </div>
                 </div>
                 <div className='tableContainerWrapper'>
@@ -1006,7 +1082,7 @@ function SuppilerDetail() {
                                                     <Tooltip title={row.stockInComment} placement="top-start" arrow><TableCell align="left" ><div className='Comment'>{row.stockInComment}</div></TableCell></Tooltip>
                                                     <TableCell align="left" >{row.stockInDate}</TableCell>
                                                     <TableCell align="right">
-                                                        <MenuStockInOut stockInOutId={row.stockInId} data={row} deleteStockInOut={handleDeleteStockIn} />
+                                                        <MenuStockInOut stockInOutId={row.stockInId} data={row} deleteStockInOut={handleDeleteStockIn} setError={setError} />
                                                     </TableCell>
                                                 </TableRow> :
                                                 <TableRow

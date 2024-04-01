@@ -174,13 +174,23 @@ function SuppilerTable() {
         setPage(0);
         getDataOnPageChange(1, parseInt(event.target.value, 10))
     };
-    const handleDeleteSuppiler = (id) => {
-        if (window.confirm("Are you sure you want to delete User?")) {
-            deleteData(id);
-            setTimeout(() => {
-                getData()
-            }, 1000)
+    const handleDeleteSuppiler = async (id) => {
+        const password = window.prompt("Are you sure you want to delete supplier ?... Enter Password to delete")
+        if (password) {
+            await axios.post(`${BACKEND_BASE_URL}userrouter/chkPassword`, { "userPassword": password }, config)
+                .then(async (res) => {
+                    deleteData(id);
+                })
+                .catch((error) => {
+                    setError(error.response ? error.response.data : "Network Error ...!!!")
+                })
         }
+        // if (window.confirm("Are you sure you want to delete User?")) {
+
+        //     setTimeout(() => {
+        //         getData()
+        //     }, 1000)
+        // }
     }
     const makePayment = async () => {
         setLoading(true);

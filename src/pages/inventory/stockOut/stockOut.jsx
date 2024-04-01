@@ -512,6 +512,7 @@ function StockOut() {
     }
     if (error) {
         toast.dismiss('loading');
+        setLoading(false);
         toast(error, {
             type: 'error',
             position: "top-right",

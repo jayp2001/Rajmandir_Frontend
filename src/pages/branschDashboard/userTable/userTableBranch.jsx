@@ -346,10 +346,10 @@ function UserTableOwner() {
         setIsEdit(false);
     };
     const search = async (searchWord) => {
-        await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getSupplierAllBranchData?page=${1}&numPerPage=${5}&searchWord=${searchWord}`, config)
+        await axios.get(`${BACKEND_BASE_URL}userrouter/getUserDetails?page=${1}&numPerPage=${5}&searchWord=${searchWord}`, config)
             .then((res) => {
-                setSuppilers(res.data.rows);
-                setTotalRowsSuppilers(res.data.numRows);
+                setData(res.data.rows);
+                setTotalRows(res.data.numRows);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -396,8 +396,8 @@ function UserTableOwner() {
             })
     }
     const handleDeleteUser = async (id) => {
-        setLoading(true);
         if (window.confirm("Are you sure you want to delete User?")) {
+            setLoading(true);
             await axios.delete(`${BACKEND_BASE_URL}userrouter/removeUser?userId=${id}`, config)
                 .then((res) => {
                     setLoading(false);
@@ -405,7 +405,7 @@ function UserTableOwner() {
                     getData();
                 })
                 .catch((error) => {
-                    alert(error.response ? error.response.data : "Network Error ...!!!")
+                    setError(error.response ? error.response.data : "Network Error ...!!!")
                 })
         }
     }
@@ -417,7 +417,7 @@ function UserTableOwner() {
                 setTotalRows(res.data.numRows);
             })
             .catch((error) => {
-                alert(error.response.data)
+                setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
     const getDataOnPageChange = async (pageNum, rowPerPageNum) => {
@@ -428,7 +428,7 @@ function UserTableOwner() {
                 setTotalRows(res.data.numRows);
             })
             .catch((error) => {
-                alert(error.response.data)
+                setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
     const handleChangePage = (event, newPage) => {
@@ -576,10 +576,10 @@ function UserTableOwner() {
     }
     const getDataSuppiler = async () => {
         console.log("page get", page, rowsPerPage)
-        await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getSupplierAllBranchData?page=${1}&numPerPage=${5}`, config)
+        await axios.get(`${BACKEND_BASE_URL}userrouter/getUserDetails?page=${1}&numPerPage=${5}`, config)
             .then((res) => {
-                setSuppilers(res.data.rows);
-                setTotalRowsSuppilers(res.data.numRows);
+                setData(res.data.rows);
+                setTotalRows(res.data.numRows);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -587,10 +587,10 @@ function UserTableOwner() {
     }
     const getDataOnPageChangeSuppiler = async (pageNum, rowPerPageNum) => {
         console.log("page get", page, rowsPerPage)
-        await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getSupplierAllBranchData?page=${pageNum}&numPerPage=${rowPerPageNum}&searchWord=${searchWord}`, config)
+        await axios.get(`${BACKEND_BASE_URL}userrouter/getUserDetails?page=${pageNum}&numPerPage=${rowPerPageNum}&searchWord=${searchWord}`, config)
             .then((res) => {
-                setSuppilers(res.data.rows);
-                setTotalRowsSuppilers(res.data.numRows);
+                setData(res.data.rows);
+                setTotalRows(res.data.numRows);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")

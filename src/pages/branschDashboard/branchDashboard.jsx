@@ -443,7 +443,7 @@ function BranchDashboard() {
                     getData();
                 })
                 .catch((error) => {
-                    alert(error.response ? error.response.data : "Network Error ...!!!")
+                    setError(error.response ? error.response.data : "Network Error ...!!!")
                 })
         }
     }
@@ -455,7 +455,7 @@ function BranchDashboard() {
                 setTotalRows(res.data.numRows);
             })
             .catch((error) => {
-                alert(error.response.data)
+                setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
     const getDataOnPageChange = async (pageNum, rowPerPageNum) => {
@@ -466,7 +466,7 @@ function BranchDashboard() {
                 setTotalRows(res.data.numRows);
             })
             .catch((error) => {
-                alert(error.response.data)
+                setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
     const handleChangePage = (event, newPage) => {
@@ -612,13 +612,23 @@ function BranchDashboard() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const handleDeleteSuppiler = (id) => {
-        if (window.confirm("Are you sure you want to delete User?")) {
-            deleteDataSuppiler(id);
-            setTimeout(() => {
-                getData()
-            }, 1000)
+    const handleDeleteSuppiler = async (id) => {
+        const password = window.prompt("Are you sure you want to delete supplier ?... Enter Password to delete")
+        if (password) {
+            await axios.post(`${BACKEND_BASE_URL}userrouter/chkPassword`, { "userPassword": password }, config)
+                .then(async (res) => {
+                    deleteDataSuppiler(id);
+                })
+                .catch((error) => {
+                    setError(error.response ? error.response.data : "Network Error ...!!!")
+                })
         }
+        // if (window.confirm("Are you sure you want to delete User?")) {
+
+        //     setTimeout(() => {
+        //         getData()
+        //     }, 1000)
+        // }
     }
     const handleOpenPayment = async (row) => {
         // getCategoryList();
@@ -693,16 +703,32 @@ function BranchDashboard() {
             })
     }
     const deleteBranch = async (id) => {
-        if (window.prompt("If you delete this Branch the all Data in Branch will be deleted... Enter Password to delete") == 'admin') {
-            await axios.delete(`${BACKEND_BASE_URL}branchrouter/removeBranch?branchId=${id}`, config)
-                .then((res) => {
-                    setSuccess(true);
-                    getBranches();
+        const password = window.prompt("If you delete this Branch the all Data in Branch will be deleted... Enter Password to delete")
+        if (password) {
+            await axios.post(`${BACKEND_BASE_URL}userrouter/chkPassword`, { "userPassword": password }, config)
+                .then(async (res) => {
+                    await axios.delete(`${BACKEND_BASE_URL}branchrouter/removeBranch?branchId=${id}`, config)
+                        .then((res) => {
+                            setSuccess(true);
+                            getBranches();
+                        })
+                        .catch((error) => {
+                            setError(error.response ? error.response.data : "Network Error ...!!!")
+                        })
                 })
                 .catch((error) => {
                     setError(error.response ? error.response.data : "Network Error ...!!!")
                 })
         }
+        // const password = window.prompt("If you delete this Branch the all Data in Branch will be deleted... Enter Password to delete")
+        // if (password) {
+        //     await axios.post(`${BACKEND_BASE_URL}userrouter/chkPassword`, { "userPassword": password }, config)
+        //         .then(async (res) => {
+        //         })
+        //         .catch((error) => {
+        //             setError(error.response ? error.response.data : "Network Error ...!!!")
+        //         })
+        // }
     }
     const handleEdit = async (data) => {
         await axios.get(`${BACKEND_BASE_URL}userrouter/fillUserDetails?userId=${data.userId}`, config)
@@ -847,10 +873,10 @@ function BranchDashboard() {
                 getBranches();
                 setOpen(false);
                 setSuccess(true);
-                setFormData({
+                setFormDataBranch({
                     branchName: ''
                 })
-                setFormDataError({
+                setFormDataErrorBranch({
                     branchName: false
                 })
             })
@@ -1122,7 +1148,7 @@ function BranchDashboard() {
                                             <TablePagination
                                                 rowsPerPageOptions={[5, 10, 25]}
                                                 component="div"
-                                                count={totalRows}
+                                                count={totalRowsSuppilers}
                                                 rowsPerPage={rowsPerPage}
                                                 page={page}
                                                 onPageChange={handleChangePage}
@@ -1187,10 +1213,10 @@ function BranchDashboard() {
                         <div className='col-span-3'>
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleCloseModalBranch();
-                                setFormData({
+                                setFormDataBranch({
                                     branchName: ''
                                 });
-                                setFormDataError({
+                                setFormDataErrorBranch({
                                     branchName: false
                                 })
                                 setIsEdit(false)

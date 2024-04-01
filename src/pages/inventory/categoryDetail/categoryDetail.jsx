@@ -283,6 +283,7 @@ function StockOutByCategory() {
     }
     if (error) {
         toast.dismiss('loading');
+        setLoading(false);
         toast(error, {
             type: 'error',
             position: "top-right",
@@ -374,7 +375,7 @@ function StockOutByCategory() {
                                 </Popover>
                             </div>
                             <div className='col-span-6 col-start-7 pr-5 flex justify-end'>
-                                <button className='exportExcelBtn' onClick={() => stockOutExportExcel()}><FileDownloadIcon />&nbsp;&nbsp;Export Excle</button>
+                                <button className='exportExcelBtn' onClick={() => stockOutExportExcel()}><FileDownloadIcon />&nbsp;&nbsp;Export Excel</button>
                             </div>
                         </div>
                         <div className='tableContainerWrapper'>

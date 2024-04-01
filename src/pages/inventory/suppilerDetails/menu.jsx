@@ -12,7 +12,7 @@ function MenuStockInOut(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
+        setAnchorEl(event.currentTarget)
     };
     const navigate = useNavigate();
     const handleClose = () => {
@@ -29,7 +29,7 @@ function MenuStockInOut(props) {
                 aria-controls={open ? 'long-menu' : undefined}
                 aria-expanded={open ? 'true' : undefined}
                 aria-haspopup="true"
-                onClick={handleClick}
+                onClick={() => props.data.productQty == props.data.remainingQty ? handleClick() : props.setError('You can not delete this StockIn')}
             >
                 <MoreVertIcon />
             </IconButton>

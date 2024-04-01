@@ -81,6 +81,9 @@ function LoginPage() {
                     else if (rights == 4 || rights == 3) {
                         navigate('/InOut/productTable');
                     }
+                    else if (rights == 6 || rights == 7) {
+                        navigate('/dashboardFactory');
+                    }
                     else
                         navigate('/dashboard');
                 }

@@ -5,6 +5,7 @@ import React from "react";
 import { useRef } from 'react';
 import { BACKEND_BASE_URL } from '../../../../url';
 import axios from 'axios';
+import ExportMenu from './exportMenu';
 // import ProductCard from './component/productCard/productCard';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -75,21 +76,6 @@ const styleStockIn = {
     borderRadius: '10px'
 };
 
-const units = [
-    'Kg',
-    'Gm',
-    'Ltr',
-    'Mtr',
-    'Pkts',
-    'BOX',
-    'ML',
-    'Qty',
-    'Piece',
-    'glass',
-    'crate',
-    'cartoon',
-    'Num'
-]
 function ProductListTableStockIn(props) {
     const regex = /^\d*(?:\.\d*)?$/;
     const textFieldRef = useRef(null);
@@ -120,21 +106,7 @@ function ProductListTableStockIn(props) {
             key: 'selection'
         }
     ]);
-    const [qtyUnit, setQtyUnit] = useState([
-        'Kg',
-        'Gm',
-        'Ltr',
-        'Mtr',
-        'Pkts',
-        'BOX',
-        'ML',
-        'Qty',
-        'Piece',
-        'Num',
-        'glass',
-        'crate',
-        'cartoon',
-    ])
+    const [qtyUnit, setQtyUnit] = useState([])
     const [searchWord, setSearchWord] = React.useState('');
     const [filter, setFilter] = React.useState(false);
     const [viewData, setViewData] = React.useState({});
@@ -254,6 +226,17 @@ function ProductListTableStockIn(props) {
                 setSuppilerList(['No Data'])
             })
     }
+    const [units, setUnits] = useState([])
+    const getUnits = async (id) => {
+        await axios.get(`${BACKEND_BASE_URL}userrouter/getUnit`, config)
+            .then((res) => {
+                setUnits(res.data);
+                setQtyUnit(res.data);
+            })
+            .catch((error) => {
+                setError(error.response ? error.response.data : "Network Error ...!!!")
+            })
+    }
     const getUnitForProduct = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/ddlUnitById?productId=${id}`, config)
             .then((res) => {
@@ -284,7 +267,7 @@ function ProductListTableStockIn(props) {
     const onChange = (e) => {
         console.log('unitConversation', unitConversation)
         if ([e.target.name] == 'minProductUnit') {
-            let qtySmall = qtyUnit.filter((data) => (data !== e.target.value));
+            let qtySmall = units.filter((data) => (data !== e.target.value));
             formData.minProductUnit && qtySmall.push(formData.minProductUnit)
             console.log('leftArray', qtySmall)
             setQtyUnit(qtySmall)
@@ -583,6 +566,7 @@ function ProductListTableStockIn(props) {
     }
     useEffect(() => {
         getAllData();
+        getUnits();
         getMainCategory();
         getCountData();
     }, [])
@@ -978,10 +962,11 @@ function ProductListTableStockIn(props) {
             }
         }
     };
+
     const productExportExcel = async () => {
         if (window.confirm('Are you sure you want to export Excel ... ?')) {
             await axios({
-                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForProductTable?startDate=${state[0].startDate}&endDate=${state[0].endDate}` : `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForProductTable?startDate=${''}&endDate=${''}`,
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForProductTable?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productCategory=${props.id}` : `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForProductTable?startDate=${''}&endDate=${''}&productCategory=${props.id}`,
                 method: 'GET',
                 headers: { Authorization: `Bearer ${userInfo.token}` },
                 responseType: 'blob', // important
@@ -990,7 +975,55 @@ function ProductListTableStockIn(props) {
                 const href = URL.createObjectURL(response.data);
                 // create "a" HTML element with href to file & click
                 const link = document.createElement('a');
-                const name = 'Products_' + new Date().toLocaleDateString() + '.xlsx'
+                const name = props.name + '_Products_' + new Date().toLocaleDateString() + '.xlsx'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        }
+    }
+    const productExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForAllProductsData?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productCategory=${props.id}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForAllProductsData?startDate=${''}&endDate=${''}&productCategory=${props.id}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = props.name + '_Products_Pdf' + new Date().toLocaleDateString() + '.pdf'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        }
+    }
+    const productExportPdfByStatus = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForAllProductsData?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productStatus=${tab}&productCategory=${props.id}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForAllProductsData?startDate=${''}&endDate=${''}&productStatus=${tab}&productCategory=${props.id}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = props.name + '_Products_Pdf_' + tab == 1 ? 'In-Stock_' : tab == 2 ? 'Low-Stock_' : 'Out_Of_Stock_' + new Date().toLocaleDateString() + '.pdf'
                 link.href = href;
                 link.setAttribute('download', name); //or any other extension
                 document.body.appendChild(link);
@@ -1266,7 +1299,7 @@ function ProductListTableStockIn(props) {
                                     />
                                 </div>}
                             <div className='col-span-4 col-start-9 pr-5 flex justify-end'>
-                                {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ? null : <button className='exportExcelBtn' onClick={productExportExcel}><FileDownloadIcon />&nbsp;&nbsp;Export Excle</button>}
+                                {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ? <button className='exportExcelBtn' onClick={() => productExportPdfByStatus()}><FileDownloadIcon />&nbsp;&nbsp;Export Excel</button> : <ExportMenu exportExcel={productExportExcel} exportPdf={productExportPdf} />}
                             </div>
                         </div>
                         {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ?

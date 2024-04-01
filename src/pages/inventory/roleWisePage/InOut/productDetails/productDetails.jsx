@@ -1689,7 +1689,7 @@ function ProductDetailsInOut() {
                     <div className='userTableSubContainer'>
                         <div className='grid grid-cols-12 pt-6'>
                             {/* <div className='col-span-6 col-start-7 pr-5 flex justify-end'>
-                                <button className='exportExcelBtn' onClick={() => { tabStockInOut === 1 || tabStockInOut === '1' ? stockInExportExcel() : stockOutExportExcel() }}><FileDownloadIcon />&nbsp;&nbsp;Export Excle</button>
+                                <button className='exportExcelBtn' onClick={() => { tabStockInOut === 1 || tabStockInOut === '1' ? stockInExportExcel() : stockOutExportExcel() }}><FileDownloadIcon />&nbsp;&nbsp;Export Excel</button>
                             </div> */}
                         </div>
                         {tabStockInOut === 1 || tabStockInOut === '1' ?

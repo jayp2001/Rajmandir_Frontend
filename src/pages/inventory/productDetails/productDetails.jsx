@@ -41,6 +41,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import MenuItem from '@mui/material/MenuItem';
 import { ToastContainer, toast } from 'react-toastify';
+import ExportMenu from '../productListTable/exportMenu';
 
 function ProductDetails() {
     var customParseFormat = require('dayjs/plugin/customParseFormat')
@@ -88,10 +89,10 @@ function ProductDetails() {
     const [stockInFormData, setStockInFormData] = React.useState({
         productId: id,
         productName: name,
-        productQty: 0,
+        productQty: "",
         productUnit: unit,
-        productPrice: 0,
-        totalPrice: 0,
+        productPrice: "",
+        totalPrice: "",
         billNumber: "",
         supplierId: "",
         stockInPaymentMethod: 'cash',
@@ -112,7 +113,7 @@ function ProductDetails() {
     ])
     const [stockOutFormData, setStockOutFormData] = React.useState({
         productId: id,
-        productQty: 0,
+        productQty: "",
         productUnit: unit,
         stockOutCategory: 'Regular',
         stockOutComment: "",
@@ -188,10 +189,10 @@ function ProductDetails() {
         setStockInFormData({
             productId: id,
             productName: name,
-            productQty: 0,
+            productQty: "",
             productUnit: unit,
-            productPrice: 0,
-            totalPrice: 0,
+            productPrice: "",
+            totalPrice: "",
             billNumber: "",
             supplierId: "",
             stockInPaymentMethod: 'cash',
@@ -212,7 +213,7 @@ function ProductDetails() {
         setStockOutFormData({
             productId: id,
             reason: '',
-            productQty: 0,
+            productQty: "",
             productUnit: unit,
             stockOutCategory: 'Regular',
             stockOutComment: "",
@@ -623,6 +624,30 @@ function ProductDetails() {
             });
         }
     }
+    const stockOutExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForStockOut?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productId=${id}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForStockOut?startDate=${''}&endDate=${''}&productId=${id}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = 'StockOut_Pdf' + new Date().toLocaleDateString() + '.pdf'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        }
+    }
     const stockInExportExcel = async () => {
         if (window.confirm('Are you sure you want to export Excel ... ?')) {
             await axios({
@@ -647,6 +672,32 @@ function ProductDetails() {
             });
         }
     }
+    const stockInExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForStockIn?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productId=${id}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForStockIn?startDate=${''}&endDate=${''}&productId=${id}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = 'StockIn_Pdf' + new Date().toLocaleDateString() + '.pdf'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        }
+    }
+
+
     const getCategoryList = async () => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/ddlStockOutCategory`, config)
             .then((res) => {
@@ -726,10 +777,10 @@ function ProductDetails() {
         setStockInFormData({
             productId: id,
             productName: name,
-            productQty: 0,
+            productQty: "",
             productUnit: unit,
-            productPrice: 0,
-            totalPrice: 0,
+            productPrice: "",
+            totalPrice: "",
             billNumber: "",
             supplierId: "",
             stockInPaymentMethod: 'cash',
@@ -747,7 +798,7 @@ function ProductDetails() {
     const resetStockOutEdit = () => {
         setStockOutFormData({
             productId: id,
-            productQty: 0,
+            productQty: "",
             productUnit: unit,
             stockOutCategory: 'Regular',
             stockOutComment: "",
@@ -1317,7 +1368,7 @@ function ProductDetails() {
                                             fullWidth
                                             onChange={onChangeStockIn}
                                             disabled={isEdit ? stockInFormData.isFullEdit ? false : true : false}
-                                            value={stockInFormData.productQty ? stockInFormData.productQty : 0}
+                                            value={stockInFormData.productQty ? stockInFormData.productQty : ""}
                                             error={stockInFormDataError.productQty}
                                             helperText={stockInFormDataError.productQty ? "Enter Qty" : ''}
                                             name="productQty"
@@ -1332,6 +1383,7 @@ function ProductDetails() {
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
+                                                disabled={isEdit ? stockInFormData.isFullEdit ? false : true : false}
                                                 value={stockInFormData.productUnit ? stockInFormData.productUnit : ''}
                                                 error={stockInFormDataError.productUnit}
                                                 name="productUnit"
@@ -1384,7 +1436,7 @@ function ProductDetails() {
                                                     onChangeStockIn(e)
                                                 }
                                             }}
-                                            value={stockInFormData.totalPrice === 'NaN' ? 0 : stockInFormData.totalPrice}
+                                            value={stockInFormData.totalPrice === 'NaN' ? "" : stockInFormData.totalPrice}
                                             error={stockInFormDataError.totalPrice}
                                             helperText={stockInFormDataError.totalPrice ? "Total Price" : ''}
                                             name="totalPrice"
@@ -1551,7 +1603,7 @@ function ProductDetails() {
                                             label="Qty"
                                             fullWidth
                                             onChange={onChangeStockOut}
-                                            value={stockOutFormData.productQty ? stockOutFormData.productQty : 0}
+                                            value={stockOutFormData.productQty ? stockOutFormData.productQty : ""}
                                             error={stockOutFormDataError.productQty}
                                             helperText={stockOutFormDataError.productQty ? 'Please enter Qty' : ''}
                                             name="productQty"
@@ -1712,7 +1764,7 @@ function ProductDetails() {
                     <div className='userTableSubContainer'>
                         <div className='grid grid-cols-12 pt-6'>
                             <div className='col-span-6 col-start-7 pr-5 flex justify-end'>
-                                <button className='exportExcelBtn' onClick={() => { tabStockInOut === 1 || tabStockInOut === '1' ? stockInExportExcel() : stockOutExportExcel() }}><FileDownloadIcon />&nbsp;&nbsp;Export Excle</button>
+                                {tabStockInOut === 1 || tabStockInOut === '1' ? <ExportMenu exportExcel={stockInExportExcel} exportPdf={stockInExportPdf} /> : <ExportMenu exportExcel={stockOutExportExcel} exportPdf={stockOutExportPdf} />}
                             </div>
                         </div>
                         {tabStockInOut === 1 || tabStockInOut === '1' ?

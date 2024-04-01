@@ -44,6 +44,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Menutemp from './menu';
 import { ToastContainer, toast } from 'react-toastify';
 import SearchIcon from '@mui/icons-material/Search';
+import ExportMenu from './exportMenu';
 
 const style = {
     position: 'absolute',
@@ -75,22 +76,6 @@ const styleStockIn = {
     paddingBottom: '20px',
     borderRadius: '10px'
 };
-
-const units = [
-    'Kg',
-    'Gm',
-    'Ltr',
-    'Mtr',
-    'Pkts',
-    'BOX',
-    'ML',
-    'Qty',
-    'Piece',
-    'glass',
-    'crate',
-    'cartoon',
-    'Num'
-]
 function ProductListTable() {
     const regex = /^\d*(?:\.\d*)?$/;
     const textFieldRef = useRef(null);
@@ -121,21 +106,7 @@ function ProductListTable() {
             key: 'selection'
         }
     ]);
-    const [qtyUnit, setQtyUnit] = useState([
-        'Kg',
-        'Gm',
-        'Ltr',
-        'Mtr',
-        'Pkts',
-        'BOX',
-        'ML',
-        'Qty',
-        'Piece',
-        'Num',
-        'glass',
-        'crate',
-        'cartoon',
-    ])
+    const [qtyUnit, setQtyUnit] = useState([])
     const [searchWord, setSearchWord] = React.useState('');
     const [openViewDetail, setOpenViewDetail] = React.useState(false);
     const [filter, setFilter] = React.useState(false);
@@ -160,13 +131,12 @@ function ProductListTable() {
         leadTime: '',
         isExpired: false,
         expiredDays: '',
-        isFactoryMade: false
     })
     const [stockInFormData, setStockInFormData] = React.useState({
         productId: "",
-        productQty: 0,
+        productQty: "",
         productUnit: "",
-        totalPrice: 0,
+        totalPrice: "",
         billNumber: "",
         supplierId: "",
         stockInPaymentMethod: 'cash',
@@ -194,7 +164,7 @@ function ProductListTable() {
     ])
     const [stockOutFormData, setStockOutFormData] = React.useState({
         productId: "",
-        productQty: 0,
+        productQty: "",
         productUnit: "",
         stockOutCategory: 'Regular',
         stockOutComment: "",
@@ -247,6 +217,17 @@ function ProductListTable() {
     const [categories, setCategories] = React.useState();
     const [categoryList, setCategoryList] = React.useState();
     const [countData, setCountData] = React.useState();
+    const [units, setUnits] = useState([])
+    const getUnits = async (id) => {
+        await axios.get(`${BACKEND_BASE_URL}userrouter/getUnit`, config)
+            .then((res) => {
+                setUnits(res.data);
+                setQtyUnit(res.data);
+            })
+            .catch((error) => {
+                setError(error.response ? error.response.data : "Network Error ...!!!")
+            })
+    }
     const getSuppilerList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/productWiseSupplierDDL?productId=${id}`, config)
             .then((res) => {
@@ -290,7 +271,7 @@ function ProductListTable() {
     const onChange = (e) => {
         console.log('unitConversation', unitConversation)
         if ([e.target.name] == 'minProductUnit') {
-            let qtySmall = qtyUnit.filter((data) => (data !== e.target.value));
+            let qtySmall = units.filter((data) => (data !== e.target.value));
             formData.minProductUnit && qtySmall.push(formData.minProductUnit)
             console.log('leftArray', qtySmall)
             setQtyUnit(qtySmall)
@@ -440,7 +421,6 @@ function ProductListTable() {
             leadTime: '',
             isExpired: false,
             expiredDays: '',
-            isFactoryMade: false
         });
         setFormDataError({
             productName: false,
@@ -467,9 +447,9 @@ function ProductListTable() {
     const handleCloseStockIn = () => {
         setStockInFormData({
             productId: "",
-            productQty: 0,
+            productQty: "",
             productUnit: "",
-            totalPrice: 0,
+            totalPrice: "",
             billNumber: "",
             supplierId: "",
             stockInPaymentMethod: 'cash',
@@ -498,7 +478,7 @@ function ProductListTable() {
     const handleCloseStockOut = () => {
         setStockOutFormData({
             productId: "",
-            productQty: 0,
+            productQty: "",
             productUnit: "",
             stockOutCategory: 'Regular',
             stockOutComment: "",
@@ -598,18 +578,21 @@ function ProductListTable() {
     }
     useEffect(() => {
         getAllData();
+        getUnits();
         getMainCategory();
         getCountData();
         autoStockOut();
     }, [])
-    const handleDeleteProduct = (id) => {
-        if (window.confirm("Are you sure you want to delete Product?")) {
-            deleteData(id);
-            setTimeout(() => {
-                setTab(null)
-                getAllData()
-                getCountData();
-            }, 1000)
+    const handleDeleteProduct = async (id) => {
+        const password = window.prompt("Are you sure you want to delete Product?... Enter Password to delete")
+        if (password) {
+            await axios.post(`${BACKEND_BASE_URL}userrouter/chkPassword`, { "userPassword": password }, config)
+                .then(async (res) => {
+                    deleteData(id);
+                })
+                .catch((error) => {
+                    setError(error.response ? error.response.data : "Network Error ...!!!")
+                })
         }
     }
     const editCategory = async () => {
@@ -628,7 +611,6 @@ function ProductListTable() {
                     leadTime: '',
                     isExpired: false,
                     expiredDays: '',
-                    isFactoryMade: false
                 });
                 setFormDataError({
                     productName: false,
@@ -1024,6 +1006,55 @@ function ProductListTable() {
             });
         }
     }
+    const productExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForAllProductsData?startDate=${state[0].startDate}&endDate=${state[0].endDate}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForAllProductsData?startDate=${''}&endDate=${''}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = 'Products_Pdf' + new Date().toLocaleDateString() + '.pdf'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        }
+    }
+    const productExportPdfByStatus = async (tab) => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForAllProductsData?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productStatus=${tab}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForAllProductsData?startDate=${''}&endDate=${''}&productStatus=${tab}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const SN = tab == 1 ? 'In-Stock_' : tab == 2 ? 'Low-Stock_' : 'Out_Of_Stock_'
+                const name = 'Products_Pdf_' + SN + new Date().toLocaleDateString() + '.pdf'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        }
+    }
     const handleViewDetail = (id, name, unit, remainingQty) => {
         navigate(`/productDetails/${id}/${name}/${unit}/${remainingQty}`)
     }
@@ -1284,7 +1315,7 @@ function ProductListTable() {
                                     />
                                 </div>}
                             <div className='col-span-4 col-start-9 pr-5 flex justify-end'>
-                                {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ? null : <button className='exportExcelBtn' onClick={productExportExcel}><FileDownloadIcon />&nbsp;&nbsp;Export Excle</button>}
+                                {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ? <button className='exportExcelBtn' onClick={() => productExportPdfByStatus(tab)}><FileDownloadIcon />&nbsp;&nbsp;Export Excel</button> : <ExportMenu exportExcel={productExportExcel} exportPdf={productExportPdf} />}
                             </div>
                         </div>
                         {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ?
@@ -1591,14 +1622,6 @@ function ProductListTable() {
                                 </Select>
                             </FormControl>
                         </div>
-                        <div className='col-span-2'>
-                            <FormControlLabel control={<Checkbox name='isFactoryMade' checked={formData.isFactoryMade} value={formData.isFactoryMade} onChange={() => {
-                                setFormData((perv) => ({
-                                    ...perv,
-                                    isFactoryMade: !formData.isFactoryMade,
-                                }))
-                            }} />} label="Is Factory Product" />
-                        </div>
                         <div className=''>
                             <FormControlLabel control={<Checkbox name='isExpired' checked={formData.isExpired} value={formData.isExpired} onChange={() => {
                                 setFormData((perv) => ({
@@ -1873,7 +1896,7 @@ function ProductListTable() {
                                         onChangeStockIn(e)
                                     }
                                 }}
-                                value={stockInFormData.totalPrice === 'NaN' ? 0 : stockInFormData.totalPrice}
+                                value={stockInFormData.totalPrice === 'NaN' ? "" : stockInFormData.totalPrice}
                                 error={stockInFormDataError.totalPrice}
                                 helperText={stockInFormDataError.totalPrice ? "Enter Toatal Price" : ''}
                                 name="totalPrice"
@@ -2034,7 +2057,7 @@ function ProductListTable() {
                         <div className='grid gap-6 grid-cols-12'>
                             {
                                 stockOutFormData.remainingStockArray ? stockOutFormData.remainingStockArray?.map((row, index) => (
-                                    <div className='col-span-2 unitName'>
+                                    <div className='col-span-3 unitName'>
                                         {row.unitName} : {row.value}
                                     </div>
                                 )) : <></>

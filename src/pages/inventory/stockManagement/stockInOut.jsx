@@ -44,6 +44,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import MenuStockInOut from './menu';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import ExportMenu from '../productListTable/exportMenu';
 
 const qtyUnit = [
     'Kg',
@@ -96,10 +97,10 @@ function StockInOut() {
         setStockInFormData({
             productId: "",
             productName: null,
-            productQty: 0,
+            productQty: "",
             productUnit: "",
-            productPrice: 0,
-            totalPrice: 0,
+            productPrice: "",
+            totalPrice: "",
             billNumber: "",
             supplierId: "",
             stockInPaymentMethod: 'cash',
@@ -121,7 +122,7 @@ function StockInOut() {
     const resetStockOutEdit = () => {
         setStockOutFormData({
             productId: "",
-            productQty: 0,
+            productQty: "",
             productUnit: "",
             stockOutCategory: 'Regular',
             stockOutComment: "",
@@ -225,10 +226,10 @@ function StockInOut() {
     const [stockInFormData, setStockInFormData] = React.useState({
         productId: "",
         productName: null,
-        productQty: 0,
+        productQty: "",
         productUnit: "",
-        productPrice: 0,
-        totalPrice: 0,
+        productPrice: "",
+        totalPrice: "",
         billNumber: "",
         supplierId: "",
         stockInPaymentMethod: 'cash',
@@ -255,7 +256,7 @@ function StockInOut() {
     ])
     const [stockOutFormData, setStockOutFormData] = React.useState({
         productId: "",
-        productQty: 0,
+        productQty: "",
         productUnit: "",
         stockOutCategory: 'Regular',
         stockOutComment: "",
@@ -298,7 +299,7 @@ function StockInOut() {
                 setProductList(res.data);
             })
             .catch((error) => {
-                setProductList(null)
+                setProductList([])
             })
     }
 
@@ -510,10 +511,10 @@ function StockInOut() {
         setStockInFormData({
             productName: null,
             productId: "",
-            productQty: 0,
+            productQty: "",
             productUnit: "",
-            productPrice: 0,
-            totalPrice: 0,
+            productPrice: "",
+            totalPrice: "",
             billNumber: "",
             supplierId: "",
             stockInPaymentMethod: 'cash',
@@ -535,7 +536,7 @@ function StockInOut() {
         setStockOutFormData({
             productId: "",
             productName: null,
-            productQty: 0,
+            productQty: "",
             productUnit: "",
             stockOutCategory: 'Regular',
             stockOutComment: "",
@@ -619,6 +620,7 @@ function StockInOut() {
                 setExpanded(false);
                 getStockOutData();
                 handleResetStockOut();
+                getProductList();
             })
             .catch((error) => {
                 setError(error.response && error.response.data ? error.response.data : "Network Error ...!!!");
@@ -862,6 +864,32 @@ function StockInOut() {
             });
         }
     }
+    const stockInExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForStockIn?startDate=${state[0].startDate}&endDate=${state[0].endDate}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForStockIn?startDate=${''}&endDate=${''}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = 'StockIn_Pdf' + new Date().toLocaleDateString() + '.pdf'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        }
+    }
+
+
     const [state, setState] = useState([
         {
             startDate: new Date(),
@@ -882,6 +910,31 @@ function StockInOut() {
                 // create "a" HTML element with href to file & click
                 const link = document.createElement('a');
                 const name = 'StockOut_' + new Date().toLocaleDateString() + '.xlsx'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        }
+    }
+
+    const stockOutExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForStockOut?startDate=${state[0].startDate}&endDate=${state[0].endDate}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForStockOut?startDate=${''}&endDate=${''}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = 'StockOut_Pdf' + new Date().toLocaleDateString() + '.pdf'
                 link.href = href;
                 link.setAttribute('download', name); //or any other extension
                 document.body.appendChild(link);
@@ -980,6 +1033,7 @@ function StockInOut() {
     }
     if (error) {
         toast.dismiss('loading');
+        setLoading(false);
         toast(error, {
             type: 'error',
             position: "top-right",
@@ -1157,11 +1211,12 @@ function StockInOut() {
                                                 <Select
                                                     labelId="demo-simple-select-label"
                                                     id="demo-simple-select"
+                                                    disabled={isEdit ? stockInFormData.isFullEdit ? false : true : !stockInFormData.productName ? true : false}
                                                     value={stockInFormData.productUnit ? stockInFormData.productUnit : ''}
                                                     error={stockInFormDataError.productUnit}
                                                     name="productUnit"
                                                     label="StockIn Unit"
-                                                    disabled={!stockInFormData.productName}
+                                                    // disabled={}
                                                     onBlur={(e) => {
                                                         if (!e.target.value) {
                                                             setStockInFormDataError((perv) => ({
@@ -1209,7 +1264,7 @@ function StockInOut() {
                                                         onChangeStockIn(e)
                                                     }
                                                 }}
-                                                value={stockInFormData.totalPrice === 'NaN' ? 0 : stockInFormData.totalPrice}
+                                                value={stockInFormData.totalPrice === 'NaN' ? "" : stockInFormData.totalPrice}
                                                 error={stockInFormDataError.totalPrice}
                                                 helperText={stockInFormDataError.totalPrice ? "Total Price" : ''}
                                                 name="totalPrice"
@@ -1614,7 +1669,7 @@ function StockInOut() {
                             </div>
                             <div className='col-span-6 col-start-7 pr-5 flex justify-end'>
                                 {tab != 3 ?
-                                    <button className='exportExcelBtn' onClick={() => { tab === 1 || tab === '1' ? stockInExportExcel() : stockOutExportExcel() }}><FileDownloadIcon />&nbsp;&nbsp;Export Excle</button>
+                                    tab === 1 || tab === '1' ? <ExportMenu exportExcel={stockInExportExcel} exportPdf={stockInExportPdf} /> : <ExportMenu exportExcel={stockOutExportExcel} exportPdf={stockOutExportPdf} />
                                     :
                                     <button className='DeleteHistoryBtn' onClick={deleteData}><CloseIcon />&nbsp;&nbsp;Delete All Updated</button>
                                 }</div>

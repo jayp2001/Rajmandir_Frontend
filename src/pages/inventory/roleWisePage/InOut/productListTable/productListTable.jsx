@@ -75,22 +75,6 @@ const styleStockIn = {
     paddingBottom: '20px',
     borderRadius: '10px'
 };
-
-const units = [
-    'Kg',
-    'Gm',
-    'Ltr',
-    'Mtr',
-    'Pkts',
-    'BOX',
-    'ML',
-    'Qty',
-    'Piece',
-    'glass',
-    'crate',
-    'cartoon',
-    'Num'
-]
 function ProductListTableInOut() {
     const regex = /^\d*(?:\.\d*)?$/;
     const textFieldRef = useRef(null);
@@ -121,21 +105,7 @@ function ProductListTableInOut() {
             key: 'selection'
         }
     ]);
-    const [qtyUnit, setQtyUnit] = useState([
-        'Kg',
-        'Gm',
-        'Ltr',
-        'Mtr',
-        'Pkts',
-        'BOX',
-        'ML',
-        'Qty',
-        'Piece',
-        'Num',
-        'glass',
-        'crate',
-        'cartoon',
-    ])
+    const [qtyUnit, setQtyUnit] = useState([])
     const [searchWord, setSearchWord] = React.useState('');
     const [openViewDetail, setOpenViewDetail] = React.useState(false);
     const [filter, setFilter] = React.useState(false);
@@ -247,6 +217,17 @@ function ProductListTableInOut() {
     const [categories, setCategories] = React.useState();
     const [categoryList, setCategoryList] = React.useState();
     const [countData, setCountData] = React.useState();
+    const [units, setUnits] = useState([])
+    const getUnits = async (id) => {
+        await axios.get(`${BACKEND_BASE_URL}userrouter/getUnit`, config)
+            .then((res) => {
+                setUnits(res.data);
+                setQtyUnit(res.data);
+            })
+            .catch((error) => {
+                setError(error.response ? error.response.data : "Network Error ...!!!")
+            })
+    }
     const getSuppilerList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/productWiseSupplierDDL?productId=${id}`, config)
             .then((res) => {
@@ -290,7 +271,7 @@ function ProductListTableInOut() {
     const onChange = (e) => {
         console.log('unitConversation', unitConversation)
         if ([e.target.name] == 'minProductUnit') {
-            let qtySmall = qtyUnit.filter((data) => (data !== e.target.value));
+            let qtySmall = units.filter((data) => (data !== e.target.value));
             formData.minProductUnit && qtySmall.push(formData.minProductUnit)
             console.log('leftArray', qtySmall)
             setQtyUnit(qtySmall)
@@ -598,6 +579,7 @@ function ProductListTableInOut() {
     }
     useEffect(() => {
         getAllData();
+        getUnits();
         getMainCategory();
         getCountData();
         autoStockOut();

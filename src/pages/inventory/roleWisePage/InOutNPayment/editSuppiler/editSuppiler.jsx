@@ -133,12 +133,11 @@ function EditSuppilerInOutNpayment() {
                         console.log(res.data.supplierProductData)
                     })
                     .catch((error) => {
-                        alert("jay")
+                        setError(error.response ? error.response.data : "Network Error ...!!!")
                     })
             })
             .catch((error) => {
-                // setLoading(false);
-                // alert(error.response.data);
+                setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
     useEffect(() => {

@@ -325,15 +325,35 @@ function CategoriesTable() {
         }
 
     };
-    const handleDelete = (id) => {
-        if (window.confirm("Are you sure you want to delete StockIn Category?")) {
-            deleteData(id);
+    const handleDelete = async (id) => {
+        const password = window.prompt("Are you sure you want to delete category ?... Enter Password to delete")
+        if (password) {
+            await axios.post(`${BACKEND_BASE_URL}userrouter/chkPassword`, { "userPassword": password }, config)
+                .then(async (res) => {
+                    deleteData(id);
+                })
+                .catch((error) => {
+                    setError(error.response ? error.response.data : "Network Error ...!!!")
+                })
         }
+        // if (window.confirm("Are you sure you want to delete StockIn Category?")) {
+        //     deleteData(id);
+        // }
     }
-    const handleDeleteStockOut = (id) => {
-        if (window.confirm("Are you sure you want to delete StockOut Category?")) {
-            deleteDataStockOut(id);
+    const handleDeleteStockOut = async (id) => {
+        const password = window.prompt("Are you sure you want to delete Category ?... Enter Password to delete")
+        if (password) {
+            await axios.post(`${BACKEND_BASE_URL}userrouter/chkPassword`, { "userPassword": password }, config)
+                .then(async (res) => {
+                    deleteDataStockOut(id);
+                })
+                .catch((error) => {
+                    setError(error.response ? error.response.data : "Network Error ...!!!")
+                })
         }
+        // if (window.confirm("Are you sure you want to delete StockOut Category?")) {
+        //     deleteDataStockOut(id);
+        // }
     }
     const handleEdit = (id, name) => {
         setCategoryError(false);
@@ -687,7 +707,6 @@ function CategoriesTable() {
                                                 <TableCell>No.</TableCell>
                                                 <TableCell>Category Name</TableCell>
                                                 <TableCell align="right">StockIn Cost</TableCell>
-                                                <TableCell align="right">Percentage</TableCell>
                                                 <TableCell align="right"></TableCell>
                                                 <TableCell align="right"></TableCell>
                                             </TableRow>
@@ -706,8 +725,8 @@ function CategoriesTable() {
                                                         <TableCell component="th" scope="row" onClick={() => navigateToStockInDetail(row.stockInCategoryName, row.stockInCategoryId)}>
                                                             {row.stockInCategoryName}
                                                         </TableCell>
-                                                        <TableCell align="right" onClick={() => navigateToStockInDetail(row.stockInCategoryName, row.stockInCategoryId)}>{parseFloat(row.outPrice ? row.outPrice : 0).toLocaleString('en-IN')}</TableCell>
-                                                        <TableCell align="right" onClick={() => navigateToStockInDetail(row.stockInCategoryName, row.stockInCategoryId)}>{row.percentage}</TableCell>
+                                                        <TableCell align="right" onClick={() => navigateToStockInDetail(row.stockInCategoryName, row.stockInCategoryId)}>{parseFloat(row.totalPurchase ? row.totalPurchase : 0).toLocaleString('en-IN')}</TableCell>
+                                                        {/* <TableCell align="right" onClick={() => navigateToStockInDetail(row.stockInCategoryName, row.stockInCategoryId)}>{row.percentage}</TableCell> */}
                                                         <TableCell align="right" ><div className=''><button className='editCategoryBtn mr-6' onClick={() => handleEdit(row.stockInCategoryId, row.stockInCategoryName)}>Edit</button><button className='deleteCategoryBtn' onClick={() => handleDelete(row.stockInCategoryId)}>Delete</button></div></TableCell>
                                                         <TableCell align="right">
                                                         </TableCell>
@@ -742,7 +761,6 @@ function CategoriesTable() {
                                                     <TableCell>No.</TableCell>
                                                     <TableCell>Category Name</TableCell>
                                                     <TableCell align="right">Used Cost</TableCell>
-                                                    <TableCell align="right">Percentage</TableCell>
                                                     <TableCell align="right"></TableCell>
                                                     <TableCell align="right"></TableCell>
                                                 </TableRow>
@@ -761,8 +779,7 @@ function CategoriesTable() {
                                                             <TableCell component="th" scope="row" onClick={() => navigateToDetail(row.stockOutCategoryName, row.stockOutCategoryId)}>
                                                                 {row.stockOutCategoryName}
                                                             </TableCell>
-                                                            <TableCell align="right" onClick={() => navigateToDetail(row.stockOutCategoryName, row.stockOutCategoryId)}>{parseFloat(row.outPrice ? row.outPrice : 0).toLocaleString('en-IN')}</TableCell>
-                                                            <TableCell align="right" onClick={() => navigateToDetail(row.stockOutCategoryName, row.stockOutCategoryId)}>{row.percentage}</TableCell>
+                                                            <TableCell align="right" onClick={() => navigateToDetail(row.stockOutCategoryName, row.stockOutCategoryId)}>{parseFloat(row.totalUsedPrice ? row.totalUsedPrice : 0).toLocaleString('en-IN')}</TableCell>
                                                             <TableCell align="right" ><div className=''><button className='editCategoryBtn mr-6' onClick={() => handleEditStockOut(row.stockOutCategoryId, row.stockOutCategoryName)}>Edit</button><button className='deleteCategoryBtn' onClick={() => handleDeleteStockOut(row.stockOutCategoryId)}>Delete</button></div></TableCell>
                                                             <TableCell align="right">
                                                             </TableCell>

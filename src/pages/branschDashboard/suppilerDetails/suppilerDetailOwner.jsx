@@ -32,6 +32,7 @@ import TablePagination from '@mui/material/TablePagination';
 import Paper from '@mui/material/Paper';
 import Menutemp from '../transaction/menu';
 import MenuStockInOut from './menu';
+import ExportMenu from './exportMenu';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -473,7 +474,7 @@ function SuppilerDetailOwner() {
     const getInvoice = async (tId, suppilerName) => {
         if (window.confirm('Are you sure you want to Download Invoice ... ?')) {
             await axios({
-                url: `${BACKEND_BASE_URL}inventoryrouter/exportTransactionInvoice?transactionId=${tId}`,
+                url: `${BACKEND_BASE_URL}inventoryrouter/exportTransactionInvoiceData?transactionId=${tId}`,
                 method: 'GET',
                 headers: { Authorization: `Bearer ${userInfo.token}` },
                 responseType: 'blob', // important
@@ -498,7 +499,7 @@ function SuppilerDetailOwner() {
     const stockInExportExcel = async () => {
         if (window.confirm('Are you sure you want to export Excel ... ?')) {
             await axios({
-                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForStockin?startDate=${state[0].startDate}&endDate=${state[0].endDate}&supplierId=${id}&payType=${tabStockIn}` : `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForStockin?startDate=${''}&endDate=${''}&supplierId=${id}&payType=${tabStockIn}`,
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForOwnerStockIn?startDate=${state[0].startDate}&endDate=${state[0].endDate}&supplierId=${id}&payType=${tabStockIn}` : `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForOwnerStockIn?startDate=${''}&endDate=${''}&supplierId=${id}&payType=${tabStockIn}`,
                 method: 'GET',
                 headers: { Authorization: `Bearer ${userInfo.token}` },
                 responseType: 'blob', // important
@@ -519,11 +520,35 @@ function SuppilerDetailOwner() {
             });
         }
     }
+    const stockInExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForOwnerStockIn?startDate=${state[0].startDate}&endDate=${state[0].endDate}&supplierId=${id}&payType=${tabStockIn}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForOwnerStockIn?startDate=${''}&endDate=${''}&supplierId=${id}&payType=${tabStockIn}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = 'StockIn_' + new Date().toLocaleDateString() + '.pdf'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        }
+    }
 
     const allProductExportExcel = async () => {
         if (window.confirm('Are you sure you want to export Excel ... ?')) {
             await axios({
-                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForAllProductBySupplierId?startDate=${state[0].startDate}&endDate=${state[0].endDate}&supplierId=${id}&payType=${tabStockIn}` : `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForAllProductBySupplierId?startDate=${''}&endDate=${''}&supplierId=${id}&payType=${tabStockIn}`,
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForOwnerAllProductBySupplierId?startDate=${state[0].startDate}&endDate=${state[0].endDate}&supplierId=${id}&payType=${tabStockIn}` : `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForOwnerAllProductBySupplierId?startDate=${''}&endDate=${''}&supplierId=${id}&payType=${tabStockIn}`,
                 method: 'GET',
                 headers: { Authorization: `Bearer ${userInfo.token}` },
                 responseType: 'blob', // important
@@ -544,11 +569,10 @@ function SuppilerDetailOwner() {
             });
         }
     }
-
-    const transactionExportExcel = async () => {
-        if (window.confirm('Are you sure you want to export Excel ... ?')) {
+    const allProductExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
             await axios({
-                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForDebitTransactionList?startDate=${state[0].startDate}&endDate=${state[0].endDate}&supplierId=${id}` : `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForDebitTransactionList?startDate=${''}&endDate=${''}&supplierId=${id}`,
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForOwnerAllProductBySupplierId?startDate=${state[0].startDate}&endDate=${state[0].endDate}&supplierId=${id}&payType=${tabStockIn}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForOwnerAllProductBySupplierId?startDate=${''}&endDate=${''}&supplierId=${id}&payType=${tabStockIn}`,
                 method: 'GET',
                 headers: { Authorization: `Bearer ${userInfo.token}` },
                 responseType: 'blob', // important
@@ -557,7 +581,56 @@ function SuppilerDetailOwner() {
                 const href = URL.createObjectURL(response.data);
                 // create "a" HTML element with href to file & click
                 const link = document.createElement('a');
-                const name = filter ? 'Transactions_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.xlsx' : 'Transactions_' + new Date().toLocaleDateString();
+                const name = 'AllProducts_' + new Date().toLocaleDateString() + '.pdf'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        }
+    }
+
+    const transactionExportExcel = async () => {
+        if (window.confirm('Are you sure you want to export Excel ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForOwnerDebitTransactionList?startDate=${state[0].startDate}&endDate=${state[0].endDate}&supplierId=${id}` : `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForOwnerDebitTransactionList?startDate=${''}&endDate=${''}&supplierId=${id}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = filter ? 'Transactions_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.xlsx' : 'Transactions_' + new Date().toLocaleDateString() + '.xlsx';
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            });
+        }
+    }
+    const transactionExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForOwnerDebitTransactionList?startDate=${state[0].startDate}&endDate=${state[0].endDate}&supplierId=${id}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForOwnerDebitTransactionList?startDate=${''}&endDate=${''}&supplierId=${id}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = filter ? 'Transactions_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.pdf' : 'Transactions_' + new Date().toLocaleDateString() + '.pdf';
                 link.href = href;
                 link.setAttribute('download', name); //or any other extension
                 document.body.appendChild(link);
@@ -602,6 +675,7 @@ function SuppilerDetailOwner() {
     }
     if (error) {
         toast.dismiss('loading');
+        setLoading(false);
         toast(error, {
             type: 'error',
             position: "top-right",
@@ -781,10 +855,10 @@ function SuppilerDetailOwner() {
                             </div>
                         </div> :
                         <div className='grid gap-4 mt-12' style={{ maxHeight: '332px', overflowY: 'scroll' }}>
-                            <div className='grid grid-cols-2 gap-6 pb-3'>
+                            <div className='grid grid-cols-1 gap-6 pb-3'>
                                 {
                                     productQtyCount && productQtyCount?.map((row, index) => (
-                                        <ProductQtyCountCard productQtyUnit={row.productUnit} productQty={row.remainingStoc} productPrice={row.productPrice} productName={row.productName} index={index} />
+                                        <ProductQtyCountCard productQtyUnit={row.productUnit} productPrice={row.productPrice} productQty={row.remainingStock} productName={row.productName} index={index} />
                                     ))
                                 }
                             </div>
@@ -956,9 +1030,7 @@ function SuppilerDetailOwner() {
             <div className='userTableSubContainer mt-6'>
                 <div className='grid grid-cols-12 pt-6'>
                     <div className='col-span-6 col-start-7 pr-5 flex justify-end'>
-                        <button className='exportExcelBtn'
-                            onClick={() => { tabStockIn !== 'transaction' && tabStockIn !== 'products' ? stockInExportExcel() : tabStockIn === 'products' ? allProductExportExcel() : transactionExportExcel() }}
-                        ><FileDownloadIcon />&nbsp;&nbsp;Export Excle</button>
+                        {tabStockIn !== 'transaction' && tabStockIn !== 'products' ? <ExportMenu exportExcel={stockInExportExcel} exportPdf={stockInExportPdf} /> : tabStockIn === 'products' ? <ExportMenu exportExcel={allProductExportExcel} exportPdf={allProductExportPdf} /> : <ExportMenu exportExcel={transactionExportExcel} exportPdf={transactionExportPdf} />}
                     </div>
                 </div>
                 <div className='tableContainerWrapper'>

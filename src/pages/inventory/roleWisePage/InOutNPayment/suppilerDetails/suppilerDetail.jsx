@@ -602,6 +602,7 @@ function SuppilerDetailInOutNpayment() {
     }
     if (error) {
         toast.dismiss('loading');
+        setLoading(false);
         toast(error, {
             type: 'error',
             position: "top-right",
@@ -944,7 +945,7 @@ function SuppilerDetailInOutNpayment() {
                     <div className='col-span-6 col-start-7 pr-5 flex justify-end'>
                         <button className='exportExcelBtn'
                             onClick={() => { tabStockIn !== 'transaction' && tabStockIn !== 'products' ? stockInExportExcel() : tabStockIn === 'products' ? allProductExportExcel() : transactionExportExcel() }}
-                        ><FileDownloadIcon />&nbsp;&nbsp;Export Excle</button>
+                        ><FileDownloadIcon />&nbsp;&nbsp;Export Excel</button>
                     </div>
                 </div>
                 <div className='tableContainerWrapper'>

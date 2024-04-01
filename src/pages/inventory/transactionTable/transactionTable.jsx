@@ -32,6 +32,7 @@ import CountCard from '../countCard/countCard';
 import Menutemp from './menu';
 import { ToastContainer, toast } from 'react-toastify';
 import SearchIcon from '@mui/icons-material/Search';
+import ExportMenu from '../productListTable/exportMenu';
 function TransactionTable() {
     const [tab, setTab] = React.useState(2);
     const [searchWord, setSearchWord] = React.useState('');
@@ -299,7 +300,7 @@ function TransactionTable() {
     const debitExportExcel = async () => {
         if (window.confirm('Are you sure you want to export Excel ... ?')) {
             await axios({
-                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForDebitTransactionList?startDate=${state[0].startDate}&endDate=${state[0].endDate}` : `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForStockin?startDate=${''}&endDate=${''}`,
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForDebitTransactionList?startDate=${state[0].startDate}&endDate=${state[0].endDate}` : `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForDebitTransactionList?startDate=${''}&endDate=${''}`,
                 method: 'GET',
                 headers: { Authorization: `Bearer ${userInfo.token}` },
                 responseType: 'blob', // important
@@ -308,7 +309,7 @@ function TransactionTable() {
                 const href = URL.createObjectURL(response.data);
                 // create "a" HTML element with href to file & click
                 const link = document.createElement('a');
-                const name = filter ? 'Debit_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.xlsx' : 'Debit_' + new Date().toLocaleDateString();
+                const name = filter ? 'Debit_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.xlsx' : 'Debit_' + new Date().toLocaleDateString() + '.xlsx';
                 link.href = href;
                 link.setAttribute('download', name); //or any other extension
                 document.body.appendChild(link);
@@ -317,7 +318,37 @@ function TransactionTable() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                console.log('>>>', error)
+                setError("No Data Or Network Error ...!!!")
+            })
+        }
+    }
+    const debitExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForDebitTransactionList?startDate=${state[0].startDate}&endDate=${state[0].endDate}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForDebitTransactionList?startDate=${''}&endDate=${''}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = filter ? 'Debit_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.pdf' : 'Debit_' + new Date().toLocaleDateString() + '.pdf';
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            }).catch((error) => {
+                console.log('>>>', error)
+                setError("No Data Or Network Error ...!!!")
+            })
         }
     }
 
@@ -325,7 +356,7 @@ function TransactionTable() {
     const CashExportExcel = async () => {
         if (window.confirm('Are you sure you want to export Excel ... ?')) {
             await axios({
-                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForCashTransactionList?startDate=${state[0].startDate}&endDate=${state[0].endDate}` : `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForStockin?startDate=${''}&endDate=${''}`,
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForCashTransactionList?startDate=${state[0].startDate}&endDate=${state[0].endDate}` : `${BACKEND_BASE_URL}inventoryrouter/exportExcelSheetForCashTransactionList?startDate=${''}&endDate=${''}`,
                 method: 'GET',
                 headers: { Authorization: `Bearer ${userInfo.token}` },
                 responseType: 'blob', // important
@@ -334,7 +365,7 @@ function TransactionTable() {
                 const href = URL.createObjectURL(response.data);
                 // create "a" HTML element with href to file & click
                 const link = document.createElement('a');
-                const name = filter ? 'Cash_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.xlsx' : 'Cash_' + new Date().toLocaleDateString();
+                const name = filter ? 'Cash_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.xlsx' : 'Cash_' + new Date().toLocaleDateString() + '.xlsx';
                 link.href = href;
                 link.setAttribute('download', name); //or any other extension
                 document.body.appendChild(link);
@@ -343,9 +374,41 @@ function TransactionTable() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                console.log('>>>', error)
+                setError("No Data Or Network Error ...!!!")
+            })
         }
     }
+    const CashExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForCashTransactionList?startDate=${state[0].startDate}&endDate=${state[0].endDate}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForCashTransactionList?startDate=${''}&endDate=${''}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = filter ? 'Cash_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.pdf' : 'Cash_' + new Date().toLocaleDateString() + '.pdf';
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            }).catch((error) => {
+                console.log('>>>', error)
+                setError("No Data Or Network Error ...!!!")
+            })
+        }
+    }
+
+
     const DebitDataExportExcel = async () => {
         if (window.confirm('Are you sure you want to export Excel ... ?')) {
             await axios({
@@ -358,7 +421,7 @@ function TransactionTable() {
                 const href = URL.createObjectURL(response.data);
                 // create "a" HTML element with href to file & click
                 const link = document.createElement('a');
-                const name = filter ? 'Cash_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.xlsx' : 'Cash_' + new Date().toLocaleDateString();
+                const name = filter ? 'Debit_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.xlsx' : 'Debit_' + new Date().toLocaleDateString() + '.xlsx';
                 link.href = href;
                 link.setAttribute('download', name); //or any other extension
                 document.body.appendChild(link);
@@ -367,9 +430,41 @@ function TransactionTable() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                console.log('>>>', error)
+                setError("No Data Or Network Error ...!!!")
+            })
         }
     }
+    const DebitDataExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}inventoryrouter/exportPdfForDeditTransaction?startDate=${state[0].startDate}&endDate=${state[0].endDate}` : `${BACKEND_BASE_URL}inventoryrouter/exportPdfForDeditTransaction?startDate=${''}&endDate=${''}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = filter ? 'Debit_' + new Date(state[0].startDate).toLocaleDateString() + ' - ' + new Date(state[0].endDate).toLocaleDateString() + '.pdf' : 'Debit_' + new Date().toLocaleDateString() + '.pdf';
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            }).catch((error) => {
+                console.log('>>>', error)
+                setError("No Data Or Network Error ...!!!")
+            })
+        }
+    }
+
+
     const deleteData = async (id) => {
         await axios.delete(`${BACKEND_BASE_URL}inventoryrouter/removeSupplierTransactionDetails?supplierTransactionId=${id}`, config)
             .then((res) => {
@@ -391,7 +486,7 @@ function TransactionTable() {
     const getInvoice = async (tId, suppilerName) => {
         if (window.confirm('Are you sure you want to Download Invoice ... ?')) {
             await axios({
-                url: `${BACKEND_BASE_URL}inventoryrouter/exportTransactionInvoice?transactionId=${tId}`,
+                url: `${BACKEND_BASE_URL}inventoryrouter/exportTransactionInvoiceData?transactionId=${tId}`,
                 method: 'GET',
                 headers: { Authorization: `Bearer ${userInfo.token}` },
                 responseType: 'blob', // important
@@ -409,7 +504,10 @@ function TransactionTable() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                console.log('>>>', error)
+                setError("No Data Or Network Error ...!!!")
+            })
         }
     }
     if (loading) {
@@ -647,7 +745,7 @@ function TransactionTable() {
                                 :
                                 null}
                             <div className='col-span-6 col-start-7 pr-5 flex justify-end'>
-                                <button className='exportExcelBtn' onClick={() => { tab === 2 || tab === '2' ? debitExportExcel() : tab === 3 || tab === '3' ? CashExportExcel() : DebitDataExportExcel() }}><FileDownloadIcon />&nbsp;&nbsp;Export Excle</button>
+                                {tab === 2 || tab === '2' ? < ExportMenu exportExcel={debitExportExcel} exportPdf={debitExportPdf} /> : tab === 3 || tab === '3' ? < ExportMenu exportExcel={CashExportExcel} exportPdf={CashExportPdf} /> : < ExportMenu exportExcel={DebitDataExportExcel} exportPdf={DebitDataExportPdf} />}
                             </div>
                         </div>
                         {tab === 2 || tab === '2' ?
