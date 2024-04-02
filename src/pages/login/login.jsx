@@ -151,6 +151,9 @@ function LoginPage() {
                                             name="agentFirstName"
                                             autoComplete='off'
                                             label="Password"
+                                            onKeyDown={(e) => {
+                                                e.key === 'Enter' ? submit(e) : <></>
+                                            }}
                                             onChange={(e) => setPassword(e.target.value)}
                                             InputProps={{ style: { fontSize: 18 } }}
                                             InputLabelProps={{ style: { fontSize: 18 } }}
