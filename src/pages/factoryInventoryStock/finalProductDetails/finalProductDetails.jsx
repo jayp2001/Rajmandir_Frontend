@@ -77,7 +77,7 @@ function FinalProductDetailsStock() {
     const [isEdit, setIsEdit] = React.useState(false);
     const [stockOutData, setStockOutData] = React.useState();
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [unitPreference, setUnitPreference] = React.useState();
     const [stockInData, setStockInData] = React.useState();
     const [page, setPage] = React.useState(0);
@@ -98,7 +98,7 @@ function FinalProductDetailsStock() {
     const [openAddRecipe, setOpenAddRecipe] = React.useState(false);
     const [recipeError, setRecipeError] = React.useState([]);
     const [statisticsCount, setStatisticsCounts] = useState();
-    const [suppilerNameAndCount, setSuppilerNameAndCount] = useState();
+    const [supplierNameAndCount, setSupplierNameAndCount] = useState();
     const [categoryNameAndCount, setCategoryNameAndCount] = useState();
     const [categories, setCategories] = React.useState();
     const [debitTransaction, setDebitTransaction] = React.useState();
@@ -309,13 +309,13 @@ function FinalProductDetailsStock() {
                 setOtherExpenseList([])
             })
     }
-    const getSuppilerList = async (id) => {
+    const getSupplierList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}mfProductrouter/productWiseSupplierDDL?mfProductId=${id}`, config)
             .then((res) => {
-                setSuppilerList(res.data);
+                setSupplierList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const onChangeRecipeStockIn = (e, index) => {
@@ -456,7 +456,7 @@ function FinalProductDetailsStock() {
                 ])
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 setFilter(false);
                 getStockOutData();
                 handleResetStockOut();
@@ -706,7 +706,7 @@ function FinalProductDetailsStock() {
                 ])
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 setFilter(false)
                 getStockInData()
                 handleResetStockIn();
@@ -740,7 +740,7 @@ function FinalProductDetailsStock() {
                 setSuccess(true)
                 getStatistics();
                 getStockInData();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 getCategoryNameAndCount();
             })
             .catch((error) => {
@@ -762,7 +762,7 @@ function FinalProductDetailsStock() {
                 getStatistics();
                 getStockOutData();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -797,7 +797,9 @@ function FinalProductDetailsStock() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const stockInExportExcel = async () => {
@@ -821,7 +823,9 @@ function FinalProductDetailsStock() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const getCategoryList = async () => {
@@ -857,7 +861,7 @@ function FinalProductDetailsStock() {
                     mfProductId: id,
                 });
                 getMaterialListOnEdit(res.data.recipeMaterial);
-                getProductListOnEdit(res.data.produceProductda);
+                getProductListOnEdit(res.data.produceProductdata);
                 getExpenseListOnEdit(res.data.otherExpense);
                 setRecipe(res.data.recipeMaterial);
                 setRecipeError(res && res.data && res.data.recipeMaterial ? res.data.recipeMaterial?.map((data, index) => (
@@ -872,8 +876,8 @@ function FinalProductDetailsStock() {
                         value: false,
                     }
                 )) : null)
-                setRecipeProduct(res.data.produceProductda)
-                setRecipeErrorProduct(res && res.data && res.data.produceProductda ? res.data.produceProductda?.map((data, index) => (
+                setRecipeProduct(res.data.produceProductdata)
+                setRecipeErrorProduct(res && res.data && res.data.produceProductdata ? res.data.produceProductdata?.map((data, index) => (
                     {
                         value: false,
                         unit: false
@@ -898,19 +902,19 @@ function FinalProductDetailsStock() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const getSuppilerNameAndCount = async () => {
+    const getSupplierNameAndCount = async () => {
         await axios.get(`${BACKEND_BASE_URL}mfProductrouter/getDistridutorWiseSellByMfProductId?mfProductId=${id}`, config)
             .then((res) => {
-                setSuppilerNameAndCount(res.data);
+                setSupplierNameAndCount(res.data);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const getSuppilerNameAndCountByFilter = async () => {
+    const getSupplierNameAndCountByFilter = async () => {
         await axios.get(`${BACKEND_BASE_URL}mfProductrouter/getDistridutorWiseSellByMfProductId?startDate=${state[0].startDate}&endDate=${state[0].endDate}&mfProductId=${id}`, config)
             .then((res) => {
-                setSuppilerNameAndCount(res.data);
+                setSupplierNameAndCount(res.data);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -996,7 +1000,7 @@ function FinalProductDetailsStock() {
                 }))
                 setRecipeStockIn(res.data.autoJson.recipeMaterial);
                 setRecipeExpenseStockIn(res.data.autoJson.otherExpense);
-                setRecipeProductStockIn(res.data.autoJson.produceProductda);
+                setRecipeProductStockIn(res.data.autoJson.produceProductdata);
                 setRecipeErrorStockIn(res && res.data.autoJson && res.data.autoJson.recipeMaterial ? res.data.autoJson.recipeMaterial?.map((data, index) => (
                     {
                         usedMaterial: false,
@@ -1007,7 +1011,7 @@ function FinalProductDetailsStock() {
                         usedSource: false,
                     }
                 )) : null)
-                setRecipeErrorProductStockIn(res && res.data.autoJson && res.data.autoJson.produceProductda ? res.data.autoJson.produceProductda?.map((data, index) => (
+                setRecipeErrorProductStockIn(res && res.data.autoJson && res.data.autoJson.produceProductdata ? res.data.autoJson.produceProductdata?.map((data, index) => (
                     {
                         usedValue: false,
                     }
@@ -1082,7 +1086,7 @@ function FinalProductDetailsStock() {
                 getStockInData();
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 handleResetStockIn();
             })
             .catch((error) => {
@@ -1106,7 +1110,7 @@ function FinalProductDetailsStock() {
                 setExpanded(false);
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 getStockOutData();
                 handleResetStockOut();
             })
@@ -1194,7 +1198,7 @@ function FinalProductDetailsStock() {
         getStockInData();
         getStatistics();
         getCategoryNameAndCount();
-        getSuppilerNameAndCount();
+        getSupplierNameAndCount();
         getUnitPreferenceById(id);
         // getCountData();
     }, [])
@@ -1246,7 +1250,7 @@ function FinalProductDetailsStock() {
     }
     console.log('formdata', stockInFormData)
     return (
-        <div className='suppilerListContainer'>
+        <div className='supplierListContainer'>
             <div className='grid grid-cols-12 gap-8'>
                 <div className='col-span-12 mt-6'>
                     <div className='datePickerWrp mb-4'>
@@ -1333,7 +1337,7 @@ function FinalProductDetailsStock() {
                             <div className='grid gap-4 mt-12' style={{ minHeight: '216px', maxHeight: '216px', overflowY: 'scroll' }}>
                                 <div className='grid grid-cols-1 gap-3 pb-3'>
                                     {
-                                        suppilerNameAndCount && suppilerNameAndCount?.map((row, index) => (
+                                        supplierNameAndCount && supplierNameAndCount?.map((row, index) => (
                                             <ProductQtyCountCard productQtyUnit={unit} rawMaterialQty={row.remainingStock} productPrice={row.totalPrice} rawMaterialName={row.distributorNickName} index={index} />
                                         ))
                                     }

@@ -70,7 +70,7 @@ function StockOutByCategoryStockIn() {
     dayjs.extend(customParseFormat)
     const [expanded, setExpanded] = React.useState(false);
     const [isEdit, setIsEdit] = React.useState(false);
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [filter, setFilter] = React.useState(false);
     const [stockInData, setStockInData] = React.useState();
     const [stockOutData, setStockOutData] = React.useState();
@@ -215,7 +215,9 @@ function StockOutByCategoryStockIn() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const [state, setState] = useState([
@@ -247,7 +249,9 @@ function StockOutByCategoryStockIn() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     useEffect(() => {

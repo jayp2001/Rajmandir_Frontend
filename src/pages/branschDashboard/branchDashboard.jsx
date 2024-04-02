@@ -53,7 +53,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import dayjs from 'dayjs';
 import BranchCard from './branchCard/branchCard';
-import MenuSuppiler from './menuSuppiler';
+import MenuSupplier from './menuSupplier';
 import TransactionTableCommon from './transaction/transactionTable';
 // import ExportMenu from '../exportMenu/exportMenu';
 // import BankTransactionMenu from "./menu/bankTransactionMenu";
@@ -145,7 +145,7 @@ function BranchDashboard() {
     const [expanded, setExpanded] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [totalRows, setTotalRows] = React.useState(0);
-    const [totalRowsSuppilers, setTotalRowsSuppilers] = React.useState(0);
+    const [totalRowsSuppliers, setTotalRowsSuppliers] = React.useState(0);
     const [totalRowsIncome, setTotalRowsIncome] = React.useState(0);
     const [totalRowsTransaction, setTotalRowsTransaction] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
@@ -163,7 +163,7 @@ function BranchDashboard() {
     //     transactionStatus: ''
     // });
     const [data, setData] = React.useState();
-    const [suppilers, setSuppilers] = React.useState();
+    const [suppliers, setSuppliers] = React.useState();
     const [bankTransaction, setBankTranaction] = React.useState();
     const [banks, setBanks] = React.useState();
     const [openPayment, setOpenPayment] = React.useState(false);
@@ -299,7 +299,7 @@ function BranchDashboard() {
                 setSuccess(true)
                 setPage(0);
                 setRowsPerPage(5)
-                getDataSuppiler();
+                getDataSupplier();
                 handleClose();
             })
             .catch((error) => {
@@ -386,8 +386,8 @@ function BranchDashboard() {
     const search = async (searchWord) => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getSupplierAllBranchData?page=${1}&numPerPage=${5}&searchWord=${searchWord}`, config)
             .then((res) => {
-                setSuppilers(res.data.rows);
-                setTotalRowsSuppilers(res.data.numRows);
+                setSuppliers(res.data.rows);
+                setTotalRowsSuppliers(res.data.numRows);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -474,7 +474,7 @@ function BranchDashboard() {
         if (tab === 2 || tab === '2') {
             getDataOnPageChange(newPage + 1, rowsPerPage)
         } else {
-            getDataOnPageChangeSuppiler(newPage + 1, rowsPerPage)
+            getDataOnPageChangeSupplier(newPage + 1, rowsPerPage)
         }
     };
     const handleChangeRowsPerPage = (event) => {
@@ -484,7 +484,7 @@ function BranchDashboard() {
             getDataOnPageChange(1, parseInt(event.target.value, 10))
         }
         else {
-            getDataOnPageChangeSuppiler(1, parseInt(event.target.value, 10))
+            getDataOnPageChangeSupplier(1, parseInt(event.target.value, 10))
         }
 
     };
@@ -510,7 +510,9 @@ function BranchDashboard() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const pdfExport = async () => {
@@ -535,7 +537,9 @@ function BranchDashboard() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const excelExportIncome = async () => {
@@ -560,7 +564,9 @@ function BranchDashboard() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const pdfExportIncome = async () => {
@@ -585,7 +591,9 @@ function BranchDashboard() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const getRights = async () => {
@@ -600,7 +608,7 @@ function BranchDashboard() {
                 setBranch(res.data);
             })
     }
-    const deleteDataSuppiler = async (id) => {
+    const deleteDataSupplier = async (id) => {
         await axios.delete(`${BACKEND_BASE_URL}inventoryrouter/removeSupplierDetails?supplierId=${id}`, config)
             .then((res) => {
                 setPage(0);
@@ -612,12 +620,12 @@ function BranchDashboard() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const handleDeleteSuppiler = async (id) => {
+    const handleDeleteSupplier = async (id) => {
         const password = window.prompt("Are you sure you want to delete supplier ?... Enter Password to delete")
         if (password) {
             await axios.post(`${BACKEND_BASE_URL}userrouter/chkPassword`, { "userPassword": password }, config)
                 .then(async (res) => {
-                    deleteDataSuppiler(id);
+                    deleteDataSupplier(id);
                 })
                 .catch((error) => {
                     setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -647,8 +655,8 @@ function BranchDashboard() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const handleSuppilerOnClick = (id) => {
-        navigate(`/suppilerDetailsOwner/${id}`)
+    const handleSupplierOnClick = (id) => {
+        navigate(`/supplierDetailsOwner/${id}`)
     }
     const editUser = async () => {
         setLoading(true);
@@ -738,23 +746,23 @@ function BranchDashboard() {
                 setExpanded(true);
             })
     }
-    const getDataSuppiler = async () => {
+    const getDataSupplier = async () => {
         console.log("page get", page, rowsPerPage)
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getSupplierAllBranchData?page=${1}&numPerPage=${5}`, config)
             .then((res) => {
-                setSuppilers(res.data.rows);
-                setTotalRowsSuppilers(res.data.numRows);
+                setSuppliers(res.data.rows);
+                setTotalRowsSuppliers(res.data.numRows);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const getDataOnPageChangeSuppiler = async (pageNum, rowPerPageNum) => {
+    const getDataOnPageChangeSupplier = async (pageNum, rowPerPageNum) => {
         console.log("page get", page, rowsPerPage)
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getSupplierAllBranchData?page=${pageNum}&numPerPage=${rowPerPageNum}&searchWord=${searchWord}`, config)
             .then((res) => {
-                setSuppilers(res.data.rows);
-                setTotalRowsSuppilers(res.data.numRows);
+                setSuppliers(res.data.rows);
+                setTotalRowsSuppliers(res.data.numRows);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -1026,16 +1034,16 @@ function BranchDashboard() {
                                             setTab(3);
                                             setPage(0);
                                             setRowsPerPage(5);
-                                            getDataSuppiler();
+                                            getDataSupplier();
                                             // getBranches();
                                         }}>
-                                            <div className='statusTabtext'>Suppilers</div>
+                                            <div className='statusTabtext'>Suppliers</div>
                                         </div>
                                         <div className={`flex col-span-3 justify-center ${tab === 4 || tab === '4' ? 'productTabOut' : 'productTab'}`} onClick={() => {
                                             setTab(4);
                                             // setPage(0);
                                             // setRowsPerPage(5);
-                                            // getDataSuppiler();
+                                            // getDataSupplier();
                                             // getBranches();
                                         }}>
                                             <div className='statusTabtext'>Transactions</div>
@@ -1095,7 +1103,7 @@ function BranchDashboard() {
                                             />
                                         </div>
                                         <div className='col-span-4 col-start-9 pr-8 flex justify-end'>
-                                            <button className='exportExcelBtn' onClick={() => { navigate(`/addSuppiler`) }}>Add Suppiler</button>
+                                            <button className='exportExcelBtn' onClick={() => { navigate(`/addSupplier`) }}>Add Supplier</button>
                                         </div>
                                     </div>
                                     <div className='tableContainerWrapper'>
@@ -1106,7 +1114,7 @@ function BranchDashboard() {
                                                         <TableCell>No.</TableCell>
                                                         <TableCell>Name</TableCell>
                                                         <TableCell align="left">Firm</TableCell>
-                                                        <TableCell align="left">Suppiler Name</TableCell>
+                                                        <TableCell align="left">Supplier Name</TableCell>
                                                         <TableCell align="left">Phone Number</TableCell>
                                                         {/* <TableCell align="left">Role</TableCell> */}
                                                         <TableCell align="left">Remaining Payment</TableCell>
@@ -1114,8 +1122,8 @@ function BranchDashboard() {
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
-                                                    {suppilers?.map((row, index) => (
-                                                        totalRowsSuppilers !== 0 ?
+                                                    {suppliers?.map((row, index) => (
+                                                        totalRowsSuppliers !== 0 ?
                                                             <TableRow
                                                                 hover
                                                                 key={row.supplierId}
@@ -1123,17 +1131,17 @@ function BranchDashboard() {
                                                                 style={{ cursor: "pointer" }}
                                                                 className='tableRow'
                                                             >
-                                                                <TableCell align="left" onClick={() => handleSuppilerOnClick(row.supplierId)} >{(index + 1) + (page * rowsPerPage)}</TableCell>
-                                                                <TableCell onClick={() => handleSuppilerOnClick(row.supplierId)} component="th" scope="row">
+                                                                <TableCell align="left" onClick={() => handleSupplierOnClick(row.supplierId)} >{(index + 1) + (page * rowsPerPage)}</TableCell>
+                                                                <TableCell onClick={() => handleSupplierOnClick(row.supplierId)} component="th" scope="row">
                                                                     {row.supplierNickName}
                                                                 </TableCell>
-                                                                <TableCell onClick={() => handleSuppilerOnClick(row.supplierId)} align="left" >{row.supplierFirmName}</TableCell>
-                                                                <TableCell onClick={() => handleSuppilerOnClick(row.supplierId)} align="left" >{row.supplierName}</TableCell>
-                                                                <TableCell onClick={() => handleSuppilerOnClick(row.supplierId)} align="left" >{row.supplierPhoneNumber}</TableCell>
+                                                                <TableCell onClick={() => handleSupplierOnClick(row.supplierId)} align="left" >{row.supplierFirmName}</TableCell>
+                                                                <TableCell onClick={() => handleSupplierOnClick(row.supplierId)} align="left" >{row.supplierName}</TableCell>
+                                                                <TableCell onClick={() => handleSupplierOnClick(row.supplierId)} align="left" >{row.supplierPhoneNumber}</TableCell>
                                                                 {/* <TableCell align="left" >{row.rightsName}</TableCell> */}
-                                                                <TableCell onClick={() => handleSuppilerOnClick(row.supplierId)} align="left" >{parseFloat(row.remainingAmount ? row.remainingAmount : 0).toLocaleString('en-IN')}</TableCell>
+                                                                <TableCell onClick={() => handleSupplierOnClick(row.supplierId)} align="left" >{parseFloat(row.remainingAmount ? row.remainingAmount : 0).toLocaleString('en-IN')}</TableCell>
                                                                 <TableCell align="right">
-                                                                    <MenuSuppiler supplierId={row.supplierId} handleOpen={handleOpenPayment} data={row} deleteSuppiler={handleDeleteSuppiler} />
+                                                                    <MenuSupplier supplierId={row.supplierId} handleOpen={handleOpenPayment} data={row} deleteSupplier={handleDeleteSupplier} />
                                                                 </TableCell>
                                                             </TableRow> :
                                                             <TableRow
@@ -1148,7 +1156,7 @@ function BranchDashboard() {
                                             <TablePagination
                                                 rowsPerPageOptions={[5, 10, 25]}
                                                 component="div"
-                                                count={totalRowsSuppilers}
+                                                count={totalRowsSuppliers}
                                                 rowsPerPage={rowsPerPage}
                                                 page={page}
                                                 onPageChange={handleChangePage}
@@ -1220,7 +1228,7 @@ function BranchDashboard() {
                                     branchName: false
                                 })
                                 setIsEdit(false)
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>
@@ -1357,7 +1365,7 @@ function BranchDashboard() {
                         <div className='col-span-3'>
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleClose();
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>

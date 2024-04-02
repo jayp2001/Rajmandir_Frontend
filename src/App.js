@@ -9,14 +9,14 @@ import NavBar from './pages/navBar/nav';
 import AddUser from './pages/users/addUser/addUser'
 import UserTable from './pages/users/userTable/userTable';
 import EditUser from './pages/users/editUser/editUser';
-import AddSuppiler from './pages/inventory/addSuppiler/addSuppiler';
-import SuppilerTable from './pages/inventory/suppilerTable/suppilerTable';
-import EditSuppiler from './pages/inventory/editSuppiler/editSuppiler';
+import AddSupplier from './pages/inventory/addSupplier/addSupplier';
+import SupplierTable from './pages/inventory/supplierTable/supplierTable';
+import EditSupplier from './pages/inventory/editSupplier/editSupplier';
 import ProductList from './pages/inventory/product/productList';
 import CategoriesTable from './pages/inventory/categoriesTable/categoriesTable';
 import StockInOut from './pages/inventory/stockManagement/stockInOut';
 import TransactionTable from './pages/inventory/transactionTable/transactionTable';
-import SuppilerDetail from './pages/inventory/suppilerDetails/suppilerDetail';
+import SupplierDetail from './pages/inventory/supplierDetails/supplierDetail';
 import ProductDetails from './pages/inventory/productDetails/productDetails';
 import ProductListTable from './pages/inventory/productListTable/productListTable';
 import 'react-toastify/dist/ReactToastify.css';
@@ -30,24 +30,24 @@ import ProtectedOwnerRoutes from './protectedOwnerRoutes';
 import BranchDashboard from './pages/branschDashboard/branchDashboard';
 import UserTableOwner from './pages/branschDashboard/userTable/userTableBranch';
 import StockOutByCategoryStockIn from './pages/branschDashboard/categoryDetailStockIn/categoryDetailStockIn';
-import SuppilerDetailOwner from './pages/branschDashboard/suppilerDetails/suppilerDetailOwner';
+import SupplierDetailOwner from './pages/branschDashboard/supplierDetails/supplierDetailOwner';
 import ProtectedInOutRoutes from './protactedInOutRoutes';
 import ProductDetailsInOut from './pages/inventory/roleWisePage/InOut/productDetails/productDetails';
 import ProductListTableInOut from './pages/inventory/roleWisePage/InOut/productListTable/productListTable';
 import StockInOutInOut from './pages/inventory/roleWisePage/InOut/stockManagement/stockInOut';
-import AddSuppilerInOutNpayment from './pages/inventory/roleWisePage/InOutNPayment/addSuppiler/addSuppiler';
-import EditSuppilerInOutNpayment from './pages/inventory/roleWisePage/InOutNPayment/editSuppiler/editSuppiler';
-import SuppilerDetailInOutNpayment from './pages/inventory/roleWisePage/InOutNPayment/suppilerDetails/suppilerDetail';
-import SuppilerTableInOutNpayment from './pages/inventory/roleWisePage/InOutNPayment/suppilerTable/suppilerTable';
+import AddSupplierInOutNpayment from './pages/inventory/roleWisePage/InOutNPayment/addSupplier/addSupplier';
+import EditSupplierInOutNpayment from './pages/inventory/roleWisePage/InOutNPayment/editSupplier/editSupplier';
+import SupplierDetailInOutNpayment from './pages/inventory/roleWisePage/InOutNPayment/supplierDetails/supplierDetail';
+import SupplierTableInOutNpayment from './pages/inventory/roleWisePage/InOutNPayment/supplierTable/supplierTable';
 import ProtactedInOutNpaymentRoutes from './protactedInOutNpaymentRoutes';
 import MaterialListTable from './pages/factoryInventory/materialListTable/materialListTable';
 import MaterialDetails from './pages/factoryInventory/materialDetails/material';
 import FinalProductListTable from './pages/factoryInventory/finalProductListTable/finalProductListTable';
 import FinalProductDetails from './pages/factoryInventory/finalProductDetails/finalProductDetails';
-import AddFactorySupplier from './pages/factoryInventory/addSuppiler/addSuppiler';
-import EditFactorySuppiler from './pages/factoryInventory/editSuppiler/editSuppiler';
-import FactorySuppilerTable from './pages/factoryInventory/suppilerTable/suppilerTable';
-import FactorySuppilerDetail from './pages/factoryInventory/suppilerDetails/suppilerDetail';
+import AddFactorySupplier from './pages/factoryInventory/addSupplier/addSupplier';
+import EditFactorySupplier from './pages/factoryInventory/editSupplier/editSupplier';
+import FactorySupplierTable from './pages/factoryInventory/supplierTable/supplierTable';
+import FactorySupplierDetail from './pages/factoryInventory/supplierDetails/supplierDetail';
 import StockInOutMaterial from './pages/factoryInventory/stockManagementMaterial/stockInOutMaterial';
 import EditHistoryMaterial from './pages/factoryInventory/editHistory/editHistory';
 import CategoriesTableMaterial from './pages/factoryInventory/categoriesTable/categoriesTable';
@@ -72,10 +72,10 @@ import FinalProductListTableStock from './pages/factoryInventoryStock/finalProdu
 import FinalProductDetailsStock from './pages/factoryInventoryStock/finalProductDetails/finalProductDetails';
 import StockInOutFactoryStock from './pages/factoryInventoryStock/factoryStockManagement/stockInOutFactory';
 import MaterialTableByDepartmentStock from './pages/factoryInventoryStock/materialTableByDepartment/materialTableByDepartment';
-import AddFactorySupplierInOut from './pages/factoryInventoryInOut/addSuppiler/addSuppiler';
-import EditFactorySuppilerInOut from './pages/factoryInventoryInOut/editSuppiler/editSuppiler';
-import FactorySuppilerTableInOut from './pages/factoryInventoryInOut/suppilerTable/suppilerTable';
-import FactorySuppilerDetailInOut from './pages/factoryInventoryInOut/suppilerDetails/suppilerDetail';
+import AddFactorySupplierInOut from './pages/factoryInventoryInOut/addSupplier/addSupplier';
+import EditFactorySupplierInOut from './pages/factoryInventoryInOut/editSupplier/editSupplier';
+import FactorySupplierTableInOut from './pages/factoryInventoryInOut/supplierTable/supplierTable';
+import FactorySupplierDetailInOut from './pages/factoryInventoryInOut/supplierDetails/supplierDetail';
 import StockOutByCategoryMaterialInOut from './pages/factoryInventoryInOut/categoryDetail/categoryDetail';
 import StockOutByCategoryStockInMaterialInOut from './pages/factoryInventoryInOut/categoryDetailStockIn/categoryDetailStockIn';
 import MaterialListTableInOut from './pages/factoryInventoryInOut/materialListTable/materialListTable';
@@ -113,10 +113,10 @@ function App() {
                   <Route path='*' element={<PageNotFoundRedirect/>}/>
                 </Route>
                 <Route path="/" element={<ProtactedInOutNpaymentRoutes/>}>
-                  <Route path="/InOutNpayment/addSuppiler" element={<AddSuppilerInOutNpayment />}/>
-                  <Route path="/InOutNpayment/suppilerTable" element={<SuppilerTableInOutNpayment />}/>
-                  <Route path="/InOutNpayment/editSuppiler/:id" element={<EditSuppilerInOutNpayment/>}/>
-                  <Route path="/InOutNpayment/suppilerDetails/:id" element={<SuppilerDetailInOutNpayment/>}/>
+                  <Route path="/InOutNpayment/addSupplier" element={<AddSupplierInOutNpayment />}/>
+                  <Route path="/InOutNpayment/supplierTable" element={<SupplierTableInOutNpayment />}/>
+                  <Route path="/InOutNpayment/editSupplier/:id" element={<EditSupplierInOutNpayment/>}/>
+                  <Route path="/InOutNpayment/supplierDetails/:id" element={<SupplierDetailInOutNpayment/>}/>
                   <Route path='*' element={<PageNotFoundRedirect/>}/>
                 </Route>
                 <Route path="/" element={<ProtectedOwnerRoutes/>}>
@@ -134,10 +134,10 @@ function App() {
                 </Route> */}
                 <Route path="/" element={<ProtectedFactoryManagerRoutes/>}>
                   <Route path="/dashboardFactory" element={<FactoryDashboard/>}/>
-                  <Route path="/inOut/material/addSuppiler" element={<AddFactorySupplierInOut />}/>
-                  <Route path="/inOut/material/editSuppiler/:id" element={<EditFactorySuppilerInOut/>}/>
-                  <Route path="/inOut/material/suppilerTable" element={<FactorySuppilerTableInOut />}/>
-                  <Route path="/inOut/material/suppilerDetails/:id" element={<FactorySuppilerDetailInOut/>}/>
+                  <Route path="/inOut/material/addSupplier" element={<AddFactorySupplierInOut />}/>
+                  <Route path="/inOut/material/editSupplier/:id" element={<EditFactorySupplierInOut/>}/>
+                  <Route path="/inOut/material/supplierTable" element={<FactorySupplierTableInOut />}/>
+                  <Route path="/inOut/material/supplierDetails/:id" element={<FactorySupplierDetailInOut/>}/>
                   <Route path="/inOut/material/stockOutByCategory/:category/:categoryId" element={<StockOutByCategoryMaterialInOut/>}/>
                   <Route path="/inOut/material/stockInByCategory/:category/:categoryId" element={<StockOutByCategoryStockInMaterialInOut/>}/>
                   <Route path="/inOut/material/materialTable" element={<MaterialListTableInOut />}/>
@@ -165,10 +165,10 @@ function App() {
                 </Route>
                 <Route path="/" element={<ProtectedFactoryRoutes/>}>
                   <Route path="/dashboardFactory" element={<FactoryDashboard/>}/>
-                   <Route path="/material/addSuppiler" element={<AddFactorySupplier />}/>
-                  <Route path="/material/editSuppiler/:id" element={<EditFactorySuppiler/>}/>
-                  <Route path="/material/suppilerTable" element={<FactorySuppilerTable />}/>
-                  <Route path="/material/suppilerDetails/:id" element={<FactorySuppilerDetail/>}/>
+                   <Route path="/material/addSupplier" element={<AddFactorySupplier />}/>
+                  <Route path="/material/editSupplier/:id" element={<EditFactorySupplier/>}/>
+                  <Route path="/material/supplierTable" element={<FactorySupplierTable />}/>
+                  <Route path="/material/supplierDetails/:id" element={<FactorySupplierDetail/>}/>
                   <Route path="/material/stockOutByCategory/:category/:categoryId" element={<StockOutByCategoryMaterial/>}/>
                   <Route path="/material/stockInByCategory/:category/:categoryId" element={<StockOutByCategoryStockInMaterial/>}/>
                   <Route path="/material/materialTable" element={<MaterialListTable />}/>
@@ -191,20 +191,20 @@ function App() {
                 <Route path="/" element={<ProtectedUserRoutes/>}>
                   <Route path="/dashboard" element={<Dashboard/>}/>
                   <Route path="/addUser" element={<AddUser />}/>
-                  <Route path="/addSuppiler" element={<AddSuppiler />}/>
+                  <Route path="/addSupplier" element={<AddSupplier />}/>
                   <Route path="/userTable" element={<UserTable />}/>
                   <Route path="/userTableOwner" element={<UserTableOwner />}/>
                   {/* <Route path="/productList" element={<ProductList />}/> */}
                   <Route path="/productTable" element={<ProductListTable />}/>
                   <Route path="/stockInOut" element={<StockInOut />}/>
                   <Route path="/transactionTable" element={<TransactionTable />}/>
-                  <Route path="/suppilerTable" element={<SuppilerTable />}/>
+                  <Route path="/supplierTable" element={<SupplierTable />}/>
                   <Route path="/categories" element={<CategoriesTable />}/>
                   <Route path="/editUser/:id" element={<EditUser/>}/>
                   <Route path="/editHistory/:id" element={<EditHistory/>}/>
-                  <Route path="/editSuppiler/:id" element={<EditSuppiler/>}/>
-                  <Route path="/suppilerDetails/:id" element={<SuppilerDetail/>}/>
-                  <Route path="/suppilerDetailsOwner/:id" element={<SuppilerDetailOwner/>}/>
+                  <Route path="/editSupplier/:id" element={<EditSupplier/>}/>
+                  <Route path="/supplierDetails/:id" element={<SupplierDetail/>}/>
+                  <Route path="/supplierDetailsOwner/:id" element={<SupplierDetailOwner/>}/>
                   <Route path="/stockOutByCategory/:category/:categoryId" element={<StockOutByCategory/>}/>
                   <Route path="/stockInByCategory/:category/:categoryId" element={<StockOutByCategoryStockIn/>}/>
                   <Route path="/productDetails/:id/:name/:unit/:remainingQty" element={<ProductDetails/>}/>

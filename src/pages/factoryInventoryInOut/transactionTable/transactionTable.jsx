@@ -317,7 +317,9 @@ function TransactionTableMaterialInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
 
@@ -343,7 +345,9 @@ function TransactionTableMaterialInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const DebitDataExportExcel = async () => {
@@ -367,7 +371,9 @@ function TransactionTableMaterialInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const deleteData = async (id) => {
@@ -388,7 +394,7 @@ function TransactionTableMaterialInOut() {
             }, 1000)
         }
     }
-    const getInvoice = async (tId, suppilerName) => {
+    const getInvoice = async (tId, supplierName) => {
         if (window.confirm('Are you sure you want to Download Invoice ... ?')) {
             await axios({
                 url: `${BACKEND_BASE_URL}rawMaterialrouter/exportTransactionInvoice?transactionId=${tId}`,
@@ -400,7 +406,7 @@ function TransactionTableMaterialInOut() {
                 const href = URL.createObjectURL(response.data);
                 // create "a" HTML element with href to file & click
                 const link = document.createElement('a');
-                const name = suppilerName + '_' + new Date().toLocaleDateString() + '.pdf'
+                const name = supplierName + '_' + new Date().toLocaleDateString() + '.pdf'
                 link.href = href;
                 link.setAttribute('download', name); //or any other extension
                 document.body.appendChild(link);
@@ -409,7 +415,9 @@ function TransactionTableMaterialInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     if (loading) {
@@ -592,7 +600,7 @@ function TransactionTableMaterialInOut() {
                                                 }}>Apply</button>
                                             </div>
                                             <div className='col-span-3'>
-                                                <button className='stockOutBtn' onClick={handleClose}>cancle</button>
+                                                <button className='stockOutBtn' onClick={handleClose}>cancel</button>
                                             </div>
                                         </div>
                                     </Box>
@@ -660,7 +668,7 @@ function TransactionTableMaterialInOut() {
                                                 <TableCell>No.</TableCell>
                                                 <TableCell>Invoice No.</TableCell>
                                                 <TableCell>Paid By</TableCell>
-                                                <TableCell align="left">Suppiler Name</TableCell>
+                                                <TableCell align="left">Supplier Name</TableCell>
                                                 <TableCell align="left">Received By</TableCell>
                                                 <TableCell align="right">Pending Amount</TableCell>
                                                 <TableCell align="right">Paid Amount</TableCell>
@@ -781,7 +789,7 @@ function TransactionTableMaterialInOut() {
                                                 <TableRow>
                                                     <TableCell>No.</TableCell>
                                                     <TableCell>Recevied By</TableCell>
-                                                    <TableCell align="left">Suppiler</TableCell>
+                                                    <TableCell align="left">Supplier</TableCell>
                                                     <TableCell align="left">Debit Amount</TableCell>
                                                     <TableCell align="left">Date</TableCell>
                                                     <TableCell align="left">Time</TableCell>

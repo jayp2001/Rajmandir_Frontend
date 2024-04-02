@@ -155,7 +155,7 @@ function AddFactoryDistributerInOut() {
         })
         setProductName([]);
     }
-    const addSuppiler = async () => {
+    const addSupplier = async () => {
         setLoading(true);
         await axios.post(`${BACKEND_BASE_URL}mfProductrouter/addDistributorDetails`, formData, config)
             .then((res) => {
@@ -199,7 +199,7 @@ function AddFactoryDistributerInOut() {
                     "Please Fill All Field"
                 )
             } else {
-                addSuppiler();
+                addSupplier();
             }
         }
     }
@@ -253,14 +253,14 @@ function AddFactoryDistributerInOut() {
 
 
     return (
-        <div className='mainBodyAddSuppiler grid content-center'>
+        <div className='mainBodyAddSupplier grid content-center'>
             <div className="grid grid-cols-12">
                 <div className="col-span-8 col-start-3">
-                    <div className="addSuppilerCard">
+                    <div className="addSupplierCard">
                         <div className="header flex items-center ">
                             <div className="grid justify-items-center w-full">
                                 <div className="header_text">
-                                    Add Suppiler
+                                    Add Supplier
                                 </div>
                             </div>
                         </div>
@@ -275,7 +275,7 @@ function AddFactoryDistributerInOut() {
                                             inputRef={textFieldRef}
                                             name="distributorFirstName"
                                             id="outlined-required"
-                                            label="Suppiler First Name"
+                                            label="Supplier First Name"
                                             InputProps={{ style: { fontSize: 14 } }}
                                             InputLabelProps={{ style: { fontSize: 14 } }}
                                             fullWidth

@@ -145,7 +145,7 @@ function EditFactoryDistributer() {
     const reset = () => {
         navigate(`/distributor/distributorTable`)
     }
-    const editSuppiler = async () => {
+    const editSupplier = async () => {
         setLoading(true);
         await axios.post(`${BACKEND_BASE_URL}mfProductrouter/updateDistributorDetails`, formData, config)
             .then((res) => {
@@ -187,7 +187,7 @@ function EditFactoryDistributer() {
                     "Please Fill All Field"
                 )
             } else {
-                editSuppiler()
+                editSupplier()
                 // console.log('submit', formData);
             }
         }
@@ -241,14 +241,14 @@ function EditFactoryDistributer() {
         return null
     }
     return (
-        <div className='mainBodyAddSuppiler grid content-center'>
+        <div className='mainBodyAddSupplier grid content-center'>
             <div className="grid grid-cols-12">
                 <div className="col-span-8 col-start-3">
-                    <div className="addSuppilerCard">
+                    <div className="addSupplierCard">
                         <div className="header flex items-center ">
                             <div className="grid justify-items-center w-full">
                                 <div className="header_text">
-                                    Edit Suppiler
+                                    Edit Supplier
                                 </div>
                             </div>
                         </div>
@@ -263,7 +263,7 @@ function EditFactoryDistributer() {
                                             helperText={formDataError.distributorFirstName ? "Please Enter First Name" : ''}
                                             name="distributorFirstName"
                                             id="outlined-required"
-                                            label="Suppiler First Name"
+                                            label="Supplier First Name"
                                             InputProps={{ style: { fontSize: 14 } }}
                                             InputLabelProps={{ style: { fontSize: 14 } }}
                                             fullWidth
@@ -474,7 +474,7 @@ function EditFactoryDistributer() {
                                     <button onClick={() => submit()} className='saveBtn' >Save</button>
                                 </div>
                                 <div className='col-span-3'>
-                                    <button onClick={() => reset()} className='resetBtn'>Cancle</button>
+                                    <button onClick={() => reset()} className='resetBtn'>Cancel</button>
                                 </div>
                             </div>
                         </div>

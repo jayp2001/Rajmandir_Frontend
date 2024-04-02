@@ -408,7 +408,7 @@ function EditUser() {
                                     <button onClick={() => submit()} className='saveBtn' >Save</button>
                                 </div>
                                 <div className='col-span-3'>
-                                    <button onClick={() => reset()} className='resetBtn'>Cancle</button>
+                                    <button onClick={() => reset()} className='resetBtn'>Cancel</button>
                                 </div>
                             </div>
                         </div>

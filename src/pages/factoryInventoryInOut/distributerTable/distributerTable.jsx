@@ -306,7 +306,7 @@ function FactoryDistributerTableInOut() {
 
     const debounceFunction = React.useCallback(debounce(handleSearch), [])
     return (
-        <div className='suppilerListContainer'>
+        <div className='supplierListContainer'>
             <div className='grid grid-cols-12 userTableContainer'>
                 <div className='col-span-12'>
                     <div className='userTableSubContainer'>
@@ -501,7 +501,7 @@ function FactoryDistributerTableInOut() {
                         <div className='col-span-3'>
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleClose();
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>

@@ -80,7 +80,7 @@ function UnitsTable() {
     const [expanded, setExpanded] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [totalRows, setTotalRows] = React.useState(0);
-    const [totalRowsSuppilers, setTotalRowsSuppilers] = React.useState(0);
+    const [totalRowsSuppliers, setTotalRowsSuppliers] = React.useState(0);
     const [totalRowsIncome, setTotalRowsIncome] = React.useState(0);
     const [totalRowsTransaction, setTotalRowsTransaction] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
@@ -90,7 +90,7 @@ function UnitsTable() {
     const [branch, setBranch] = useState();
     const [isEdit, setIsEdit] = React.useState(false);
     const [data, setData] = React.useState();
-    const [suppilers, setSuppilers] = React.useState();
+    const [suppliers, setSuppliers] = React.useState();
     const [bankTransaction, setBankTranaction] = React.useState();
     const [banks, setBanks] = React.useState();
     const [openPayment, setOpenPayment] = React.useState(false);
@@ -217,7 +217,7 @@ function UnitsTable() {
     const getBranches = async () => {
         await axios.get(`${BACKEND_BASE_URL}userrouter/getUnit`, config)
             .then((res) => {
-                setSuppilers(res.data);
+                setSuppliers(res.data);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -407,7 +407,7 @@ function UnitsTable() {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {suppilers?.map((row, index) => (
+                                                {suppliers?.map((row, index) => (
                                                     <TableRow
                                                         hover
                                                         key={row}
@@ -488,7 +488,7 @@ function UnitsTable() {
                                     unitName: false
                                 })
                                 setIsEdit(false)
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>

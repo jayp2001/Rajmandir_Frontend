@@ -69,7 +69,7 @@ function StockOutByCategoryMaterial() {
     dayjs.extend(customParseFormat)
     const [expanded, setExpanded] = React.useState(false);
     const [isEdit, setIsEdit] = React.useState(false);
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [filter, setFilter] = React.useState(false);
     const [stockInData, setStockInData] = React.useState();
     const [stockOutData, setStockOutData] = React.useState();
@@ -214,7 +214,9 @@ function StockOutByCategoryMaterial() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const [state, setState] = useState([
@@ -246,7 +248,9 @@ function StockOutByCategoryMaterial() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     useEffect(() => {
@@ -368,7 +372,7 @@ function StockOutByCategoryMaterial() {
                                                 <button className='stockInBtn' onClick={() => { getStockOutDataByFilter(); setFilter(true); setPage(0); handleClose() }}>Apply</button>
                                             </div>
                                             <div className='col-span-3'>
-                                                <button className='stockOutBtn' onClick={handleClose}>cancle</button>
+                                                <button className='stockOutBtn' onClick={handleClose}>cancel</button>
                                             </div>
                                         </div>
                                     </Box>

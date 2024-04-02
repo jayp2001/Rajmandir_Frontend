@@ -42,7 +42,7 @@ function StockOut() {
     dayjs.extend(customParseFormat)
     const [expanded, setExpanded] = React.useState(false);
     const [isEdit, setIsEdit] = React.useState(false);
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [filter, setFilter] = React.useState(false);
     const [stockInData, setStockInData] = React.useState();
     const [stockOutData, setStockOutData] = React.useState();
@@ -201,13 +201,13 @@ function StockOut() {
             })
     }
 
-    const getSuppilerList = async (id) => {
+    const getSupplierList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/productWiseSupplierDDL?productId=${id}`, config)
             .then((res) => {
-                setSuppilerList(res.data);
+                setSupplierList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const handleStockOutDate = (date) => {
@@ -841,7 +841,7 @@ function StockOut() {
                                             {
                                                 isEdit && setExpanded(false);
                                             }
-                                        }}>{isEdit ? "cancle" : "reset"}</button>
+                                        }}>{isEdit ? "cancel" : "reset"}</button>
                                     </div>
                                 </div>
                             </div>

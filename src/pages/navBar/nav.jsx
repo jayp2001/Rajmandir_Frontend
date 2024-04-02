@@ -230,7 +230,7 @@ function NavBar() {
                             </ListItemButton>
                         </ListItem>
                         <ListItem key={'inout32'}>
-                            <ListItemButton to="/InOutNpayment/suppilerTable">
+                            <ListItemButton to="/InOutNpayment/supplierTable">
                                 <ListItemIcon>
                                     <DomainAddIcon />
                                 </ListItemIcon>
@@ -238,7 +238,7 @@ function NavBar() {
                             </ListItemButton>
                         </ListItem>
                     </> :
-                        location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'units' || location.pathname.split('/')[1] == 'suppilerDetailsOwner' || (location.pathname.split('/')[1] == 'addSuppiler' && role == 1) ? <>
+                        location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'units' || location.pathname.split('/')[1] == 'supplierDetailsOwner' || (location.pathname.split('/')[1] == 'addSupplier' && role == 1) ? <>
                             <ListItem key={'branchDashboard1'}>
                                 <ListItemButton to="/dashboard">
                                     <ListItemIcon>
@@ -247,7 +247,7 @@ function NavBar() {
                                     <ListItemText primary={'Dashboard'} />
                                 </ListItemButton>
                             </ListItem>
-                            {(location.pathname.split('/')[1] == 'suppilerDetailsOwner' || location.pathname.split('/')[1] == 'addSuppiler') &&
+                            {(location.pathname.split('/')[1] == 'supplierDetailsOwner' || location.pathname.split('/')[1] == 'addSupplier') &&
                                 <ListItem key={'ownerDashboard'}>
                                     <ListItemButton to="/dashboardOwner">
                                         <ListItemIcon>
@@ -535,7 +535,7 @@ function NavBar() {
                                                         </ListItemButton>
                                                     </ListItem>
                                                     <ListItem key={4}>
-                                                        <ListItemButton to="/suppilerTable">
+                                                        <ListItemButton to="/supplierTable">
                                                             <ListItemIcon>
                                                                 <DomainAddIcon />
                                                             </ListItemIcon>
@@ -623,7 +623,7 @@ function NavBar() {
                             </ListItemButton>
                         </ListItem>
                         <ListItem key={'inout32'}>
-                            <ListItemButton to="/InOutNpayment/suppilerTable">
+                            <ListItemButton to="/InOutNpayment/supplierTable">
                                 <ListItemIcon>
                                     <DomainAddIcon />
                                 </ListItemIcon>
@@ -631,7 +631,7 @@ function NavBar() {
                             </ListItemButton>
                         </ListItem>
                     </> :
-                        location.pathname.split('/')[1] == 'dashboardFactory' || location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'suppilerDetailsOwner' || (location.pathname.split('/')[1] == 'addSuppiler' && role == 1) ? <>
+                        location.pathname.split('/')[1] == 'dashboardFactory' || location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'supplierDetailsOwner' || (location.pathname.split('/')[1] == 'addSupplier' && role == 1) ? <>
                             <ListItem key={'branchDashboard1'}>
                                 <ListItemButton to="/dashboard">
                                     <ListItemIcon>
@@ -640,7 +640,7 @@ function NavBar() {
                                     <ListItemText primary={'Dashboard'} />
                                 </ListItemButton>
                             </ListItem>
-                            {(location.pathname.split('/')[1] == 'suppilerDetailsOwner' || location.pathname.split('/')[1] == 'addSuppiler') &&
+                            {(location.pathname.split('/')[1] == 'supplierDetailsOwner' || location.pathname.split('/')[1] == 'addSupplier') &&
                                 <ListItem key={'ownerDashboard'}>
                                     <ListItemButton to="/dashboardOwner">
                                         <ListItemIcon>
@@ -998,7 +998,7 @@ function NavBar() {
                             </ListItemButton>
                         </ListItem>
                         <ListItem key={'inout32'}>
-                            <ListItemButton to="/InOutNpayment/suppilerTable">
+                            <ListItemButton to="/InOutNpayment/supplierTable">
                                 <ListItemIcon>
                                     <DomainAddIcon />
                                 </ListItemIcon>
@@ -1006,7 +1006,7 @@ function NavBar() {
                             </ListItemButton>
                         </ListItem>
                     </> :
-                        location.pathname.split('/')[1] == 'dashboardFactory' || location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'suppilerDetailsOwner' || (location.pathname.split('/')[1] == 'addSuppiler' && role == 1) ? <>
+                        location.pathname.split('/')[1] == 'dashboardFactory' || location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'supplierDetailsOwner' || (location.pathname.split('/')[1] == 'addSupplier' && role == 1) ? <>
                             <ListItem key={'branchDashboard1'}>
                                 <ListItemButton to="/dashboard">
                                     <ListItemIcon>
@@ -1015,7 +1015,7 @@ function NavBar() {
                                     <ListItemText primary={'Dashboard'} />
                                 </ListItemButton>
                             </ListItem>
-                            {(location.pathname.split('/')[1] == 'suppilerDetailsOwner' || location.pathname.split('/')[1] == 'addSuppiler') &&
+                            {(location.pathname.split('/')[1] == 'supplierDetailsOwner' || location.pathname.split('/')[1] == 'addSupplier') &&
                                 <ListItem key={'ownerDashboard'}>
                                     <ListItemButton to="/dashboardOwner">
                                         <ListItemIcon>
@@ -1425,7 +1425,7 @@ function NavBar() {
                             </ListItemButton>
                         </ListItem>
                         <ListItem key={'inout32'}>
-                            <ListItemButton to="/InOutNpayment/suppilerTable">
+                            <ListItemButton to="/InOutNpayment/supplierTable">
                                 <ListItemIcon>
                                     <DomainAddIcon />
                                 </ListItemIcon>
@@ -1433,7 +1433,7 @@ function NavBar() {
                             </ListItemButton>
                         </ListItem>
                     </> :
-                        location.pathname.split('/')[1] == 'dashboardFactory' || location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'suppilerDetailsOwner' || (location.pathname.split('/')[1] == 'addSuppiler' && role == 1) ? <>
+                        location.pathname.split('/')[1] == 'dashboardFactory' || location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'supplierDetailsOwner' || (location.pathname.split('/')[1] == 'addSupplier' && role == 1) ? <>
                             <ListItem key={'branchDashboard1'}>
                                 <ListItemButton to="/dashboard">
                                     <ListItemIcon>
@@ -1442,7 +1442,7 @@ function NavBar() {
                                     <ListItemText primary={'Dashboard'} />
                                 </ListItemButton>
                             </ListItem>
-                            {(location.pathname.split('/')[1] == 'suppilerDetailsOwner' || location.pathname.split('/')[1] == 'addSuppiler') &&
+                            {(location.pathname.split('/')[1] == 'supplierDetailsOwner' || location.pathname.split('/')[1] == 'addSupplier') &&
                                 <ListItem key={'ownerDashboard'}>
                                     <ListItemButton to="/dashboardOwner">
                                         <ListItemIcon>
@@ -1720,7 +1720,7 @@ function NavBar() {
                                                         </ListItemButton>
                                                     </ListItem>
                                                     <ListItem key={4}>
-                                                        <ListItemButton to="/material/suppilerTable">
+                                                        <ListItemButton to="/material/supplierTable">
                                                             <ListItemIcon>
                                                                 <DomainAddIcon />
                                                             </ListItemIcon>
@@ -1808,7 +1808,7 @@ function NavBar() {
                             </ListItemButton>
                         </ListItem>
                         <ListItem key={'inout32'}>
-                            <ListItemButton to="/InOutNpayment/suppilerTable">
+                            <ListItemButton to="/InOutNpayment/supplierTable">
                                 <ListItemIcon>
                                     <DomainAddIcon />
                                 </ListItemIcon>
@@ -1816,7 +1816,7 @@ function NavBar() {
                             </ListItemButton>
                         </ListItem>
                     </> :
-                        location.pathname.split('/')[1] == 'dashboardFactory' || location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'suppilerDetailsOwner' || (location.pathname.split('/')[1] == 'addSuppiler' && role == 1) ? <>
+                        location.pathname.split('/')[1] == 'dashboardFactory' || location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'supplierDetailsOwner' || (location.pathname.split('/')[1] == 'addSupplier' && role == 1) ? <>
                             <ListItem key={'branchDashboard1'}>
                                 <ListItemButton to="/dashboard">
                                     <ListItemIcon>
@@ -1825,7 +1825,7 @@ function NavBar() {
                                     <ListItemText primary={'Dashboard'} />
                                 </ListItemButton>
                             </ListItem>
-                            {(location.pathname.split('/')[1] == 'suppilerDetailsOwner' || location.pathname.split('/')[1] == 'addSuppiler') &&
+                            {(location.pathname.split('/')[1] == 'supplierDetailsOwner' || location.pathname.split('/')[1] == 'addSupplier') &&
                                 <ListItem key={'ownerDashboard'}>
                                     <ListItemButton to="/dashboardOwner">
                                         <ListItemIcon>
@@ -2095,7 +2095,7 @@ function NavBar() {
                                                         </ListItemButton>
                                                     </ListItem>
                                                     <ListItem key={4}>
-                                                        <ListItemButton to="/inOut/material/suppilerTable">
+                                                        <ListItemButton to="/inOut/material/supplierTable">
                                                             <ListItemIcon>
                                                                 <DomainAddIcon />
                                                             </ListItemIcon>
@@ -2171,7 +2171,7 @@ function NavBar() {
                     </ListItemButton>
                 </ListItem>
                 <ListItem key={4}>
-                    <ListItemButton to="/material/suppilerTable">
+                    <ListItemButton to="/material/supplierTable">
                         <ListItemIcon>
                             <DomainAddIcon />
                         </ListItemIcon>

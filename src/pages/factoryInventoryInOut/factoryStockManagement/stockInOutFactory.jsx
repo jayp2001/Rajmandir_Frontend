@@ -99,7 +99,7 @@ function StockInOutFactoryInOut() {
     const [expanded, setExpanded] = React.useState(false);
     const [isEdit, setIsEdit] = React.useState(false);
     const [isView, setIsView] = React.useState(false);
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [filter, setFilter] = React.useState(false);
     const [ddlDistributer, setDdlDistributer] = React.useState([]);
     const [ddlBranch, setDdlBranch] = React.useState([]);
@@ -310,7 +310,7 @@ function StockInOutFactoryInOut() {
                 }))
                 setRecipeStockIn(res.data.autoJson.recipeMaterial);
                 setRecipeExpenseStockIn(res.data.autoJson.otherExpense);
-                setRecipeProductStockIn(res.data.autoJson.produceProductda);
+                setRecipeProductStockIn(res.data.autoJson.produceProductdata);
                 setRecipeErrorStockIn(res && res.data.autoJson && res.data.autoJson.recipeMaterial ? res.data.autoJson.recipeMaterial?.map((data, index) => (
                     {
                         usedMaterial: false,
@@ -321,7 +321,7 @@ function StockInOutFactoryInOut() {
                         usedSource: false,
                     }
                 )) : null)
-                setRecipeErrorProductStockIn(res && res.data.autoJson && res.data.autoJson.produceProductda ? res.data.autoJson.produceProductda?.map((data, index) => (
+                setRecipeErrorProductStockIn(res && res.data.autoJson && res.data.autoJson.produceProductdata ? res.data.autoJson.produceProductdata?.map((data, index) => (
                     {
                         usedValue: false,
                     }
@@ -491,13 +491,13 @@ function StockInOutFactoryInOut() {
             })
     }
 
-    const getSuppilerList = async (id) => {
+    const getSupplierList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}mfProductrouter/productWiseSupplierDDL?mfProductId=${id}`, config)
             .then((res) => {
-                setSuppilerList(res.data);
+                setSupplierList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const stockIn = async () => {
@@ -507,7 +507,7 @@ function StockInOutFactoryInOut() {
             autoJson: {
                 recipeMaterial: recipeStockIn,
                 otherExpense: recipeExpenseStockIn,
-                produceProductda: recipeProductStockIn
+                produceProductdata: recipeProductStockIn
             }
         }
         console.log("dddd", newStockInData)
@@ -542,7 +542,7 @@ function StockInOutFactoryInOut() {
             autoJson: {
                 recipeMaterial: recipeStockIn,
                 otherExpense: recipeExpenseStockIn,
-                produceProductda: recipeProductStockIn
+                produceProductdata: recipeProductStockIn
             }
         }
         console.log("dddd", newStockInData)
@@ -572,7 +572,7 @@ function StockInOutFactoryInOut() {
             .then((res) => {
                 setRecipeStockIn(res.data.recipeMaterial);
                 setRecipeExpenseStockIn(res.data.otherExpense);
-                setRecipeProductStockIn(res.data.produceProductda);
+                setRecipeProductStockIn(res.data.produceProductdata);
                 setRecipeErrorStockIn(res && res.data && res.data.recipeMaterial ? res.data.recipeMaterial?.map((data, index) => (
                     data.usedMaterial <= data.remainQty ? {
                         usedMaterial: false,
@@ -585,7 +585,7 @@ function StockInOutFactoryInOut() {
                         usedSource: false,
                     }
                 )) : null)
-                setRecipeErrorProductStockIn(res && res.data && res.data.produceProductda ? res.data.produceProductda?.map((data, index) => (
+                setRecipeErrorProductStockIn(res && res.data && res.data.produceProductdata ? res.data.produceProductdata?.map((data, index) => (
                     data.usedValue <= data.remainQty ? {
                         usedValue: false,
                     } : {
@@ -602,7 +602,7 @@ function StockInOutFactoryInOut() {
             .then((res) => {
                 setRecipeStockIn(res.data.recipeMaterial);
                 setRecipeExpenseStockIn(res.data.otherExpense);
-                setRecipeProductStockIn(res.data.produceProductda);
+                setRecipeProductStockIn(res.data.produceProductdata);
                 setStockInFormData((perv) => ({
                     ...perv,
                     mfProductQty: res.data.batchQty,
@@ -625,7 +625,7 @@ function StockInOutFactoryInOut() {
                         usedSource: false,
                     }
                 )) : null)
-                setRecipeErrorProductStockIn(res && res.data && res.data.produceProductda ? res.data.produceProductda?.map((data, index) => (
+                setRecipeErrorProductStockIn(res && res.data && res.data.produceProductdata ? res.data.produceProductdata?.map((data, index) => (
                     data.usedValue <= data.remainQty ? {
                         usedValue: false,
                     } : {
@@ -1313,7 +1313,9 @@ function StockInOutFactoryInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const [state, setState] = useState([
@@ -1344,7 +1346,9 @@ function StockInOutFactoryInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
 
@@ -1552,7 +1556,7 @@ function StockInOutFactoryInOut() {
                                                         <button className='stockInBtn' onClick={() => { tab === 1 || tab === '1' ? getStockInDataByFilter() : getStockOutDataByFilter(); setFilter(true); setPage(0); handleClose() }}>Apply</button>
                                                     </div>
                                                     <div className='col-span-3'>
-                                                        <button className='stockOutBtn' onClick={handleClose}>cancle</button>
+                                                        <button className='stockOutBtn' onClick={handleClose}>cancel</button>
                                                     </div>
                                                 </div>
                                             </Box>
@@ -1659,7 +1663,7 @@ function StockInOutFactoryInOut() {
                                                             </Tooltip>
                                                             <TableCell align="left"  >{row.mfProductName}</TableCell>
                                                             <TableCell align="left"  >{row.Quantity}</TableCell>
-                                                            <TableCell align="left" >{parseFloat(row.stockOutPrice ? row.stockOutPrice : 0).toLocaleString('en-IN')}</TableCell>
+                                                            <TableCell align="left" >{parseFloat(row.sellAmt ? row.sellAmt : 0).toLocaleString('en-IN')}</TableCell>
                                                             <TableCell align="left"  >{row.stockOutCategoryName}</TableCell>
                                                             <Tooltip title={row.mfStockOutComment} placement="top-start" arrow><TableCell align="left"  ><div className='Comment'>{row.mfStockOutComment}</div></TableCell></Tooltip>
                                                             <TableCell align="left"   >{row.mfStockOutDate}</TableCell>
@@ -2094,7 +2098,7 @@ function StockInOutFactoryInOut() {
                             <div className='col-span-3'>
                                 <button className='addCategoryCancleBtn' onClick={() => {
                                     handleCloseStockIn();
-                                }}>Cancle</button>
+                                }}>Cancel</button>
                             </div>
                         </div>}
                 </Box>
@@ -2445,7 +2449,7 @@ function StockInOutFactoryInOut() {
                         <div className='col-span-3'>
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleCloseStockOut();
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box >

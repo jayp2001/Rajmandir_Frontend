@@ -728,7 +728,9 @@ function MaterialTableByDepartmentInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const pdfExportCategoryWise = async () => {
@@ -753,7 +755,9 @@ function MaterialTableByDepartmentInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const onSearchChange = (e) => {
@@ -850,10 +854,11 @@ function MaterialTableByDepartmentInOut() {
                                                 key: 'selection'
                                             }
                                         ])
-                                        setTab(0);
+                                        setPage(0);
                                         setRowsPerPage(5);
                                         tab == 2 && getData();
                                         tab == 3 && getExpenseData();
+                                        tab == 1 && getDataProduct();
                                     }}><CloseIcon /></button>
                                 </div>
                                 <Popover
@@ -880,14 +885,14 @@ function MaterialTableByDepartmentInOut() {
                                             <div className='col-span-3 col-start-7'>
                                                 <button className='stockInBtn' onClick={() => {
                                                     setRowsPerPage(5);
-                                                    tab == 2 ? filter ? getDataByFilter() : getData() : <></>
-                                                    tab == 3 ? filter ? getExpenseDataByFilter() : getExpenseData() : <></>
-                                                    tab == 1 ? filter ? getExpenseDataByFilter() : getExpenseData() : <></>
+                                                    tab == 2 && getDataByFilter()
+                                                    tab == 3 && getExpenseDataByFilter()
+                                                    tab == 1 && getDataByFilterProduct()
                                                     setFilter(true); setPage(0); handleClose();
                                                 }}>Apply</button>
                                             </div>
                                             <div className='col-span-3'>
-                                                <button className='stockOutBtn' onClick={handleClose}>cancle</button>
+                                                <button className='stockOutBtn' onClick={handleClose}>cancel</button>
                                             </div>
                                         </div>
                                     </Box>
@@ -1211,7 +1216,7 @@ function MaterialTableByDepartmentInOut() {
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleCloseModal();
                                 setIsEdit(false)
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>

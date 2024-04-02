@@ -207,7 +207,7 @@ function FactoryDistributerTable() {
             })
     }
     const getDebitCounts = async () => {
-        await axios.get(`${BACKEND_BASE_URL}mfProductrouter/getRmDebitTransactionCounter`, config)
+        await axios.get(`${BACKEND_BASE_URL}mfProductrouter/getDistributorDebitTransactionCounter`, config)
             .then((res) => {
                 setDebitCount(res.data);
             })
@@ -316,7 +316,7 @@ function FactoryDistributerTable() {
 
     const debounceFunction = React.useCallback(debounce(handleSearch), [])
     return (
-        <div className='suppilerListContainer'>
+        <div className='supplierListContainer'>
             <div className='grid grid-cols-12 userTableContainer'>
                 <div className='col-span-12'>
                     <div className='userTableSubContainer'>
@@ -511,7 +511,7 @@ function FactoryDistributerTable() {
                         <div className='col-span-3'>
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleClose();
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>

@@ -492,7 +492,8 @@ function MaterialTableByDepartment() {
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
             }).catch((error) => {
-                setError(error.response ? error.response.data : "Network Error ...!!!")
+                // console.log('>>>', error)
+                setError("No Data Or Network Error ...!!!")
             })
         }
     }
@@ -518,7 +519,8 @@ function MaterialTableByDepartment() {
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
             }).catch((error) => {
-                setError(error.response ? error.response.data : "Network Error ...!!!")
+                // console.log('>>>', error)
+                setError("No Data Or Network Error ...!!!")
             })
         }
     }
@@ -545,7 +547,8 @@ function MaterialTableByDepartment() {
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
             }).catch((error) => {
-                setError(error.response ? error.response.data : "Network Error ...!!!")
+                // console.log('>>>', error)
+                setError("No Data Or Network Error ...!!!")
             })
         }
     }
@@ -571,7 +574,8 @@ function MaterialTableByDepartment() {
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
             }).catch((error) => {
-                setError(error.response ? error.response.data : "Network Error ...!!!")
+                // console.log('>>>', error)
+                setError("No Data Or Network Error ...!!!")
             })
         }
     }
@@ -598,7 +602,8 @@ function MaterialTableByDepartment() {
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
             }).catch((error) => {
-                setError(error.response ? error.response.data : "Network Error ...!!!")
+                // console.log('>>>', error)
+                setError("No Data Or Network Error ...!!!")
             })
         }
     }
@@ -624,7 +629,8 @@ function MaterialTableByDepartment() {
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
             }).catch((error) => {
-                setError(error.response ? error.response.data : "Network Error ...!!!")
+                // console.log('>>>', error)
+                setError("No Data Or Network Error ...!!!")
             })
         }
     }
@@ -655,9 +661,9 @@ function MaterialTableByDepartment() {
         searchProduct(document.getElementById('searchWord').value)
     }
 
-    const debounceFunction = React.useCallback(debounce(handleSearch), [])
-    const debounceFunctionOther = React.useCallback(debounce(handleSearchOther), [])
-    const debounceFunctionProduct = React.useCallback(debounce(handleSearchProduct), [])
+    const debounceFunction = React.useCallback(debounce(handleSearch), [filter, tab, state])
+    const debounceFunctionOther = React.useCallback(debounce(handleSearchOther), [filter, tab, state])
+    const debounceFunctionProduct = React.useCallback(debounce(handleSearchProduct), [filter, tab, state])
 
 
     const handleDelete = (id) => {
@@ -898,7 +904,9 @@ function MaterialTableByDepartment() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const pdfExportCategoryWise = async () => {
@@ -923,7 +931,9 @@ function MaterialTableByDepartment() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const onSearchChange = (e) => {
@@ -1020,10 +1030,11 @@ function MaterialTableByDepartment() {
                                                 key: 'selection'
                                             }
                                         ])
-                                        setTab(0);
+                                        setPage(0);
                                         setRowsPerPage(5);
                                         tab == 2 && getData();
                                         tab == 3 && getExpenseData();
+                                        tab == 1 && getDataProduct();
                                     }}><CloseIcon /></button>
                                 </div>
                                 <Popover
@@ -1050,14 +1061,14 @@ function MaterialTableByDepartment() {
                                             <div className='col-span-3 col-start-7'>
                                                 <button className='stockInBtn' onClick={() => {
                                                     setRowsPerPage(5);
-                                                    tab == 2 ? filter ? getDataByFilter() : getData() : <></>
-                                                    tab == 3 ? filter ? getExpenseDataByFilter() : getExpenseData() : <></>
-                                                    tab == 1 ? filter ? getExpenseDataByFilter() : getExpenseData() : <></>
+                                                    tab == 2 && getDataByFilter()
+                                                    tab == 3 && getExpenseDataByFilter()
+                                                    tab == 1 && getDataByFilterProduct()
                                                     setFilter(true); setPage(0); handleClose();
                                                 }}>Apply</button>
                                             </div>
                                             <div className='col-span-3'>
-                                                <button className='stockOutBtn' onClick={handleClose}>cancle</button>
+                                                <button className='stockOutBtn' onClick={handleClose}>cancel</button>
                                             </div>
                                         </div>
                                     </Box>
@@ -1133,7 +1144,7 @@ function MaterialTableByDepartment() {
                                                             {row.rawMaterialName}
                                                         </TableCell>
                                                         <TableCell align="right" >{row.remainingStock}</TableCell>
-                                                        <TableCell align="right" >{parseFloat(row.outPrice ? row.outPrice : 0).toLocaleString('en-IN')}</TableCell>
+                                                        <TableCell align="right" >{parseFloat(row.usedPrice ? row.usedPrice : 0).toLocaleString('en-IN')}</TableCell>
                                                         {/* <TableCell align="right" ><div className=''><button className='editCategoryBtn mr-6' onClick={() => handleEdit(row.stockInCategoryId, row.stockInCategoryName)}>Edit</button><button className='deleteCategoryBtn' onClick={() => handleDelete(row.stockInCategoryId)}>Delete</button></div></TableCell> */}
                                                         <TableCell align="right">
                                                         </TableCell>
@@ -1394,7 +1405,7 @@ function MaterialTableByDepartment() {
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleCloseModal();
                                 setIsEdit(false)
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>

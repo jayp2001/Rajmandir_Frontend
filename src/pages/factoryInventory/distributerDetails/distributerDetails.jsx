@@ -67,7 +67,7 @@ function FactoryDistributerDetail() {
     const [filter, setFilter] = React.useState(false);
     const [tab, setTab] = React.useState(1);
     const [tabStockIn, setTabStockIn] = React.useState('');
-    const [suppilerDetails, setSuppilerDetails] = useState();
+    const [supplierDetails, setSupplierDetails] = useState();
     const [statisticsCount, setStatisticsCounts] = useState();
     const [productQtyCount, setProductQty] = useState();
     const [debitTransaction, setDebitTransaction] = React.useState();
@@ -86,11 +86,11 @@ function FactoryDistributerDetail() {
             key: 'selection'
         }
     ]);
-    const getSuppilerDetails = async () => {
+    const getSupplierDetails = async () => {
         await axios.get(`${BACKEND_BASE_URL}mfProductrouter/getFactoryDistributorDetailsById?distributorId=${id}`, config)
             .then((res) => {
                 console.log(">>>", res.data);
-                setSuppilerDetails(res.data);
+                setSupplierDetails(res.data);
                 setFormData((perv) => ({
                     ...perv,
                     supplierName: res.data.firmName,
@@ -373,7 +373,7 @@ function FactoryDistributerDetail() {
     useEffect(() => {
         getProductCount();
         getStatistics();
-        getSuppilerDetails();
+        getSupplierDetails();
         getStockInData()
     }, [])
     const onChange = (e) => {
@@ -391,13 +391,12 @@ function FactoryDistributerDetail() {
     }
     const makePayment = async () => {
         setLoading(true)
-        await axios.post(`${BACKEND_BASE_URL}mfProductrouter/addFacttorySupplierTransactionDetails`, formData, config)
+        await axios.post(`${BACKEND_BASE_URL}mfProductrouter/addFacttoryDistributorTransactionDetails`, formData, config)
             .then((res) => {
                 setSuccess(true)
                 setLoading(false)
                 setFormData((perv) => ({
                     ...perv,
-                    receivedBy: '',
                     paidAmount: '',
                     transactionNote: '',
                 }))
@@ -471,7 +470,7 @@ function FactoryDistributerDetail() {
             }, 1000)
         }
     }
-    const getInvoice = async (tId, suppilerName) => {
+    const getInvoice = async (tId, supplierName) => {
         if (window.confirm('Are you sure you want to Download Invoice ... ?')) {
             await axios({
                 url: `${BACKEND_BASE_URL}mfProductrouter/exportDistributorTransactionInvoiceData?transactionId=${tId}`,
@@ -483,7 +482,7 @@ function FactoryDistributerDetail() {
                 const href = URL.createObjectURL(response.data);
                 // create "a" HTML element with href to file & click
                 const link = document.createElement('a');
-                const name = suppilerName + '_' + new Date().toLocaleDateString() + '.pdf'
+                const name = supplierName + '_' + new Date().toLocaleDateString() + '.pdf'
                 link.href = href;
                 link.setAttribute('download', name); //or any other extension
                 document.body.appendChild(link);
@@ -492,7 +491,9 @@ function FactoryDistributerDetail() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
 
@@ -517,7 +518,9 @@ function FactoryDistributerDetail() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const stockInExportPdf = async () => {
@@ -541,7 +544,9 @@ function FactoryDistributerDetail() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const allProductExportPdf = async () => {
@@ -565,7 +570,9 @@ function FactoryDistributerDetail() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const transactionExportPdf = async () => {
@@ -589,7 +596,9 @@ function FactoryDistributerDetail() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const allProductExportExcel = async () => {
@@ -613,7 +622,9 @@ function FactoryDistributerDetail() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const transactionExportExcel = async () => {
@@ -637,11 +648,13 @@ function FactoryDistributerDetail() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
 
-    if (!suppilerDetails) {
+    if (!supplierDetails) {
         return null;
     }
 
@@ -689,58 +702,58 @@ function FactoryDistributerDetail() {
         setError(false);
     }
     return (
-        <div className='suppilerListContainer'>
+        <div className='supplierListContainer'>
             <div className='grid grid-cols-12 gap-8'>
-                <div className='col-span-5 mt-6 grid gap-2 suppilerDetailContainer'>
-                    <div className='suppilerHeader'>
+                <div className='col-span-5 mt-6 grid gap-2 supplierDetailContainer'>
+                    <div className='supplierHeader'>
                         Distributor Details
                     </div>
                     <div className='grid grid-cols-12 gap-3 hrLine'>
-                        <div className='col-span-5 suppilerDetailFeildHeader'>
+                        <div className='col-span-5 supplierDetailFeildHeader'>
                             Distributor Name :
                         </div>
-                        <div className='col-span-7 suppilerDetailFeild'>
-                            {suppilerDetails.distributorFirstName} {suppilerDetails.distributorLastName}
+                        <div className='col-span-7 supplierDetailFeild'>
+                            {supplierDetails.distributorFirstName} {supplierDetails.distributorLastName}
                         </div>
                     </div>
                     <div className='grid grid-cols-12 gap-3 hrLine'>
-                        <div className='col-span-5 suppilerDetailFeildHeader'>
+                        <div className='col-span-5 supplierDetailFeildHeader'>
                             Nick Name :
                         </div>
-                        <div className='col-span-7 suppilerDetailFeild'>
-                            {suppilerDetails.distributorNickName}
+                        <div className='col-span-7 supplierDetailFeild'>
+                            {supplierDetails.distributorNickName}
                         </div>
                     </div>
                     <div className='grid grid-cols-12 gap-3 hrLine'>
-                        <div className='col-span-5 suppilerDetailFeildHeader'>
+                        <div className='col-span-5 supplierDetailFeildHeader'>
                             Firm Name :
                         </div>
-                        <div className='col-span-7 suppilerDetailFeild'>
-                            {suppilerDetails.distributorFirmName}
+                        <div className='col-span-7 supplierDetailFeild'>
+                            {supplierDetails.distributorFirmName}
                         </div>
                     </div>
                     <div className='grid grid-cols-12 gap-3 hrLine'>
-                        <div className='col-span-5 suppilerDetailFeildHeader'>
+                        <div className='col-span-5 supplierDetailFeildHeader'>
                             Address :
                         </div>
-                        <div className='col-span-7 suppilerDetailFeild'>
-                            {suppilerDetails.distributorFirmAddress}
+                        <div className='col-span-7 supplierDetailFeild'>
+                            {supplierDetails.distributorFirmAddress}
                         </div>
                     </div>
                     <div className='grid grid-cols-12 gap-3 hrLine'>
-                        <div className='col-span-5 suppilerDetailFeildHeader'>
+                        <div className='col-span-5 supplierDetailFeildHeader'>
                             Mobile No :
                         </div>
-                        <div className='col-span-7 suppilerDetailFeild'>
-                            {suppilerDetails.distributorPhoneNumber}
+                        <div className='col-span-7 supplierDetailFeild'>
+                            {supplierDetails.distributorPhoneNumber}
                         </div>
                     </div>
                     <div className='grid grid-cols-12 gap-3 '>
-                        <div className='col-span-5 suppilerDetailFeildHeader'>
+                        <div className='col-span-5 supplierDetailFeildHeader'>
                             Email Id :
                         </div>
-                        <div className='col-span-7 suppilerDetailFeild'>
-                            {suppilerDetails.distributorEmailId}
+                        <div className='col-span-7 supplierDetailFeild'>
+                            {supplierDetails.distributorEmailId}
                         </div>
                     </div>
                 </div>
@@ -814,7 +827,7 @@ function FactoryDistributerDetail() {
                                                             }}>Apply</button>
                                                         </div>
                                                         <div className='col-span-3'>
-                                                            <button className='stockOutBtn' onClick={handleClose}>cancle</button>
+                                                            <button className='stockOutBtn' onClick={handleClose}>cancel</button>
                                                         </div>
                                                     </div>
                                                 </Box>
@@ -987,7 +1000,7 @@ function FactoryDistributerDetail() {
                                             receivedBy: false,
                                             paidAmount: false,
                                         }))
-                                    }}>Cancle</button>
+                                    }}>Cancel</button>
                                 </div>
                             </div>
                         </div>

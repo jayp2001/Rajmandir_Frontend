@@ -259,7 +259,7 @@ function FinalProductListTableStock() {
     const [error, setError] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
     const [allData, setAllData] = React.useState();
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [categories, setCategories] = React.useState([]);
     const [ddlDistributer, setDdlDistributer] = React.useState([]);
     const [ddlBranch, setDdlBranch] = React.useState([]);
@@ -276,13 +276,13 @@ function FinalProductListTableStock() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const getSuppilerList = async (id) => {
+    const getSupplierList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}mfProductrouter/productWiseSupplierDDL?mfProductId=${id}`, config)
             .then((res) => {
-                setSuppilerList(res.data);
+                setSupplierList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getUnitForProduct = async (id) => {
@@ -291,7 +291,7 @@ function FinalProductListTableStock() {
                 setUnitsForProduct(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getUnitForProductRecipe = async (id, value) => {
@@ -304,7 +304,7 @@ function FinalProductListTableStock() {
                 })
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getUnitForProductRecipeProduct = async (id, value) => {
@@ -316,7 +316,7 @@ function FinalProductListTableStock() {
                 })
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getMainCategory = async (id) => {
@@ -325,7 +325,7 @@ function FinalProductListTableStock() {
                 setCategoryList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getCategoryList = async (id) => {
@@ -667,7 +667,7 @@ function FinalProductListTableStock() {
             .then((res) => {
                 setRecipeStockIn(res.data.recipeMaterial);
                 setRecipeExpenseStockIn(res.data.otherExpense);
-                setRecipeProductStockIn(res.data.produceProductda);
+                setRecipeProductStockIn(res.data.produceProductdata);
                 setRecipeErrorStockIn(res && res.data && res.data.recipeMaterial ? res.data.recipeMaterial?.map((data, index) => (
                     data.usedMaterial <= data.remainQty ? {
                         usedMaterial: false,
@@ -680,7 +680,7 @@ function FinalProductListTableStock() {
                         usedSource: false,
                     }
                 )) : null)
-                setRecipeErrorProductStockIn(res && res.data && res.data.produceProductda ? res.data.produceProductda?.map((data, index) => (
+                setRecipeErrorProductStockIn(res && res.data && res.data.produceProductdata ? res.data.produceProductdata?.map((data, index) => (
                     data.usedValue <= data.remainQty ? {
                         usedValue: false,
                     } : {
@@ -697,7 +697,7 @@ function FinalProductListTableStock() {
             .then((res) => {
                 setRecipeStockIn(res.data.recipeMaterial);
                 setRecipeExpenseStockIn(res.data.otherExpense);
-                setRecipeProductStockIn(res.data.produceProductda);
+                setRecipeProductStockIn(res.data.produceProductdata);
                 setStockInFormData((perv) => ({
                     ...perv,
                     mfProductQty: res.data.batchQty,
@@ -720,7 +720,7 @@ function FinalProductListTableStock() {
                         usedSource: false,
                     }
                 )) : null)
-                setRecipeErrorProductStockIn(res && res.data && res.data.produceProductda ? res.data.produceProductda?.map((data, index) => (
+                setRecipeErrorProductStockIn(res && res.data && res.data.produceProductdata ? res.data.produceProductdata?.map((data, index) => (
                     data.usedValue <= data.remainQty ? {
                         usedValue: false,
                     } : {
@@ -749,7 +749,7 @@ function FinalProductListTableStock() {
                     batchQty: false
                 })
                 getMaterialListOnEdit(res.data.recipeMaterial);
-                getProductListOnEdit(res.data.produceProductda);
+                getProductListOnEdit(res.data.produceProductdata);
                 getExpenseListOnEdit(res.data.otherExpense);
                 setRecipe(res.data.recipeMaterial);
                 setRecipeError(res && res.data && res.data.recipeMaterial ? res.data.recipeMaterial?.map((data, index) => (
@@ -764,8 +764,8 @@ function FinalProductListTableStock() {
                         value: false,
                     }
                 )) : null)
-                setRecipeProduct(res.data.produceProductda)
-                setRecipeErrorProduct(res && res.data && res.data.produceProductda ? res.data.produceProductda?.map((data, index) => (
+                setRecipeProduct(res.data.produceProductdata)
+                setRecipeErrorProduct(res && res.data && res.data.produceProductdata ? res.data.produceProductdata?.map((data, index) => (
                     {
                         value: false,
                         unit: false
@@ -1151,7 +1151,7 @@ function FinalProductListTableStock() {
             autoJson: {
                 recipeMaterial: recipeStockIn,
                 otherExpense: recipeExpenseStockIn,
-                produceProductda: recipeProductStockIn
+                produceProductdata: recipeProductStockIn
             }
         }
         console.log("dddd", newStockInData)
@@ -1829,7 +1829,9 @@ function FinalProductListTableStock() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const handleViewDetail = (id, name, unit, remainingQty) => {

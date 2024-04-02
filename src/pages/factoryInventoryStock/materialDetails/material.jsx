@@ -52,7 +52,7 @@ function MaterialDetailsStock() {
     const [isEdit, setIsEdit] = React.useState(false);
     const [stockOutData, setStockOutData] = React.useState();
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [unitPreference, setUnitPreference] = React.useState();
     const [stockInData, setStockInData] = React.useState();
     const [page, setPage] = React.useState(0);
@@ -64,7 +64,7 @@ function MaterialDetailsStock() {
     const [tab, setTab] = React.useState(1);
     const [tabStockInOut, setTabStockInOut] = React.useState(1);
     const [statisticsCount, setStatisticsCounts] = useState();
-    const [suppilerNameAndCount, setSuppilerNameAndCount] = useState();
+    const [supplierNameAndCount, setSupplierNameAndCount] = useState();
     const [categoryNameAndCount, setCategoryNameAndCount] = useState();
     const [categories, setCategories] = React.useState();
     const [debitTransaction, setDebitTransaction] = React.useState();
@@ -228,13 +228,13 @@ function MaterialDetailsStock() {
             reason: false
         })
     }
-    const getSuppilerList = async (id) => {
+    const getSupplierList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}rawMaterialrouter/rawMaterialWiseSupplierDDL?rawMaterialId=${id}`, config)
             .then((res) => {
-                setSuppilerList(res.data);
+                setSupplierList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getRmUnitPreferenceById = async (id) => {
@@ -352,7 +352,7 @@ function MaterialDetailsStock() {
                 ])
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 setFilter(false);
                 getStockOutData();
                 handleResetStockOut();
@@ -540,7 +540,7 @@ function MaterialDetailsStock() {
                 ])
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 setFilter(false)
                 getStockInData()
                 handleResetStockIn();
@@ -574,7 +574,7 @@ function MaterialDetailsStock() {
                 setSuccess(true)
                 getStatistics();
                 getStockInData();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 getCategoryNameAndCount();
             })
             .catch((error) => {
@@ -596,7 +596,7 @@ function MaterialDetailsStock() {
                 getStatistics();
                 getStockOutData();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -631,7 +631,9 @@ function MaterialDetailsStock() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const stockInExportExcel = async () => {
@@ -655,7 +657,9 @@ function MaterialDetailsStock() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const getCategoryList = async (isSupplyBranch) => {
@@ -701,19 +705,19 @@ function MaterialDetailsStock() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const getSuppilerNameAndCount = async () => {
+    const getSupplierNameAndCount = async () => {
         await axios.get(`${BACKEND_BASE_URL}rawMaterialrouter/getSupplierByRawMaterialId?rawMaterialId=${id}`, config)
             .then((res) => {
-                setSuppilerNameAndCount(res.data);
+                setSupplierNameAndCount(res.data);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const getSuppilerNameAndCountByFilter = async () => {
+    const getSupplierNameAndCountByFilter = async () => {
         await axios.get(`${BACKEND_BASE_URL}rawMaterialrouter/getSupplierByRawMaterialId?startDate=${state[0].startDate}&endDate=${state[0].endDate}&rawMaterialId=${id}`, config)
             .then((res) => {
-                setSuppilerNameAndCount(res.data);
+                setSupplierNameAndCount(res.data);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -801,7 +805,7 @@ function MaterialDetailsStock() {
                     rmStockInDate: dayjs(res.data.rmStockInDate),
                     isFullEdit: isFullEdit
                 }))
-                getSuppilerList(res.data.rawMaterialId)
+                getSupplierList(res.data.rawMaterialId)
             })
             .catch((error) => {
                 //  setError(error.response && error.response.data ? error.response.data : "Network Error ...!!!");
@@ -860,7 +864,7 @@ function MaterialDetailsStock() {
                 getStockInData();
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 handleResetStockIn();
             })
             .catch((error) => {
@@ -884,7 +888,7 @@ function MaterialDetailsStock() {
                 setExpanded(false);
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 getStockOutData();
                 handleResetStockOut();
             })
@@ -969,13 +973,13 @@ function MaterialDetailsStock() {
     }
     useEffect(() => {
         getUnitForProduct(id);
-        getSuppilerList(id)
+        getSupplierList(id)
         getCategoryList(status);
         getStockInData();
         getStatistics();
         getDDLBranchList();
         getCategoryNameAndCount();
-        getSuppilerNameAndCount();
+        getSupplierNameAndCount();
         getRmUnitPreferenceById(id);
         // getCountData();
     }, [])
@@ -1027,7 +1031,7 @@ function MaterialDetailsStock() {
     }
     console.log('formdata', stockInFormData)
     return (
-        <div className='suppilerListContainer'>
+        <div className='supplierListContainer'>
             <div className='grid grid-cols-12 gap-8'>
                 <div className='col-span-12 mt-6'>
                     <div className='datePickerWrp mb-4'>
@@ -1114,7 +1118,7 @@ function MaterialDetailsStock() {
                             <div className='grid gap-4 mt-12' style={{ minHeight: '216px', maxHeight: '216px', overflowY: 'scroll' }}>
                                 <div className='grid grid-cols-1 pb-3'>
                                     {
-                                        suppilerNameAndCount && suppilerNameAndCount?.map((row, index) => (
+                                        supplierNameAndCount && supplierNameAndCount?.map((row, index) => (
                                             <ProductQtyCountCard productQtyUnit={unit} rawMaterialQty={row.remainingStock} productPrice={row.expense} rawMaterialName={row.supplierNickName} index={index} />
                                         ))
                                     }

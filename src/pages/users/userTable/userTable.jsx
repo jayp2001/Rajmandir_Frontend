@@ -645,7 +645,7 @@ function UserTable() {
                                     <button onClick={() => isEdit ? editUser() : submit()} className='saveBtn' >Save</button>
                                 </div>
                                 <div className='col-span-3'>
-                                    <button onClick={() => handleClose()} className='resetBtn'>Cancle</button>
+                                    <button onClick={() => handleClose()} className='resetBtn'>Cancel</button>
                                 </div>
                             </div>
                         </div>

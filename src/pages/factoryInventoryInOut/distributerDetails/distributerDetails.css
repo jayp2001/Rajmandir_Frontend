@@ -1,4 +1,4 @@
-.suppilerDetailContainer {
+.supplierDetailContainer {
     min-height: 420px;
     width: 100%;
     word-wrap: break-word;
@@ -9,7 +9,7 @@
     font-size: 14px;
 }
 
-.suppilerHeader {
+.supplierHeader {
     font-size: 18px;
     font-weight: 600;
     color: rgba(0, 0, 0, 0.8);
@@ -78,6 +78,6 @@
     cursor: pointer;
 }
 
-.suppilerDetailFeildHeader {
+.supplierDetailFeildHeader {
     font-weight: 600;
 }

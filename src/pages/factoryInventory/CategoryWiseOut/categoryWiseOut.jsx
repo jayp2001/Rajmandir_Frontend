@@ -252,7 +252,7 @@ function CategoryWiseOut() {
         outCategoryId: '',
         branchId: '',
     });
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [categories, setCategories] = React.useState([]);
     const [ddlDistributer, setDdlDistributer] = React.useState([]);
     const [ddlBranch, setDdlBranch] = React.useState([]);
@@ -275,7 +275,7 @@ function CategoryWiseOut() {
                 setCategoryList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getMaterialList = async () => {
@@ -395,6 +395,15 @@ function CategoryWiseOut() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
+    const getDebitCountsOnCancel = async (outId, branchId) => {
+        await axios.get(`${BACKEND_BASE_URL}mfProductrouter/getStaticsOutCategoryWiseMfProductData?outCategoryId=${outId}&branchId=${branchId}`, config)
+            .then((res) => {
+                setCounts(res.data);
+            })
+            .catch((error) => {
+                setError(error.response ? error.response.data : "Network Error ...!!!")
+            })
+    }
     const getDebitCountsByFilter = async (outId, branchId) => {
         await axios.get(`${BACKEND_BASE_URL}mfProductrouter/getStaticsOutCategoryWiseMfProductData?outCategoryId=${outId}&branchId=${branchId}&startDate=${state[0].startDate}&endDate=${state[0].endDate}`, config)
             .then((res) => {
@@ -490,7 +499,7 @@ function CategoryWiseOut() {
     const productExportExcel = async (outId, branchId) => {
         if (window.confirm('Are you sure you want to export Excel ... ?')) {
             await axios({
-                url: filter ? `${BACKEND_BASE_URL}mfProductrouter/exportExcelForOutCategoryWiseMfProductData?startDate=${state[0].startDate}&endDate=${state[0].endDate}&outCategoryId=${outId}&branchId=${branchId}` : `${BACKEND_BASE_URL}mfProductrouter/exportExcelForOutCategoryWiseMfProductData?startDate=${''}&endDate=${''}&outCategoryId=${outId}&branchId=${branchId}`,
+                url: filter ? `${BACKEND_BASE_URL}mfProductrouter/exportExcelForOutCategoryWiseMfProductData?startDate=${state[0].startDate}&endDate=${state[0].endDate}&outCategoryId=${outId ? outId : ''}&branchId=${branchId ? branchId : ''}` : `${BACKEND_BASE_URL}mfProductrouter/exportExcelForOutCategoryWiseMfProductData?startDate=${''}&endDate=${''}&outCategoryId=${outId ? outId : ''}&branchId=${branchId ? branchId : ''}`,
                 method: 'GET',
                 headers: { Authorization: `Bearer ${userInfo.token}` },
                 responseType: 'blob', // important
@@ -508,13 +517,15 @@ function CategoryWiseOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const productExportPdf = async (outId, branchId) => {
         if (window.confirm('Are you sure you want to export Pdf ... ?')) {
             await axios({
-                url: filter ? `${BACKEND_BASE_URL}mfProductrouter/exportPdfForOutCategoryWiseMfProductData?startDate=${state[0].startDate}&endDate=${state[0].endDate}&outCategoryId=${outId}&branchId=${branchId}` : `${BACKEND_BASE_URL}mfProductrouter/exportPdfForOutCategoryWiseMfProductData?startDate=${''}&endDate=${''}&outCategoryId=${outId}&branchId=${branchId}`,
+                url: filter ? `${BACKEND_BASE_URL}mfProductrouter/exportPdfForOutCategoryWiseMfProductData?startDate=${state[0].startDate}&endDate=${state[0].endDate}&outCategoryId=${outId ? outId : ''}&branchId=${branchId ? branchId : ''}` : `${BACKEND_BASE_URL}mfProductrouter/exportPdfForOutCategoryWiseMfProductData?startDate=${''}&endDate=${''}&outCategoryId=${outId ? outId : ''}&branchId=${branchId ? branchId : ''}`,
                 method: 'GET',
                 headers: { Authorization: `Bearer ${userInfo.token}` },
                 responseType: 'blob', // important
@@ -532,7 +543,9 @@ function CategoryWiseOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
 
@@ -641,9 +654,11 @@ function CategoryWiseOut() {
                                         onClick={() => {
                                             setFilter(false);
                                             getAllData(filterFormData.outCategoryId, filterFormData.branchId);
+                                            getDebitCountsOnCancel(filterFormData.outCategoryId, filterFormData.branchId);
                                             setPage(0);
                                             setSearchWord('')
                                             setRowsPerPage(10);
+                                            getDebitCounts()
                                             setState([
                                                 {
                                                     startDate: new Date(),
@@ -678,7 +693,7 @@ function CategoryWiseOut() {
                                                 <button className='stockInBtn' onClick={() => { getAllDataByFilter(filterFormData.outCategoryId, filterFormData.branchId); getDebitCountsByFilter(filterFormData.outCategoryId, filterFormData.branchId); setFilter(true); setPage(0); setRowsPerPage(10); handleCloseDate() }}>Apply</button>
                                             </div>
                                             <div className='col-span-3'>
-                                                <button className='stockOutBtn' onClick={handleCloseDate}>cancle</button>
+                                                <button className='stockOutBtn' onClick={handleCloseDate}>cancel</button>
                                             </div>
                                         </div>
                                     </Box>
@@ -765,7 +780,7 @@ function CategoryWiseOut() {
                                                 filter ? getDebitCountsByFilterByCategory(filterFormData.outCategoryId, e.target.value) : getDebitCountsByFilterByCategory(filterFormData.outCategoryId, e.target.value)
                                             }}
                                         >
-                                            <MenuItem key={"Clear"} value={""}>Clear</MenuItem>
+                                            <MenuItem key={"Clear"} value={null}>Clear</MenuItem>
                                             {
                                                 ddlBranch ? ddlBranch.map((category) => (
                                                     <MenuItem key={category.branchId} value={category.branchId}>{category.branchName}</MenuItem>
@@ -776,7 +791,7 @@ function CategoryWiseOut() {
                                     </FormControl>
                                 </div>}
                             <div className='col-span-4 col-start-9 pr-5 flex justify-end'>
-                                <ExportMenu exportExcel={() => productExportExcel(filterFormData.outId ? filterFormData.outId : '', filterFormData.branchId ? filterFormData.branchId : '')} exportPdf={() => productExportPdf(filterFormData.outId ? filterFormData.outId : '', filterFormData.branchId ? filterFormData.branchId : '')} />
+                                <ExportMenu exportExcel={() => productExportExcel(filterFormData.outCategoryId ? filterFormData.outCategoryId : '', filterFormData.branchId ? filterFormData.branchId : '')} exportPdf={() => productExportPdf(filterFormData.outCategoryId ? filterFormData.outCategoryId : '', filterFormData.branchId ? filterFormData.branchId : '')} />
                             </div>
                         </div>
                         <div className='tableContainerWrapper'>

@@ -19,7 +19,7 @@ function Menutemp(props) {
         setAnchorEl(null);
     };
     // const handleEditClick = (id) => {
-    //     navigate(`/editSuppiler/${id}`)
+    //     navigate(`/editSupplier/${id}`)
     // }
     return (
         <div>
@@ -76,7 +76,7 @@ function Menutemp(props) {
                     }}>
                     Delete Product
                 </MenuItem>
-                {props.data.recipeeStatus ? <>
+                {props.data.recipeeStatus ?
                     <MenuItem key={'EditRecipe'}
                         onClick={() => {
                             handleClose();
@@ -84,13 +84,7 @@ function Menutemp(props) {
                         }}>
                         Edit Recipe
                     </MenuItem>
-                    <MenuItem key={'EditRecipe'}
-                        onClick={() => {
-                            handleClose();
-                            props.handleDeleteRecipe(props.data.mfProductId)
-                        }}>
-                        Delete Recipe
-                    </MenuItem></> :
+                    :
                     <MenuItem key={'recipe'}
                         onClick={() => {
                             handleClose();
@@ -98,6 +92,15 @@ function Menutemp(props) {
                         }}>
                         Add Recipe
                     </MenuItem>}
+                {props.data.recipeeStatus ? <MenuItem key={'deleteRecipe'}
+                    onClick={() => {
+                        handleClose();
+                        props.handleDeleteRecipe(props.data.mfProductId)
+                    }}>
+                    Delete Recipe
+                </MenuItem>
+                    : null
+                }
             </Menu>
         </div >
     );

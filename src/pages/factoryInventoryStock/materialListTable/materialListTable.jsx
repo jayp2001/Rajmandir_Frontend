@@ -216,7 +216,7 @@ function MaterialListTableStock() {
     const [error, setError] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
     const [allData, setAllData] = React.useState();
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [categories, setCategories] = React.useState();
     const [ddlBranch, setddlBranch] = React.useState();
     const [categoryList, setCategoryList] = React.useState();
@@ -233,13 +233,13 @@ function MaterialListTableStock() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const getSuppilerList = async (id) => {
+    const getSupplierList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}rawMaterialrouter/rawMaterialWiseSupplierDDL?rawMaterialId=${id}`, config)
             .then((res) => {
-                setSuppilerList(res.data);
+                setSupplierList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getUnitForProduct = async (id) => {
@@ -248,7 +248,7 @@ function MaterialListTableStock() {
                 setUnitsForProduct(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getMainCategory = async (id) => {
@@ -257,7 +257,7 @@ function MaterialListTableStock() {
                 setCategoryList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getCategoryList = async (isSupplyBranch) => {
@@ -413,7 +413,7 @@ function MaterialListTableStock() {
     }
     const handleOpen = () => setOpenM(true);
     const handleOpenStockIn = (row) => {
-        getSuppilerList(row.rawMaterialId);
+        getSupplierList(row.rawMaterialId);
         getUnitForProduct(row.rawMaterialId)
         setStockInFormData((perv) => ({
             ...perv,
@@ -1067,7 +1067,9 @@ function MaterialListTableStock() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const handleViewDetail = (id, name, unit, remainingQty, status) => {
@@ -1759,7 +1761,7 @@ function MaterialListTableStock() {
                                 handleClose();
                                 handleReset();
                                 setIsEdit(false)
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>
@@ -1898,14 +1900,14 @@ function MaterialListTableStock() {
                         </div>
                         <div className='col-span-4'>
                             <FormControl style={{ minWidth: '100%', maxWidth: '100%' }}>
-                                <InputLabel id="demo-simple-select-label" required error={stockInFormDataError.rmSupplierId}>Suppiler</InputLabel>
+                                <InputLabel id="demo-simple-select-label" required error={stockInFormDataError.rmSupplierId}>Supplier</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     value={stockInFormData.rmSupplierId}
                                     error={stockInFormDataError.rmSupplierId}
                                     name="rmSupplierId"
-                                    label="Suppiler"
+                                    label="Supplier"
                                     onBlur={(e) => {
                                         if (!e.target.value) {
                                             setStockInFormDataError((perv) => ({
@@ -1923,8 +1925,8 @@ function MaterialListTableStock() {
                                     onChange={onChangeStockIn}
                                 >
                                     {
-                                        suppiler ? suppiler.map((suppilerData) => (
-                                            <MenuItem key={suppilerData.rmSupplierId} value={suppilerData.rmSupplierId}>{suppilerData.supplierNickName}</MenuItem>
+                                        supplier ? supplier.map((supplierData) => (
+                                            <MenuItem key={supplierData.rmSupplierId} value={supplierData.rmSupplierId}>{supplierData.supplierNickName}</MenuItem>
                                         )) : null
                                     }
 
@@ -2003,7 +2005,7 @@ function MaterialListTableStock() {
                         <div className='col-span-3'>
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleCloseStockIn();
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>
@@ -2253,7 +2255,7 @@ function MaterialListTableStock() {
                         <div className='col-span-3'>
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleCloseStockOut();
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box >

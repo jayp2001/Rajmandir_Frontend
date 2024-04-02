@@ -252,7 +252,7 @@ function CategoryWiseOutInOut() {
         outCategoryId: '',
         branchId: '',
     });
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [categories, setCategories] = React.useState([]);
     const [ddlDistributer, setDdlDistributer] = React.useState([]);
     const [ddlBranch, setDdlBranch] = React.useState([]);
@@ -275,7 +275,7 @@ function CategoryWiseOutInOut() {
                 setCategoryList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getMaterialList = async () => {
@@ -500,7 +500,9 @@ function CategoryWiseOutInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const handleViewDetail = (id, name, unit, remainingQty) => {
@@ -645,7 +647,7 @@ function CategoryWiseOutInOut() {
                                                 <button className='stockInBtn' onClick={() => { getAllDataByFilter(filterFormData.outCategoryId, filterFormData.branchId); setFilter(true); setPage(0); setRowsPerPage(10); handleCloseDate() }}>Apply</button>
                                             </div>
                                             <div className='col-span-3'>
-                                                <button className='stockOutBtn' onClick={handleCloseDate}>cancle</button>
+                                                <button className='stockOutBtn' onClick={handleCloseDate}>cancel</button>
                                             </div>
                                         </div>
                                     </Box>

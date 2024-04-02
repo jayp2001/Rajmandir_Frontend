@@ -260,7 +260,7 @@ function FinalProductListTable() {
     const [error, setError] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
     const [allData, setAllData] = React.useState();
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [categories, setCategories] = React.useState([]);
     const [ddlDistributer, setDdlDistributer] = React.useState([]);
     const [ddlBranch, setDdlBranch] = React.useState([]);
@@ -277,13 +277,13 @@ function FinalProductListTable() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const getSuppilerList = async (id) => {
+    const getSupplierList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}mfProductrouter/productWiseSupplierDDL?mfProductId=${id}`, config)
             .then((res) => {
-                setSuppilerList(res.data);
+                setSupplierList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getUnitForProduct = async (id) => {
@@ -292,7 +292,7 @@ function FinalProductListTable() {
                 setUnitsForProduct(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getUnitForProductRecipe = async (id, value) => {
@@ -305,7 +305,7 @@ function FinalProductListTable() {
                 })
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getUnitForProductRecipeProduct = async (id, value) => {
@@ -317,7 +317,7 @@ function FinalProductListTable() {
                 })
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getMainCategory = async (id) => {
@@ -326,7 +326,7 @@ function FinalProductListTable() {
                 setCategoryList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getCategoryList = async (id) => {
@@ -1886,7 +1886,9 @@ function FinalProductListTable() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const productExportPdf = async () => {
@@ -1910,7 +1912,9 @@ function FinalProductListTable() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const productExportPdfByStatus = async (tab) => {
@@ -1935,7 +1939,9 @@ function FinalProductListTable() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
 
@@ -2175,7 +2181,7 @@ function FinalProductListTable() {
                                                 <button className='stockInBtn' onClick={() => { getAllDataByFilter(); setTab(''); setFilter(true); setPage(0); setRowsPerPage(10); handleCloseDate() }}>Apply</button>
                                             </div>
                                             <div className='col-span-3'>
-                                                <button className='stockOutBtn' onClick={handleCloseDate}>cancle</button>
+                                                <button className='stockOutBtn' onClick={handleCloseDate}>cancel</button>
                                             </div>
                                         </div>
                                     </Box>
@@ -2200,7 +2206,7 @@ function FinalProductListTable() {
                                     />
                                 </div>}
                             <div className='col-span-4 col-start-9 pr-5 flex justify-end'>
-                                {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ? <button className='exportExcelBtn' onClick={() => productExportPdfByStatus(tab)}><FileDownloadIcon />&nbsp;&nbsp;Export Excel</button> : <ExportMenu exportExcel={productExportExcel} exportPdf={productExportPdf} />}
+                                {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ? <button className='exportExcelBtn' onClick={() => productExportPdfByStatus(tab)}><FileDownloadIcon />&nbsp;&nbsp;Export</button> : <ExportMenu exportExcel={productExportExcel} exportPdf={productExportPdf} />}
                             </div>
                         </div>
                         {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ?
@@ -2281,7 +2287,7 @@ function FinalProductListTable() {
                                                 <TableCell align="left">Remaining Stock</TableCell>
                                                 {/* <TableCell align="left">Value of Remaining</TableCell> */}
                                                 {/* <TableCell align="left">Min ProductQty</TableCell> */}
-                                                <TableCell align="start">Status</TableCell>
+                                                <TableCell align="left">Status</TableCell>
                                                 {/* <TableCell align="left">LastIn Date</TableCell> */}
                                                 <TableCell align="left"></TableCell>
                                             </TableRow>
@@ -2669,7 +2675,7 @@ function FinalProductListTable() {
                                 handleClose();
                                 handleReset();
                                 setIsEdit(false)
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>
@@ -3048,7 +3054,7 @@ function FinalProductListTable() {
                         <div className='col-span-3'>
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleCloseStockIn();
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>
@@ -3367,7 +3373,7 @@ function FinalProductListTable() {
                         <div className='col-span-3'>
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleCloseStockOut();
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box >
@@ -3820,7 +3826,7 @@ function FinalProductListTable() {
                                 handleCloseAddRecipe();
                                 // handleResetAddRecipe();
                                 setIsEdit(false)
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>

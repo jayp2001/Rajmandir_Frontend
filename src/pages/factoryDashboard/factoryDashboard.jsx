@@ -23,7 +23,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import dayjs from 'dayjs';
 import BranchCard from './branchCard/branchCard';
-import MenuSuppiler from './menuSuppiler';
+import MenuSupplier from './menuSupplier';
 import MaterialCard from './branchCard/materialCard';
 import DistributorCard from './branchCard/distributorCard';
 // import ExportMenu from '../exportMenu/exportMenu';
@@ -437,7 +437,7 @@ function FactoryDashboard() {
                                     mfProductCategoryName: false
                                 })
                                 setIsEdit(false)
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>

@@ -66,7 +66,7 @@ function StockInOut() {
     dayjs.extend(customParseFormat)
     const [expanded, setExpanded] = React.useState(false);
     const [isEdit, setIsEdit] = React.useState(false);
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [filter, setFilter] = React.useState(false);
     const [unitsForProduct, setUnitsForProduct] = React.useState(0);
     const [stockInData, setStockInData] = React.useState();
@@ -156,7 +156,7 @@ function StockInOut() {
                     stockInDate: dayjs(res.data.stockInDate),
                     isFullEdit: isFullEdit
                 }))
-                getSuppilerList(res.data.productId);
+                getSupplierList(res.data.productId);
                 getUnitForProduct(res.data.productId);
             })
             .catch((error) => {
@@ -303,13 +303,13 @@ function StockInOut() {
             })
     }
 
-    const getSuppilerList = async (id) => {
+    const getSupplierList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/productWiseSupplierDDL?productId=${id}`, config)
             .then((res) => {
-                setSuppilerList(res.data);
+                setSupplierList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const stockIn = async () => {
@@ -487,7 +487,7 @@ function StockInOut() {
             ...prevState,
             productName: value && value.productId ? false : true
         }))
-        value && value.productId && getSuppilerList(value.productId);
+        value && value.productId && getSupplierList(value.productId);
         value && value.productId && getUnitForProduct(value.productId);
         // console.log('formddds', stockInFormData)
     }
@@ -861,7 +861,9 @@ function StockInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const stockInExportPdf = async () => {
@@ -885,7 +887,9 @@ function StockInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
 
@@ -918,7 +922,9 @@ function StockInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
 
@@ -943,7 +949,9 @@ function StockInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
 
@@ -1290,7 +1298,7 @@ function StockInOut() {
                                         </div>
                                         <div className='col-span-3'>
                                             <FormControl style={{ minWidth: '100%', maxWidth: '100%' }}>
-                                                <InputLabel id="demo-simple-select-label" required error={stockInFormDataError.supplierId}>Suppiler</InputLabel>
+                                                <InputLabel id="demo-simple-select-label" required error={stockInFormDataError.supplierId}>Supplier</InputLabel>
                                                 <Select
                                                     labelId="demo-simple-select-label"
                                                     id="demo-simple-select"
@@ -1298,7 +1306,7 @@ function StockInOut() {
                                                     error={stockInFormDataError.supplierId}
                                                     disabled={stockInFormData.productId ? false : true}
                                                     name="supplierId"
-                                                    label="Suppiler"
+                                                    label="Supplier"
                                                     onBlur={(e) => {
                                                         if (!e.target.value) {
                                                             setStockInFormDataError((perv) => ({
@@ -1316,8 +1324,8 @@ function StockInOut() {
                                                     onChange={onChangeStockIn}
                                                 >
                                                     {
-                                                        suppiler ? suppiler.map((suppilerData) => (
-                                                            <MenuItem key={suppilerData.supplierId} value={suppilerData.supplierId}>{suppilerData.supplierNickName}</MenuItem>
+                                                        supplier ? supplier.map((supplierData) => (
+                                                            <MenuItem key={supplierData.supplierId} value={supplierData.supplierId}>{supplierData.supplierNickName}</MenuItem>
                                                         )) : null
                                                     }
 
@@ -1394,7 +1402,7 @@ function StockInOut() {
                                                 handleResetStockIn();
                                                 setIsEdit(false);
                                                 { isEdit && setExpanded(false); }
-                                            }}>{isEdit ? 'Cancle' : 'Reset'}</button>
+                                            }}>{isEdit ? 'Cancel' : 'Reset'}</button>
                                         </div>
                                     </div>
                                     :
@@ -1598,7 +1606,7 @@ function StockInOut() {
                                                 {
                                                     isEdit && setExpanded(false);
                                                 }
-                                            }}>{isEdit ? "cancle" : "reset"}</button>
+                                            }}>{isEdit ? "cancel" : "reset"}</button>
                                         </div>
                                     </div>
                                 }
@@ -1659,7 +1667,7 @@ function StockInOut() {
                                                         <button className='stockInBtn' onClick={() => { tab === 1 || tab === '1' ? getStockInDataByFilter() : getStockOutDataByFilter(); setFilter(true); setPage(0); handleClose() }}>Apply</button>
                                                     </div>
                                                     <div className='col-span-3'>
-                                                        <button className='stockOutBtn' onClick={handleClose}>cancle</button>
+                                                        <button className='stockOutBtn' onClick={handleClose}>cancel</button>
                                                     </div>
                                                 </div>
                                             </Box>

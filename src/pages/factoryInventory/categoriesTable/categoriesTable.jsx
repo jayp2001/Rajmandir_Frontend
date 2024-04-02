@@ -491,7 +491,9 @@ function CategoriesTableMaterial() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const pdfExportCategoryWise = async () => {
@@ -516,7 +518,9 @@ function CategoriesTableMaterial() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const navigateToDetail = (name, id) => {
@@ -636,7 +640,7 @@ function CategoriesTableMaterial() {
                                                 }}>Apply</button>
                                             </div>
                                             <div className='col-span-3'>
-                                                <button className='stockOutBtn' onClick={handleClose}>cancle</button>
+                                                <button className='stockOutBtn' onClick={handleClose}>cancel</button>
                                             </div>
                                         </div>
                                     </Box>
@@ -840,7 +844,7 @@ function CategoriesTableMaterial() {
                                     <button className='addCategoryCancleBtn' onClick={() => {
                                         handleCloseModal();
                                         setIsEdit(false)
-                                    }}>Cancle</button>
+                                    }}>Cancel</button>
                                 </div>
                             </div></>
                     }{
@@ -884,7 +888,7 @@ function CategoriesTableMaterial() {
                                     <button className='addCategoryCancleBtn' onClick={() => {
                                         handleCloseModal();
                                         setIsEdit(false)
-                                    }}>Cancle</button>
+                                    }}>Cancel</button>
                                 </div>
                             </div>
                         </>

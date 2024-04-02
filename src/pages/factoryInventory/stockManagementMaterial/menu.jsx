@@ -19,7 +19,7 @@ function MenuStockInOut(props) {
         setAnchorEl(null);
     };
     const handleEditClick = (id) => {
-        navigate(`/editSuppiler/${id}`)
+        navigate(`/editSupplier/${id}`)
     }
     return (
         <div>

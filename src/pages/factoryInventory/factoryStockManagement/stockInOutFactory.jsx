@@ -100,7 +100,7 @@ function StockInOutFactory() {
     const [expanded, setExpanded] = React.useState(false);
     const [isEdit, setIsEdit] = React.useState(false);
     const [isView, setIsView] = React.useState(false);
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [filter, setFilter] = React.useState(false);
     const [ddlDistributer, setDdlDistributer] = React.useState([]);
     const [ddlBranch, setDdlBranch] = React.useState([]);
@@ -496,13 +496,13 @@ function StockInOutFactory() {
             })
     }
 
-    const getSuppilerList = async (id) => {
+    const getSupplierList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}mfProductrouter/productWiseSupplierDDL?mfProductId=${id}`, config)
             .then((res) => {
-                setSuppilerList(res.data);
+                setSupplierList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const stockIn = async () => {
@@ -1318,7 +1318,9 @@ function StockInOutFactory() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const stockInExportPdf = async () => {
@@ -1342,7 +1344,9 @@ function StockInOutFactory() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const [state, setState] = useState([
@@ -1373,7 +1377,9 @@ function StockInOutFactory() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const stockOutExportPdf = async () => {
@@ -1397,7 +1403,9 @@ function StockInOutFactory() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
 
@@ -1608,7 +1616,7 @@ function StockInOutFactory() {
                                                         <button className='stockInBtn' onClick={() => { tab === 1 || tab === '1' ? getStockInDataByFilter() : getStockOutDataByFilter(); setFilter(true); setPage(0); handleClose() }}>Apply</button>
                                                     </div>
                                                     <div className='col-span-3'>
-                                                        <button className='stockOutBtn' onClick={handleClose}>cancle</button>
+                                                        <button className='stockOutBtn' onClick={handleClose}>cancel</button>
                                                     </div>
                                                 </div>
                                             </Box>
@@ -1720,7 +1728,7 @@ function StockInOutFactory() {
                                                             </Tooltip>
                                                             <TableCell align="left"  >{row.mfProductName}</TableCell>
                                                             <TableCell align="left"  >{row.Quantity}</TableCell>
-                                                            <TableCell align="left" >{parseFloat(row.stockOutPrice ? row.stockOutPrice : 0).toLocaleString('en-IN')}</TableCell>
+                                                            <TableCell align="left" >{parseFloat(row.sellAmt ? row.sellAmt : 0).toLocaleString('en-IN')}</TableCell>
                                                             <TableCell align="left" >{parseFloat(row.mfProductOutPrice ? row.mfProductOutPrice : 0).toLocaleString('en-IN')}</TableCell>
                                                             <TableCell align="left"  >{row.stockOutCategoryName}</TableCell>
                                                             <Tooltip title={row.mfStockOutComment} placement="top-start" arrow><TableCell align="left"  ><div className='Comment'>{row.mfStockOutComment}</div></TableCell></Tooltip>
@@ -2396,7 +2404,7 @@ function StockInOutFactory() {
                             <div className='col-span-3'>
                                 <button className='addCategoryCancleBtn' onClick={() => {
                                     handleCloseStockIn();
-                                }}>Cancle</button>
+                                }}>Cancel</button>
                             </div>
                         </div>}
                 </Box>
@@ -2747,7 +2755,7 @@ function StockInOutFactory() {
                         <div className='col-span-3'>
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleCloseStockOut();
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box >

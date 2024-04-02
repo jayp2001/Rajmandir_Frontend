@@ -126,7 +126,7 @@ function UserTableOwner() {
     const [expanded, setExpanded] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [totalRows, setTotalRows] = React.useState(0);
-    const [totalRowsSuppilers, setTotalRowsSuppilers] = React.useState(0);
+    const [totalRowsSuppliers, setTotalRowsSuppliers] = React.useState(0);
     const [totalRowsIncome, setTotalRowsIncome] = React.useState(0);
     const [totalRowsTransaction, setTotalRowsTransaction] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
@@ -144,7 +144,7 @@ function UserTableOwner() {
     //     transactionStatus: ''
     // });
     const [data, setData] = React.useState();
-    const [suppilers, setSuppilers] = React.useState();
+    const [suppliers, setSuppliers] = React.useState();
     const [bankTransaction, setBankTranaction] = React.useState();
     const [banks, setBanks] = React.useState();
     const [openPayment, setOpenPayment] = React.useState(false);
@@ -260,7 +260,7 @@ function UserTableOwner() {
                 setSuccess(true)
                 setPage(0);
                 setRowsPerPage(5)
-                getDataSuppiler();
+                getDataSupplier();
                 handleClose();
             })
             .catch((error) => {
@@ -436,7 +436,7 @@ function UserTableOwner() {
         if (tab === 2 || tab === '2') {
             getDataOnPageChange(newPage + 1, rowsPerPage)
         } else {
-            getDataOnPageChangeSuppiler(newPage + 1, rowsPerPage)
+            getDataOnPageChangeSupplier(newPage + 1, rowsPerPage)
         }
     };
     const handleChangeRowsPerPage = (event) => {
@@ -446,7 +446,7 @@ function UserTableOwner() {
             getDataOnPageChange(1, parseInt(event.target.value, 10))
         }
         else {
-            getDataOnPageChangeSuppiler(1, parseInt(event.target.value, 10))
+            getDataOnPageChangeSupplier(1, parseInt(event.target.value, 10))
         }
 
     };
@@ -462,7 +462,7 @@ function UserTableOwner() {
                 setBranch(res.data);
             })
     }
-    const deleteDataSuppiler = async (id) => {
+    const deleteDataSupplier = async (id) => {
         await axios.delete(`${BACKEND_BASE_URL}inventoryrouter/removeSupplierDetails?supplierId=${id}`, config)
             .then((res) => {
                 setPage(0);
@@ -474,9 +474,9 @@ function UserTableOwner() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const handleDeleteSuppiler = (id) => {
+    const handleDeleteSupplier = (id) => {
         if (window.confirm("Are you sure you want to delete User?")) {
-            deleteDataSuppiler(id);
+            deleteDataSupplier(id);
             setTimeout(() => {
                 getData()
             }, 1000)
@@ -499,8 +499,8 @@ function UserTableOwner() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const handleSuppilerOnClick = (id) => {
-        navigate(`/suppilerDetails/${id}`)
+    const handleSupplierOnClick = (id) => {
+        navigate(`/supplierDetails/${id}`)
     }
     const editUser = async () => {
         setLoading(true);
@@ -574,7 +574,7 @@ function UserTableOwner() {
                 setExpanded(true);
             })
     }
-    const getDataSuppiler = async () => {
+    const getDataSupplier = async () => {
         console.log("page get", page, rowsPerPage)
         await axios.get(`${BACKEND_BASE_URL}userrouter/getUserDetails?page=${1}&numPerPage=${5}`, config)
             .then((res) => {
@@ -585,7 +585,7 @@ function UserTableOwner() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const getDataOnPageChangeSuppiler = async (pageNum, rowPerPageNum) => {
+    const getDataOnPageChangeSupplier = async (pageNum, rowPerPageNum) => {
         console.log("page get", page, rowsPerPage)
         await axios.get(`${BACKEND_BASE_URL}userrouter/getUserDetails?page=${pageNum}&numPerPage=${rowPerPageNum}&searchWord=${searchWord}`, config)
             .then((res) => {

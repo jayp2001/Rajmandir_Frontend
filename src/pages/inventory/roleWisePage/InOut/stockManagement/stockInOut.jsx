@@ -65,7 +65,7 @@ function StockInOutInOut() {
     dayjs.extend(customParseFormat)
     const [expanded, setExpanded] = React.useState(false);
     const [isEdit, setIsEdit] = React.useState(false);
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [filter, setFilter] = React.useState(false);
     const [unitsForProduct, setUnitsForProduct] = React.useState(0);
     const [stockInData, setStockInData] = React.useState();
@@ -155,7 +155,7 @@ function StockInOutInOut() {
                     stockInDate: dayjs(res.data.stockInDate),
                     isFullEdit: isFullEdit
                 }))
-                getSuppilerList(res.data.productId);
+                getSupplierList(res.data.productId);
                 getUnitForProduct(res.data.productId);
             })
             .catch((error) => {
@@ -302,13 +302,13 @@ function StockInOutInOut() {
             })
     }
 
-    const getSuppilerList = async (id) => {
+    const getSupplierList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/productWiseSupplierDDL?productId=${id}`, config)
             .then((res) => {
-                setSuppilerList(res.data);
+                setSupplierList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const stockIn = async () => {
@@ -440,7 +440,7 @@ function StockInOutInOut() {
             supplierId: '',
             productUnit: value && value.productUnit ? value.productUnit : ''
         }))
-        getSuppilerList(value && value.productId ? value.productId : '');
+        getSupplierList(value && value.productId ? value.productId : '');
         getUnitForProduct(value && value.productId ? value.productId : '');
     }
     const handleProductNameAutoCompleteOut = (event, value) => {
@@ -789,7 +789,9 @@ function StockInOutInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const [state, setState] = useState([
@@ -820,7 +822,9 @@ function StockInOutInOut() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
 
@@ -1151,7 +1155,7 @@ function StockInOutInOut() {
                                     </div>
                                     <div className='col-span-3'>
                                         <FormControl style={{ minWidth: '100%', maxWidth: '100%' }}>
-                                            <InputLabel id="demo-simple-select-label" required error={stockInFormDataError.supplierId}>Suppiler</InputLabel>
+                                            <InputLabel id="demo-simple-select-label" required error={stockInFormDataError.supplierId}>Supplier</InputLabel>
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
@@ -1159,7 +1163,7 @@ function StockInOutInOut() {
                                                 error={stockInFormDataError.supplierId}
                                                 disabled={stockInFormData.productId ? false : true}
                                                 name="supplierId"
-                                                label="Suppiler"
+                                                label="Supplier"
                                                 onBlur={(e) => {
                                                     if (!e.target.value) {
                                                         setStockInFormDataError((perv) => ({
@@ -1177,8 +1181,8 @@ function StockInOutInOut() {
                                                 onChange={onChangeStockIn}
                                             >
                                                 {
-                                                    suppiler ? suppiler.map((suppilerData) => (
-                                                        <MenuItem key={suppilerData.supplierId} value={suppilerData.supplierId}>{suppilerData.supplierNickName}</MenuItem>
+                                                    supplier ? supplier.map((supplierData) => (
+                                                        <MenuItem key={supplierData.supplierId} value={supplierData.supplierId}>{supplierData.supplierNickName}</MenuItem>
                                                     )) : null
                                                 }
 
@@ -1255,7 +1259,7 @@ function StockInOutInOut() {
                                             handleResetStockIn();
                                             setIsEdit(false);
                                             { isEdit && setExpanded(false); }
-                                        }}>{isEdit ? 'Cancle' : 'Reset'}</button>
+                                        }}>{isEdit ? 'Cancel' : 'Reset'}</button>
                                     </div>
                                 </div>
                                 :
@@ -1459,7 +1463,7 @@ function StockInOutInOut() {
                                             {
                                                 isEdit && setExpanded(false);
                                             }
-                                        }}>{isEdit ? "cancle" : "reset"}</button>
+                                        }}>{isEdit ? "cancel" : "reset"}</button>
                                     </div>
                                 </div>
                             }
@@ -1516,7 +1520,7 @@ function StockInOutInOut() {
                                                 <button className='stockInBtn' onClick={() => { tab === 1 || tab === '1' ? getStockInDataByFilter() : getStockOutDataByFilter(); setFilter(true); setPage(0); handleClose() }}>Apply</button>
                                             </div>
                                             <div className='col-span-3'>
-                                                <button className='stockOutBtn' onClick={handleClose}>cancle</button>
+                                                <button className='stockOutBtn' onClick={handleClose}>cancel</button>
                                             </div>
                                         </div>
                                     </Box>

@@ -54,7 +54,7 @@ function ProductDetailsManager() {
     const [isEdit, setIsEdit] = React.useState(false);
     const [stockOutData, setStockOutData] = React.useState();
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [stockInData, setStockInData] = React.useState();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -65,7 +65,7 @@ function ProductDetailsManager() {
     const [unitsForProduct, setUnitsForProduct] = React.useState([]);
     const [tabStockInOut, setTabStockInOut] = React.useState(1);
     const [statisticsCount, setStatisticsCounts] = useState();
-    const [suppilerNameAndCount, setSuppilerNameAndCount] = useState();
+    const [supplierNameAndCount, setSupplierNameAndCount] = useState();
     const [categoryNameAndCount, setCategoryNameAndCount] = useState();
     const [categories, setCategories] = React.useState();
     const [debitTransaction, setDebitTransaction] = React.useState();
@@ -231,13 +231,13 @@ function ProductDetailsManager() {
             reason: false
         })
     }
-    const getSuppilerList = async (id) => {
+    const getSupplierList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/productWiseSupplierDDL?productId=${id}`, config)
             .then((res) => {
-                setSuppilerList(res.data);
+                setSupplierList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const handleStockInDate = (date) => {
@@ -343,7 +343,7 @@ function ProductDetailsManager() {
                 ])
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 setFilter(false);
                 getStockOutData();
                 handleResetStockOut();
@@ -532,7 +532,7 @@ function ProductDetailsManager() {
                 ])
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 setFilter(false)
                 getStockInData()
                 handleResetStockIn();
@@ -566,7 +566,7 @@ function ProductDetailsManager() {
                 setSuccess(true)
                 getStatistics();
                 getStockInData();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 getCategoryNameAndCount();
             })
             .catch((error) => {
@@ -588,7 +588,7 @@ function ProductDetailsManager() {
                 getStatistics();
                 getStockOutData();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -623,7 +623,9 @@ function ProductDetailsManager() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const stockInExportExcel = async () => {
@@ -647,7 +649,9 @@ function ProductDetailsManager() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const getCategoryList = async () => {
@@ -687,19 +691,19 @@ function ProductDetailsManager() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const getSuppilerNameAndCount = async () => {
+    const getSupplierNameAndCount = async () => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getSupplierByProductId?productId=${id}`, config)
             .then((res) => {
-                setSuppilerNameAndCount(res.data);
+                setSupplierNameAndCount(res.data);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const getSuppilerNameAndCountByFilter = async () => {
+    const getSupplierNameAndCountByFilter = async () => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getSupplierByProductId?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productId=${id}`, config)
             .then((res) => {
-                setSuppilerNameAndCount(res.data);
+                setSupplierNameAndCount(res.data);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -786,7 +790,7 @@ function ProductDetailsManager() {
                     stockInComment: res.data.stockInComment,
                     stockInDate: dayjs(res.data.stockInDate)
                 }))
-                getSuppilerList(res.data.productId)
+                getSupplierList(res.data.productId)
             })
             .catch((error) => {
                 //  setError(error.response && error.response.data ? error.response.data : "Network Error ...!!!");
@@ -843,7 +847,7 @@ function ProductDetailsManager() {
                 getStockInData();
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 handleResetStockIn();
             })
             .catch((error) => {
@@ -867,7 +871,7 @@ function ProductDetailsManager() {
                 setExpanded(false);
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 getStockOutData();
                 handleResetStockOut();
             })
@@ -947,14 +951,14 @@ function ProductDetailsManager() {
             })
     }
     useEffect(() => {
-        getSuppilerList(id);
+        getSupplierList(id);
         getUnitForProduct(id);
         getCategoryList();
         getStockInData();
         getStatistics();
         getUnitPreferenceById(id);
         getCategoryNameAndCount();
-        getSuppilerNameAndCount();
+        getSupplierNameAndCount();
         // getCountData();
     }, [])
 
@@ -1005,7 +1009,7 @@ function ProductDetailsManager() {
     }
 
     return (
-        <div className='suppilerListContainer'>
+        <div className='supplierListContainer'>
             <div className='grid grid-cols-12 gap-8'>
                 <div className='col-span-12 mt-6'>
                     <div className='datePickerWrp mb-4'>
@@ -1058,7 +1062,7 @@ function ProductDetailsManager() {
                                                         // getProductCount();
                                                         getStatistics()
                                                         setTabStockInOut(1);
-                                                        getStockInData(); setPage(0); setRowsPerPage(5); getSuppilerNameAndCount(); getCategoryNameAndCount()
+                                                        getStockInData(); setPage(0); setRowsPerPage(5); getSupplierNameAndCount(); getCategoryNameAndCount()
                                                     }}><CloseIcon /></button>
                                             </div>
                                             <Popover
@@ -1091,12 +1095,12 @@ function ProductDetailsManager() {
                                                                 setRowsPerPage(5);
                                                                 getStockInDataByFilter();
                                                                 getStatisticsByFilter();
-                                                                getSuppilerNameAndCountByFilter();
+                                                                getSupplierNameAndCountByFilter();
                                                                 getCategoryNameAndCountByFilter();
                                                             }}>Apply</button>
                                                         </div>
                                                         <div className='col-span-3'>
-                                                            <button className='stockOutBtn' onClick={handleClose}>cancle</button>
+                                                            <button className='stockOutBtn' onClick={handleClose}>cancel</button>
                                                         </div>
                                                     </div>
                                                 </Box>
@@ -1419,7 +1423,7 @@ function ProductDetailsManager() {
                                             {
                                                 isEdit && setExpanded(false);
                                             }
-                                        }}>{isEdit ? "cancle" : "reset"}</button>
+                                        }}>{isEdit ? "cancel" : "reset"}</button>
                                     </div>
                                 </div>
                             </div>

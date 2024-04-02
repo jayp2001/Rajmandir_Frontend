@@ -1,6 +1,6 @@
 
 
-.addSuppilerCard {
+.addSupplierCard {
     padding-left: 30px;
     padding-right: 30px;
     padding-bottom: 30px;
@@ -54,7 +54,7 @@
     border-radius: 10px;
 }
 
-.mainBodyAddSuppiler {
+.mainBodyAddSupplier {
     height: calc(100vh - 60px);
     overflow: scroll;
 }

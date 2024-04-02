@@ -54,7 +54,7 @@ function ProductDetails() {
     const [isEdit, setIsEdit] = React.useState(false);
     const [stockOutData, setStockOutData] = React.useState();
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [unitPreference, setUnitPreference] = React.useState();
     const [stockInData, setStockInData] = React.useState();
     const [page, setPage] = React.useState(0);
@@ -66,7 +66,7 @@ function ProductDetails() {
     const [tab, setTab] = React.useState(1);
     const [tabStockInOut, setTabStockInOut] = React.useState(1);
     const [statisticsCount, setStatisticsCounts] = useState();
-    const [suppilerNameAndCount, setSuppilerNameAndCount] = useState();
+    const [supplierNameAndCount, setSupplierNameAndCount] = useState();
     const [categoryNameAndCount, setCategoryNameAndCount] = useState();
     const [categories, setCategories] = React.useState();
     const [debitTransaction, setDebitTransaction] = React.useState();
@@ -229,13 +229,13 @@ function ProductDetails() {
             reason: false
         })
     }
-    const getSuppilerList = async (id) => {
+    const getSupplierList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/productWiseSupplierDDL?productId=${id}`, config)
             .then((res) => {
-                setSuppilerList(res.data);
+                setSupplierList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getUnitPreferenceById = async (id) => {
@@ -351,7 +351,7 @@ function ProductDetails() {
                 ])
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 setFilter(false);
                 getStockOutData();
                 handleResetStockOut();
@@ -530,7 +530,7 @@ function ProductDetails() {
                 ])
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 setFilter(false)
                 getStockInData()
                 handleResetStockIn();
@@ -564,7 +564,7 @@ function ProductDetails() {
                 setSuccess(true)
                 getStatistics();
                 getStockInData();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 getCategoryNameAndCount();
             })
             .catch((error) => {
@@ -586,7 +586,7 @@ function ProductDetails() {
                 getStatistics();
                 getStockOutData();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -621,7 +621,9 @@ function ProductDetails() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const stockOutExportPdf = async () => {
@@ -645,7 +647,9 @@ function ProductDetails() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const stockInExportExcel = async () => {
@@ -669,7 +673,9 @@ function ProductDetails() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const stockInExportPdf = async () => {
@@ -693,7 +699,9 @@ function ProductDetails() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
 
@@ -735,19 +743,19 @@ function ProductDetails() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const getSuppilerNameAndCount = async () => {
+    const getSupplierNameAndCount = async () => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getSupplierByProductId?productId=${id}`, config)
             .then((res) => {
-                setSuppilerNameAndCount(res.data);
+                setSupplierNameAndCount(res.data);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const getSuppilerNameAndCountByFilter = async () => {
+    const getSupplierNameAndCountByFilter = async () => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/getSupplierByProductId?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productId=${id}`, config)
             .then((res) => {
-                setSuppilerNameAndCount(res.data);
+                setSupplierNameAndCount(res.data);
             })
             .catch((error) => {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
@@ -835,7 +843,7 @@ function ProductDetails() {
                     stockInDate: dayjs(res.data.stockInDate),
                     isFullEdit: isFullEdit
                 }))
-                getSuppilerList(res.data.productId)
+                getSupplierList(res.data.productId)
             })
             .catch((error) => {
                 //  setError(error.response && error.response.data ? error.response.data : "Network Error ...!!!");
@@ -894,7 +902,7 @@ function ProductDetails() {
                 getStockInData();
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 handleResetStockIn();
             })
             .catch((error) => {
@@ -918,7 +926,7 @@ function ProductDetails() {
                 setExpanded(false);
                 getStatistics();
                 getCategoryNameAndCount();
-                getSuppilerNameAndCount();
+                getSupplierNameAndCount();
                 getStockOutData();
                 handleResetStockOut();
             })
@@ -1003,12 +1011,12 @@ function ProductDetails() {
     }
     useEffect(() => {
         getUnitForProduct(id);
-        getSuppilerList(id)
+        getSupplierList(id)
         getCategoryList();
         getStockInData();
         getStatistics();
         getCategoryNameAndCount();
-        getSuppilerNameAndCount();
+        getSupplierNameAndCount();
         getUnitPreferenceById(id);
         // getCountData();
     }, [])
@@ -1060,7 +1068,7 @@ function ProductDetails() {
     }
     console.log('formdata', stockInFormData)
     return (
-        <div className='suppilerListContainer'>
+        <div className='supplierListContainer'>
             <div className='grid grid-cols-12 gap-8'>
                 <div className='col-span-12 mt-6'>
                     <div className='datePickerWrp mb-4'>
@@ -1090,7 +1098,7 @@ function ProductDetails() {
                                                     onClick={() => {
                                                         setTab(2);
                                                     }}>
-                                                    <div className='statusTabtext'>Suppiler</div>
+                                                    <div className='statusTabtext'>Supplier</div>
                                                 </div>
                                                 <div className={`flex col-span-4 justify-center ${tab === 3 || tab === '3' ? 'productTabOut' : 'productTab'}`}
                                                     onClick={() => {
@@ -1119,7 +1127,7 @@ function ProductDetails() {
                                                         // getProductCount();
                                                         getStatistics()
                                                         setTabStockInOut(1);
-                                                        getStockInData(); setPage(0); setRowsPerPage(5); getSuppilerNameAndCount(); getCategoryNameAndCount()
+                                                        getStockInData(); setPage(0); setRowsPerPage(5); getSupplierNameAndCount(); getCategoryNameAndCount()
                                                     }}><CloseIcon /></button>
                                             </div>
                                             <Popover
@@ -1152,12 +1160,12 @@ function ProductDetails() {
                                                                 setRowsPerPage(5);
                                                                 getStockInDataByFilter();
                                                                 getStatisticsByFilter();
-                                                                getSuppilerNameAndCountByFilter();
+                                                                getSupplierNameAndCountByFilter();
                                                                 getCategoryNameAndCountByFilter();
                                                             }}>Apply</button>
                                                         </div>
                                                         <div className='col-span-3'>
-                                                            <button className='stockOutBtn' onClick={handleClose}>cancle</button>
+                                                            <button className='stockOutBtn' onClick={handleClose}>cancel</button>
                                                         </div>
                                                     </div>
                                                 </Box>
@@ -1243,7 +1251,7 @@ function ProductDetails() {
                             <div className='grid gap-4 mt-12' style={{ minHeight: '216px', maxHeight: '216px', overflowY: 'scroll' }}>
                                 <div className='grid grid-cols-1 pb-3'>
                                     {
-                                        suppilerNameAndCount && suppilerNameAndCount?.map((row, index) => (
+                                        supplierNameAndCount && supplierNameAndCount?.map((row, index) => (
                                             <ProductQtyCountCard productQtyUnit={unit} productQty={row.remainingStock} productPrice={row.expense} productName={row.supplierNickName} index={index} />
                                         ))
                                     }
@@ -1462,14 +1470,14 @@ function ProductDetails() {
                                     </div>
                                     <div className='col-span-3'>
                                         <FormControl style={{ minWidth: '100%', maxWidth: '100%' }}>
-                                            <InputLabel id="demo-simple-select-label" required error={stockInFormDataError.supplierId}>Suppiler</InputLabel>
+                                            <InputLabel id="demo-simple-select-label" required error={stockInFormDataError.supplierId}>Supplier</InputLabel>
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
                                                 value={stockInFormData.supplierId}
                                                 error={stockInFormDataError.supplierId}
                                                 name="supplierId"
-                                                label="Suppiler"
+                                                label="Supplier"
                                                 onBlur={(e) => {
                                                     if (!e.target.value) {
                                                         setStockInFormDataError((perv) => ({
@@ -1487,8 +1495,8 @@ function ProductDetails() {
                                                 onChange={onChangeStockIn}
                                             >
                                                 {
-                                                    suppiler ? suppiler.map((suppilerData) => (
-                                                        <MenuItem key={suppilerData.supplierId} value={suppilerData.supplierId}>{suppilerData.supplierNickName}</MenuItem>
+                                                    supplier ? supplier.map((supplierData) => (
+                                                        <MenuItem key={supplierData.supplierId} value={supplierData.supplierId}>{supplierData.supplierNickName}</MenuItem>
                                                     )) : null
                                                 }
 
@@ -1565,7 +1573,7 @@ function ProductDetails() {
                                             handleResetStockIn();
                                             isEdit ? setExpanded(false) : setExpanded(true);
                                             setIsEdit(false);
-                                        }}>{isEdit ? 'Cancle' : 'Reset'}</button>
+                                        }}>{isEdit ? 'Cancel' : 'Reset'}</button>
                                     </div>
                                 </div>
                                 :
@@ -1751,7 +1759,7 @@ function ProductDetails() {
                                             handleResetStockOut();
                                             setIsEdit(false);
                                             isEdit ? setExpanded(false) : setExpanded(true);
-                                        }}>{isEdit ? "cancle" : "reset"}</button>
+                                        }}>{isEdit ? "cancel" : "reset"}</button>
                                     </div>
                                 </div>
                             }

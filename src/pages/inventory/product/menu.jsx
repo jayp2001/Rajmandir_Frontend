@@ -19,7 +19,7 @@ function Menutemp(props) {
         setAnchorEl(null);
     };
     // const handleEditClick = (id) => {
-    //     navigate(`/editSuppiler/${id}`)
+    //     navigate(`/editSupplier/${id}`)
     // }
     return (
         <div>
@@ -51,7 +51,7 @@ function Menutemp(props) {
                 <MenuItem key={'delete'}
                     onClick={() => {
                         handleClose();
-                        props.deleteSuppiler(props.supplierId)
+                        props.deleteSupplier(props.supplierId)
                     }}>
                     Delete
                 </MenuItem>

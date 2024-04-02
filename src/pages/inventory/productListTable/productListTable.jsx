@@ -213,7 +213,7 @@ function ProductListTable() {
     const [error, setError] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
     const [allData, setAllData] = React.useState();
-    const [suppiler, setSuppilerList] = React.useState();
+    const [supplier, setSupplierList] = React.useState();
     const [categories, setCategories] = React.useState();
     const [categoryList, setCategoryList] = React.useState();
     const [countData, setCountData] = React.useState();
@@ -228,13 +228,13 @@ function ProductListTable() {
                 setError(error.response ? error.response.data : "Network Error ...!!!")
             })
     }
-    const getSuppilerList = async (id) => {
+    const getSupplierList = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}inventoryrouter/productWiseSupplierDDL?productId=${id}`, config)
             .then((res) => {
-                setSuppilerList(res.data);
+                setSupplierList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getUnitForProduct = async (id) => {
@@ -243,7 +243,7 @@ function ProductListTable() {
                 setUnitsForProduct(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getMainCategory = async (id) => {
@@ -252,7 +252,7 @@ function ProductListTable() {
                 setCategoryList(res.data);
             })
             .catch((error) => {
-                setSuppilerList(['No Data'])
+                setSupplierList(['No Data'])
             })
     }
     const getCategoryList = async (id) => {
@@ -386,7 +386,7 @@ function ProductListTable() {
     }
     const handleOpen = () => setOpenM(true);
     const handleOpenStockIn = (row) => {
-        getSuppilerList(row.productId);
+        getSupplierList(row.productId);
         getUnitForProduct(row.productId)
         setStockInFormData((perv) => ({
             ...perv,
@@ -1003,7 +1003,9 @@ function ProductListTable() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const productExportPdf = async () => {
@@ -1027,7 +1029,9 @@ function ProductListTable() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const productExportPdfByStatus = async (tab) => {
@@ -1052,7 +1056,9 @@ function ProductListTable() {
                 // clean up "a" element & remove ObjectURL
                 document.body.removeChild(link);
                 URL.revokeObjectURL(href);
-            });
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
         }
     }
     const handleViewDetail = (id, name, unit, remainingQty) => {
@@ -1290,7 +1296,7 @@ function ProductListTable() {
                                                 <button className='stockInBtn' onClick={() => { getAllDataByFilter(); setTab(''); setFilter(true); setPage(0); setRowsPerPage(10); handleCloseDate() }}>Apply</button>
                                             </div>
                                             <div className='col-span-3'>
-                                                <button className='stockOutBtn' onClick={handleCloseDate}>cancle</button>
+                                                <button className='stockOutBtn' onClick={handleCloseDate}>cancel</button>
                                             </div>
                                         </div>
                                     </Box>
@@ -1315,7 +1321,7 @@ function ProductListTable() {
                                     />
                                 </div>}
                             <div className='col-span-4 col-start-9 pr-5 flex justify-end'>
-                                {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ? <button className='exportExcelBtn' onClick={() => productExportPdfByStatus(tab)}><FileDownloadIcon />&nbsp;&nbsp;Export Excel</button> : <ExportMenu exportExcel={productExportExcel} exportPdf={productExportPdf} />}
+                                {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ? <button className='exportExcelBtn' onClick={() => productExportPdfByStatus(tab)}><FileDownloadIcon />&nbsp;&nbsp;Export</button> : <ExportMenu exportExcel={productExportExcel} exportPdf={productExportPdf} />}
                             </div>
                         </div>
                         {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ?
@@ -1784,7 +1790,7 @@ function ProductListTable() {
                                 handleClose();
                                 handleReset();
                                 setIsEdit(false)
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>
@@ -1923,14 +1929,14 @@ function ProductListTable() {
                         </div>
                         <div className='col-span-4'>
                             <FormControl style={{ minWidth: '100%', maxWidth: '100%' }}>
-                                <InputLabel id="demo-simple-select-label" required error={stockInFormDataError.supplierId}>Suppiler</InputLabel>
+                                <InputLabel id="demo-simple-select-label" required error={stockInFormDataError.supplierId}>Supplier</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     value={stockInFormData.supplierId}
                                     error={stockInFormDataError.supplierId}
                                     name="supplierId"
-                                    label="Suppiler"
+                                    label="Supplier"
                                     onBlur={(e) => {
                                         if (!e.target.value) {
                                             setStockInFormDataError((perv) => ({
@@ -1948,8 +1954,8 @@ function ProductListTable() {
                                     onChange={onChangeStockIn}
                                 >
                                     {
-                                        suppiler ? suppiler.map((suppilerData) => (
-                                            <MenuItem key={suppilerData.supplierId} value={suppilerData.supplierId}>{suppilerData.supplierNickName}</MenuItem>
+                                        supplier ? supplier.map((supplierData) => (
+                                            <MenuItem key={supplierData.supplierId} value={supplierData.supplierId}>{supplierData.supplierNickName}</MenuItem>
                                         )) : null
                                     }
 
@@ -2028,7 +2034,7 @@ function ProductListTable() {
                         <div className='col-span-3'>
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleCloseStockIn();
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box>
@@ -2221,7 +2227,7 @@ function ProductListTable() {
                         <div className='col-span-3'>
                             <button className='addCategoryCancleBtn' onClick={() => {
                                 handleCloseStockOut();
-                            }}>Cancle</button>
+                            }}>Cancel</button>
                         </div>
                     </div>
                 </Box >
