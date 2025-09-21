@@ -137,7 +137,7 @@ function FinalProductListTable() {
     const [batchFormDataError, setBatchFormDataError] = React.useState({
         batchQty: false,
     });
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = React.useState(100);
     const [totalRows, setTotalRows] = React.useState(0);
     const [unitsForProduct, setUnitsForProduct] = React.useState(0);
     const [totalRowsOut, setTotalRowsOut] = React.useState(0);
@@ -177,7 +177,7 @@ function FinalProductListTable() {
         totalPrice: "",
         mfStockInComment: "",
         mfStockInDate: dayjs(),
-        isAuto: true,
+        isAuto: false,
         batchQty: ""
     })
     const [stockInFormDataError, setStockInFormDataError] = React.useState({
@@ -786,7 +786,7 @@ function FinalProductListTable() {
             mfProductId: row.mfProductId,
             mfProductName: row.mfProductName,
             mfProductUnit: row.mfProductUnit,
-            isAuto: true
+            isAuto: false
         }))
         setOpenStockIn(true);
     }
@@ -895,7 +895,7 @@ function FinalProductListTable() {
             totalPrice: "",
             mfStockInComment: "",
             mfStockInDate: dayjs(),
-            isAuto: true,
+            isAuto: false,
             batchQty: ""
         })
         setStockInFormDataError({
@@ -1004,7 +1004,7 @@ function FinalProductListTable() {
                 setSuccess(true)
                 setPage(0);
                 setTab('')
-                setRowsPerPage(10);
+                setRowsPerPage(100);
                 setFilter(false);
                 setState([
                     {
@@ -1027,7 +1027,7 @@ function FinalProductListTable() {
                 setSuccess(true)
                 setPage(0);
                 setTab('')
-                setRowsPerPage(10);
+                setRowsPerPage(100);
                 setFilter(false);
                 setState([
                     {
@@ -1122,7 +1122,7 @@ function FinalProductListTable() {
                 setUnitConversation([]);
                 setUnitConversationError([]);
                 setPage(0);
-                setRowsPerPage(10);
+                setRowsPerPage(100);
                 setFilter(false);
                 setState([
                     {
@@ -1216,7 +1216,7 @@ function FinalProductListTable() {
                 setLoading(false);
                 setTab('')
                 setPage(0);
-                setRowsPerPage(10);
+                setRowsPerPage(100);
                 setFilter(false);
                 setState([
                     {
@@ -1242,7 +1242,7 @@ function FinalProductListTable() {
                 setLoading(false)
                 setTab('')
                 setPage(0);
-                setRowsPerPage(10);
+                setRowsPerPage(100);
                 setFilter(false);
                 setState([
                     {
@@ -2036,7 +2036,7 @@ function FinalProductListTable() {
                                     <div className={`flex col-span-3 justify-center ${tab === null || tab === '' || !tab ? 'productTabAll' : 'productTab'}`} onClick={() => {
                                         setTab('');
                                         setPage(0);
-                                        setRowsPerPage(10);
+                                        setRowsPerPage(100);
                                         setSearchWord('')
                                         setFilter(false);
                                         getAllDataByTab('');
@@ -2054,7 +2054,7 @@ function FinalProductListTable() {
                                         setTab(1);
                                         setFilter(false);
                                         setPage(0);
-                                        setRowsPerPage(10);
+                                        setRowsPerPage(100);
                                         setSearchWord('')
                                         getAllDataByTab(1);
                                         setState([
@@ -2071,7 +2071,7 @@ function FinalProductListTable() {
                                         setTab(2);
                                         setFilter(false);
                                         setPage(0);
-                                        setRowsPerPage(10);
+                                        setRowsPerPage(100);
                                         setSearchWord('')
                                         getAllDataByTab(2);
                                         setState([
@@ -2088,7 +2088,7 @@ function FinalProductListTable() {
                                         setTab(3);
                                         setFilter(false);
                                         setPage(0);
-                                        setRowsPerPage(10);
+                                        setRowsPerPage(100);
                                         setSearchWord('')
                                         getAllDataByTab(3);
                                         setState([
@@ -2142,7 +2142,7 @@ function FinalProductListTable() {
                                                 setFilter(false);
                                                 setPage(0);
                                                 setSearchWord('')
-                                                setRowsPerPage(10);
+                                                setRowsPerPage(100);
                                                 getAllDataByTab('');
                                                 setState([
                                                     {
@@ -2178,7 +2178,7 @@ function FinalProductListTable() {
                                         />
                                         <div className='mt-8 grid gap-4 grid-cols-12'>
                                             <div className='col-span-3 col-start-7'>
-                                                <button className='stockInBtn' onClick={() => { getAllDataByFilter(); setTab(''); setFilter(true); setPage(0); setRowsPerPage(10); handleCloseDate() }}>Apply</button>
+                                                <button className='stockInBtn' onClick={() => { getAllDataByFilter(); setTab(''); setFilter(true); setPage(0); setRowsPerPage(100); handleCloseDate() }}>Apply</button>
                                             </div>
                                             <div className='col-span-3'>
                                                 <button className='stockOutBtn' onClick={handleCloseDate}>cancel</button>
@@ -2334,7 +2334,7 @@ function FinalProductListTable() {
                                         </TableBody>
                                     </Table>
                                     <TablePagination
-                                        rowsPerPageOptions={[10, 25, 50]}
+                                        rowsPerPageOptions={[100, 200, 300]}
                                         component="div"
                                         count={totalRows}
                                         rowsPerPage={rowsPerPage}

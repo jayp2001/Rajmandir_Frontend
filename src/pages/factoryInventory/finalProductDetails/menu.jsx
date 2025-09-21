@@ -51,7 +51,7 @@ function MenuStockInOut(props) {
                 <MenuItem key={'delete'}
                     onClick={() => {
                         handleClose();
-                        props.data.remainingQty == props.data.mfProductQty ? props.deleteStockInOut(props.mfStockInId) : props.setError("You can not delete this data...!!")
+                        props.data.remainingQty == props.data.mfProductQty ? props.deleteStockInOut(props.stockInOutId) : props.setError("You can not delete this data...!!")
                     }}>
                     Delete
                 </MenuItem>

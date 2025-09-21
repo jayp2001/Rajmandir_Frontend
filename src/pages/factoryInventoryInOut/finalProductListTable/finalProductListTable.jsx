@@ -45,6 +45,7 @@ import Menutemp from './menu';
 import { ToastContainer, toast } from 'react-toastify';
 import SearchIcon from '@mui/icons-material/Search';
 import { validateDate } from '@mui/x-date-pickers/internals';
+import ExportMenu from '../../factoryInventory/materialListTable/exportMenu';
 
 const style = {
     position: 'absolute',
@@ -136,7 +137,7 @@ function FinalProductListTableInOut() {
     const [batchFormDataError, setBatchFormDataError] = React.useState({
         batchQty: false,
     });
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = React.useState(100);
     const [totalRows, setTotalRows] = React.useState(0);
     const [unitsForProduct, setUnitsForProduct] = React.useState(0);
     const [totalRowsOut, setTotalRowsOut] = React.useState(0);
@@ -176,7 +177,7 @@ function FinalProductListTableInOut() {
         totalPrice: "",
         mfStockInComment: "",
         mfStockInDate: dayjs(),
-        isAuto: true,
+        isAuto: false,
         batchQty: ""
     })
     const [stockInFormDataError, setStockInFormDataError] = React.useState({
@@ -784,7 +785,7 @@ function FinalProductListTableInOut() {
             mfProductId: row.mfProductId,
             mfProductName: row.mfProductName,
             mfProductUnit: row.mfProductUnit,
-            isAuto: true
+            isAuto: false
         }))
         setOpenStockIn(true);
     }
@@ -893,7 +894,7 @@ function FinalProductListTableInOut() {
             totalPrice: "",
             mfStockInComment: "",
             mfStockInDate: dayjs(),
-            isAuto: true,
+            isAuto: false,
             batchQty: ""
         })
         setStockInFormDataError({
@@ -1002,7 +1003,7 @@ function FinalProductListTableInOut() {
                 setSuccess(true)
                 setPage(0);
                 setTab('')
-                setRowsPerPage(10);
+                setRowsPerPage(100);
                 setFilter(false);
                 setState([
                     {
@@ -1067,7 +1068,7 @@ function FinalProductListTableInOut() {
                 setUnitConversation([]);
                 setUnitConversationError([]);
                 setPage(0);
-                setRowsPerPage(10);
+                setRowsPerPage(100);
                 setFilter(false);
                 setState([
                     {
@@ -1161,7 +1162,7 @@ function FinalProductListTableInOut() {
                 setLoading(false);
                 setTab('')
                 setPage(0);
-                setRowsPerPage(10);
+                setRowsPerPage(100);
                 setFilter(false);
                 setState([
                     {
@@ -1187,7 +1188,7 @@ function FinalProductListTableInOut() {
                 setLoading(false)
                 setTab('')
                 setPage(0);
-                setRowsPerPage(10);
+                setRowsPerPage(100);
                 setFilter(false);
                 setState([
                     {
@@ -1808,10 +1809,67 @@ function FinalProductListTableInOut() {
             }
         }
     };
+
+    const productExportPdf = async () => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}mfProductrouter/exportPdfForMfProductData?startDate=${state[0].startDate}&endDate=${state[0].endDate}` : `${BACKEND_BASE_URL}mfProductrouter/exportPdfForMfProductData?startDate=${''}&endDate=${''}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = 'Products_Pdf' + new Date().toLocaleDateString() + '.pdf'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
+        }
+    }
+
+    const productExportPdfByStatus = async (tab) => {
+        if (window.confirm('Are you sure you want to export Pdf ... ?')) {
+            await axios({
+                url: filter ? `${BACKEND_BASE_URL}mfProductrouter/exportPdfForMfProductData?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productStatus=${tab}` : `${BACKEND_BASE_URL}mfProductrouter/exportPdfForMfProductData?startDate=${''}&endDate=${''}&productStatus=${tab}`,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const SN = tab == 1 ? 'In-Stock_' : tab == 2 ? 'Low-Stock_' : 'Out_Of_Stock_'
+                const name = 'Products_Pdf_' + SN + new Date().toLocaleDateString() + '.pdf'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
+        }
+    }
+
+
     const productExportExcel = async () => {
         if (window.confirm('Are you sure you want to export Excel ... ?')) {
             await axios({
-                url: filter ? `${BACKEND_BASE_URL}mfProductrouter/exportExcelSheetForProductTable?startDate=${state[0].startDate}&endDate=${state[0].endDate}` : `${BACKEND_BASE_URL}mfProductrouter/exportExcelSheetForProductTable?startDate=${''}&endDate=${''}`,
+                url: filter ? `${BACKEND_BASE_URL}mfProductrouter/exportExcelSheetForMfProduct?startDate=${state[0].startDate}&endDate=${state[0].endDate}` : `${BACKEND_BASE_URL}mfProductrouter/exportExcelSheetForMfProduct?startDate=${''}&endDate=${''}`,
                 method: 'GET',
                 headers: { Authorization: `Bearer ${userInfo.token}` },
                 responseType: 'blob', // important
@@ -1924,7 +1982,7 @@ function FinalProductListTableInOut() {
                                     <div className={`flex col-span-3 justify-center ${tab === null || tab === '' || !tab ? 'productTabAll' : 'productTab'}`} onClick={() => {
                                         setTab('');
                                         setPage(0);
-                                        setRowsPerPage(10);
+                                        setRowsPerPage(100);
                                         setSearchWord('')
                                         setFilter(false);
                                         getAllDataByTab('');
@@ -1942,7 +2000,7 @@ function FinalProductListTableInOut() {
                                         setTab(1);
                                         setFilter(false);
                                         setPage(0);
-                                        setRowsPerPage(10);
+                                        setRowsPerPage(100);
                                         setSearchWord('')
                                         getAllDataByTab(1);
                                         setState([
@@ -1959,7 +2017,7 @@ function FinalProductListTableInOut() {
                                         setTab(2);
                                         setFilter(false);
                                         setPage(0);
-                                        setRowsPerPage(10);
+                                        setRowsPerPage(100);
                                         setSearchWord('')
                                         getAllDataByTab(2);
                                         setState([
@@ -1976,7 +2034,7 @@ function FinalProductListTableInOut() {
                                         setTab(3);
                                         setFilter(false);
                                         setPage(0);
-                                        setRowsPerPage(10);
+                                        setRowsPerPage(100);
                                         setSearchWord('')
                                         getAllDataByTab(3);
                                         setState([
@@ -2030,7 +2088,7 @@ function FinalProductListTableInOut() {
                                                 setFilter(false);
                                                 setPage(0);
                                                 setSearchWord('')
-                                                setRowsPerPage(10);
+                                                setRowsPerPage(100);
                                                 getAllDataByTab('');
                                                 setState([
                                                     {
@@ -2066,7 +2124,7 @@ function FinalProductListTableInOut() {
                                         />
                                         <div className='mt-8 grid gap-4 grid-cols-12'>
                                             <div className='col-span-3 col-start-7'>
-                                                <button className='stockInBtn' onClick={() => { getAllDataByFilter(); setTab(''); setFilter(true); setPage(0); setRowsPerPage(10); handleCloseDate() }}>Apply</button>
+                                                <button className='stockInBtn' onClick={() => { getAllDataByFilter(); setTab(''); setFilter(true); setPage(0); setRowsPerPage(100); handleCloseDate() }}>Apply</button>
                                             </div>
                                             <div className='col-span-3'>
                                                 <button className='stockOutBtn' onClick={handleCloseDate}>cancel</button>
@@ -2094,7 +2152,7 @@ function FinalProductListTableInOut() {
                                     />
                                 </div>}
                             <div className='col-span-4 col-start-9 pr-5 flex justify-end'>
-                                {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ? null : <button className='exportExcelBtn' onClick={productExportExcel}><FileDownloadIcon />&nbsp;&nbsp;Export Excel</button>}
+                                {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ? <button className='exportExcelBtn' onClick={() => productExportPdfByStatus(tab)}><FileDownloadIcon />&nbsp;&nbsp;Export</button> : <ExportMenu exportExcel={productExportExcel} exportPdf={productExportPdf} />}
                             </div>
                         </div>
                         {tab === 1 || tab === '1' || tab === 2 || tab === '2' || tab === 3 || tab === '3' ?
@@ -2222,7 +2280,7 @@ function FinalProductListTableInOut() {
                                         </TableBody>
                                     </Table>
                                     <TablePagination
-                                        rowsPerPageOptions={[10, 25, 50]}
+                                        rowsPerPageOptions={[100, 200, 300]}
                                         component="div"
                                         count={totalRows}
                                         rowsPerPage={rowsPerPage}

@@ -240,7 +240,7 @@ function NavBar() {
                     </> :
                         location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'units' || location.pathname.split('/')[1] == 'supplierDetailsOwner' || (location.pathname.split('/')[1] == 'addSupplier' && role == 1) ? <>
                             <ListItem key={'branchDashboard1'}>
-                                <ListItemButton to="/dashboard">
+                                <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                     <ListItemIcon>
                                         <DashboardIcon />
                                     </ListItemIcon>
@@ -261,7 +261,7 @@ function NavBar() {
                             location.pathname.split('/')[1] == 'staff' ?
                                 <>
                                     <ListItem key={'staff1'}>
-                                        <ListItemButton to="/dashboard">
+                                        <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                             <ListItemIcon>
                                                 <DashboardIcon />
                                             </ListItemIcon>
@@ -313,7 +313,7 @@ function NavBar() {
                                 location.pathname.split('/')[1] == 'expense' && location.pathname.split('/')[2] == 'dashboard' ?
                                     <>
                                         <ListItem key={'staff1'}>
-                                            <ListItemButton to="/dashboard">
+                                            <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                 <ListItemIcon>
                                                     <DashboardIcon />
                                                 </ListItemIcon>
@@ -341,7 +341,7 @@ function NavBar() {
                                     location.pathname.split('/')[1] == 'bank' && location.pathname.split('/')[2] == 'dashboard' ?
                                         <>
                                             <ListItem key={'staff1'}>
-                                                <ListItemButton to="/dashboard">
+                                                <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                     <ListItemIcon>
                                                         <DashboardIcon />
                                                     </ListItemIcon>
@@ -369,7 +369,7 @@ function NavBar() {
                                         location.pathname.split('/')[1] == 'businessReport' ?
                                             <>
                                                 <ListItem key={'staff1'}>
-                                                    <ListItemButton to="/dashboard">
+                                                    <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                         <ListItemIcon>
                                                             <DashboardIcon />
                                                         </ListItemIcon>
@@ -397,7 +397,7 @@ function NavBar() {
                                             location.pathname.split('/')[1] == 'expense' || location.pathname.split('/')[1] == 'bank' || location.pathname.split('/')[1] == 'businessReport' ? <>
                                                 <>
                                                     <ListItem key={'staff1'}>
-                                                        <ListItemButton to="/dashboard">
+                                                        <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                             <ListItemIcon>
                                                                 <DashboardIcon />
                                                             </ListItemIcon>
@@ -493,7 +493,7 @@ function NavBar() {
                                                 :
                                                 <>
                                                     <ListItem key={1}>
-                                                        <ListItemButton to="/dashboard">
+                                                        <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                             <ListItemIcon>
                                                                 <DashboardIcon />
                                                             </ListItemIcon>
@@ -633,7 +633,7 @@ function NavBar() {
                     </> :
                         location.pathname.split('/')[1] == 'dashboardFactory' || location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'supplierDetailsOwner' || (location.pathname.split('/')[1] == 'addSupplier' && role == 1) ? <>
                             <ListItem key={'branchDashboard1'}>
-                                <ListItemButton to="/dashboard">
+                                <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                     <ListItemIcon>
                                         <DashboardIcon />
                                     </ListItemIcon>
@@ -654,7 +654,7 @@ function NavBar() {
                             location.pathname.split('/')[1] == 'staff' ?
                                 <>
                                     <ListItem key={'staff1'}>
-                                        <ListItemButton to="/dashboard">
+                                        <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                             <ListItemIcon>
                                                 <DashboardIcon />
                                             </ListItemIcon>
@@ -706,7 +706,7 @@ function NavBar() {
                                 location.pathname.split('/')[1] == 'expense' && location.pathname.split('/')[2] == 'dashboard' ?
                                     <>
                                         <ListItem key={'staff1'}>
-                                            <ListItemButton to="/dashboard">
+                                            <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                 <ListItemIcon>
                                                     <DashboardIcon />
                                                 </ListItemIcon>
@@ -734,7 +734,7 @@ function NavBar() {
                                     location.pathname.split('/')[1] == 'bank' && location.pathname.split('/')[2] == 'dashboard' ?
                                         <>
                                             <ListItem key={'staff1'}>
-                                                <ListItemButton to="/dashboard">
+                                                <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                     <ListItemIcon>
                                                         <DashboardIcon />
                                                     </ListItemIcon>
@@ -762,7 +762,7 @@ function NavBar() {
                                         location.pathname.split('/')[1] == 'businessReport' ?
                                             <>
                                                 <ListItem key={'staff1'}>
-                                                    <ListItemButton to="/dashboard">
+                                                    <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                         <ListItemIcon>
                                                             <DashboardIcon />
                                                         </ListItemIcon>
@@ -790,7 +790,7 @@ function NavBar() {
                                             location.pathname.split('/')[1] == 'expense' || location.pathname.split('/')[1] == 'bank' || location.pathname.split('/')[1] == 'businessReport' ? <>
                                                 <>
                                                     <ListItem key={'staff1'}>
-                                                        <ListItemButton to="/dashboard">
+                                                        <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                             <ListItemIcon>
                                                                 <DashboardIcon />
                                                             </ListItemIcon>
@@ -886,7 +886,7 @@ function NavBar() {
                                                 :
                                                 <>
                                                     <ListItem key={1}>
-                                                        <ListItemButton to="/dashboard">
+                                                        <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                             <ListItemIcon>
                                                                 <DashboardIcon />
                                                             </ListItemIcon>
@@ -1008,7 +1008,7 @@ function NavBar() {
                     </> :
                         location.pathname.split('/')[1] == 'dashboardFactory' || location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'supplierDetailsOwner' || (location.pathname.split('/')[1] == 'addSupplier' && role == 1) ? <>
                             <ListItem key={'branchDashboard1'}>
-                                <ListItemButton to="/dashboard">
+                                <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                     <ListItemIcon>
                                         <DashboardIcon />
                                     </ListItemIcon>
@@ -1029,7 +1029,7 @@ function NavBar() {
                             location.pathname.split('/')[1] == 'staff' ?
                                 <>
                                     <ListItem key={'staff1'}>
-                                        <ListItemButton to="/dashboard">
+                                        <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                             <ListItemIcon>
                                                 <DashboardIcon />
                                             </ListItemIcon>
@@ -1081,7 +1081,7 @@ function NavBar() {
                                 location.pathname.split('/')[1] == 'expense' && location.pathname.split('/')[2] == 'dashboard' ?
                                     <>
                                         <ListItem key={'staff1'}>
-                                            <ListItemButton to="/dashboard">
+                                            <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                 <ListItemIcon>
                                                     <DashboardIcon />
                                                 </ListItemIcon>
@@ -1109,7 +1109,7 @@ function NavBar() {
                                     location.pathname.split('/')[1] == 'bank' && location.pathname.split('/')[2] == 'dashboard' ?
                                         <>
                                             <ListItem key={'staff1'}>
-                                                <ListItemButton to="/dashboard">
+                                                <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                     <ListItemIcon>
                                                         <DashboardIcon />
                                                     </ListItemIcon>
@@ -1137,7 +1137,7 @@ function NavBar() {
                                         location.pathname.split('/')[1] == 'businessReport' ?
                                             <>
                                                 <ListItem key={'staff1'}>
-                                                    <ListItemButton to="/dashboard">
+                                                    <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                         <ListItemIcon>
                                                             <DashboardIcon />
                                                         </ListItemIcon>
@@ -1165,7 +1165,7 @@ function NavBar() {
                                             location.pathname.split('/')[1] == 'expense' || location.pathname.split('/')[1] == 'bank' || location.pathname.split('/')[1] == 'businessReport' ? <>
                                                 <>
                                                     <ListItem key={'staff1'}>
-                                                        <ListItemButton to="/dashboard">
+                                                        <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                             <ListItemIcon>
                                                                 <DashboardIcon />
                                                             </ListItemIcon>
@@ -1435,7 +1435,7 @@ function NavBar() {
                     </> :
                         location.pathname.split('/')[1] == 'dashboardFactory' || location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'supplierDetailsOwner' || (location.pathname.split('/')[1] == 'addSupplier' && role == 1) ? <>
                             <ListItem key={'branchDashboard1'}>
-                                <ListItemButton to="/dashboard">
+                                <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                     <ListItemIcon>
                                         <DashboardIcon />
                                     </ListItemIcon>
@@ -1456,7 +1456,7 @@ function NavBar() {
                             location.pathname.split('/')[1] == 'staff' ?
                                 <>
                                     <ListItem key={'staff1'}>
-                                        <ListItemButton to="/dashboard">
+                                        <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                             <ListItemIcon>
                                                 <DashboardIcon />
                                             </ListItemIcon>
@@ -1508,7 +1508,7 @@ function NavBar() {
                                 location.pathname.split('/')[1] == 'expense' && location.pathname.split('/')[2] == 'dashboard' ?
                                     <>
                                         <ListItem key={'staff1'}>
-                                            <ListItemButton to="/dashboard">
+                                            <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                 <ListItemIcon>
                                                     <DashboardIcon />
                                                 </ListItemIcon>
@@ -1536,7 +1536,7 @@ function NavBar() {
                                     location.pathname.split('/')[1] == 'bank' && location.pathname.split('/')[2] == 'dashboard' ?
                                         <>
                                             <ListItem key={'staff1'}>
-                                                <ListItemButton to="/dashboard">
+                                                <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                     <ListItemIcon>
                                                         <DashboardIcon />
                                                     </ListItemIcon>
@@ -1564,7 +1564,7 @@ function NavBar() {
                                         location.pathname.split('/')[1] == 'businessReport' ?
                                             <>
                                                 <ListItem key={'staff1'}>
-                                                    <ListItemButton to="/dashboard">
+                                                    <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                         <ListItemIcon>
                                                             <DashboardIcon />
                                                         </ListItemIcon>
@@ -1592,7 +1592,7 @@ function NavBar() {
                                             location.pathname.split('/')[1] == 'expense' || location.pathname.split('/')[1] == 'bank' || location.pathname.split('/')[1] == 'businessReport' ? <>
                                                 <>
                                                     <ListItem key={'staff1'}>
-                                                        <ListItemButton to="/dashboard">
+                                                        <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                             <ListItemIcon>
                                                                 <DashboardIcon />
                                                             </ListItemIcon>
@@ -1688,7 +1688,7 @@ function NavBar() {
                                                 :
                                                 <>
                                                     <ListItem key={1}>
-                                                        <ListItemButton to="/dashboard">
+                                                        <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                             <ListItemIcon>
                                                                 <DashboardIcon />
                                                             </ListItemIcon>
@@ -1818,7 +1818,7 @@ function NavBar() {
                     </> :
                         location.pathname.split('/')[1] == 'dashboardFactory' || location.pathname.split('/')[1] == 'dashboardOwner' || location.pathname.split('/')[1] == 'userTableOwner' || location.pathname.split('/')[1] == 'supplierDetailsOwner' || (location.pathname.split('/')[1] == 'addSupplier' && role == 1) ? <>
                             <ListItem key={'branchDashboard1'}>
-                                <ListItemButton to="/dashboard">
+                                <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                     <ListItemIcon>
                                         <DashboardIcon />
                                     </ListItemIcon>
@@ -1839,7 +1839,7 @@ function NavBar() {
                             location.pathname.split('/')[1] == 'staff' ?
                                 <>
                                     <ListItem key={'staff1'}>
-                                        <ListItemButton to="/dashboard">
+                                        <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                             <ListItemIcon>
                                                 <DashboardIcon />
                                             </ListItemIcon>
@@ -1891,7 +1891,7 @@ function NavBar() {
                                 location.pathname.split('/')[1] == 'expense' && location.pathname.split('/')[2] == 'dashboard' ?
                                     <>
                                         <ListItem key={'staff1'}>
-                                            <ListItemButton to="/dashboard">
+                                            <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                 <ListItemIcon>
                                                     <DashboardIcon />
                                                 </ListItemIcon>
@@ -1919,7 +1919,7 @@ function NavBar() {
                                     location.pathname.split('/')[1] == 'bank' && location.pathname.split('/')[2] == 'dashboard' ?
                                         <>
                                             <ListItem key={'staff1'}>
-                                                <ListItemButton to="/dashboard">
+                                                <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                     <ListItemIcon>
                                                         <DashboardIcon />
                                                     </ListItemIcon>
@@ -1947,7 +1947,7 @@ function NavBar() {
                                         location.pathname.split('/')[1] == 'businessReport' ?
                                             <>
                                                 <ListItem key={'staff1'}>
-                                                    <ListItemButton to="/dashboard">
+                                                    <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                         <ListItemIcon>
                                                             <DashboardIcon />
                                                         </ListItemIcon>
@@ -1975,7 +1975,7 @@ function NavBar() {
                                             location.pathname.split('/')[1] == 'expense' || location.pathname.split('/')[1] == 'bank' || location.pathname.split('/')[1] == 'businessReport' ? <>
                                                 <>
                                                     <ListItem key={'staff1'}>
-                                                        <ListItemButton to="/dashboard">
+                                                        <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                                                             <ListItemIcon>
                                                                 <DashboardIcon />
                                                             </ListItemIcon>
@@ -2139,7 +2139,7 @@ function NavBar() {
             <Divider />
             <List>
                 <ListItem key={1}>
-                    <ListItemButton to="/dashboard">
+                    <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
                         <ListItemIcon>
                             <DashboardIcon />
                         </ListItemIcon>

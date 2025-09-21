@@ -135,7 +135,7 @@ function StockInOutFactoryInOut() {
             totalPrice: "",
             mfStockInComment: "",
             mfStockInDate: dayjs(),
-            isAuto: true
+            isAuto: false
         })
         setStockInFormDataError({
             mfProductQty: false,
@@ -205,7 +205,7 @@ function StockInOutFactoryInOut() {
             ...perv,
             mfProductId: row.mfProductId,
             mfProductName: row.mfProductName,
-            isAuto: true
+            isAuto: false
         }))
         setOpenStockIn(true);
     }
@@ -260,7 +260,7 @@ function StockInOutFactoryInOut() {
             totalPrice: "",
             mfStockInComment: "",
             mfStockInDate: dayjs(),
-            isAuto: true
+            isAuto: false
         });
         setStockInFormDataError({
             mfProductQty: false,
@@ -424,7 +424,7 @@ function StockInOutFactoryInOut() {
         totalPrice: "",
         mfStockInComment: "",
         mfStockInDate: dayjs(),
-        isAuto: true
+        isAuto: false
     })
     const [stockInFormDataError, setStockInFormDataError] = React.useState({
         mfProductQty: false,
@@ -1564,9 +1564,9 @@ function StockInOutFactoryInOut() {
                                     </>
                                 }
                             </div>
-                            <div className='col-span-6 col-start-7 pr-5 flex justify-end'>
+                            {/* <div className='col-span-6 col-start-7 pr-5 flex justify-end'>
                                 <button className='exportExcelBtn' onClick={() => { tab === 1 || tab === '1' ? stockInExportExcel() : stockOutExportExcel() }}><FileDownloadIcon />&nbsp;&nbsp;Export Excel</button>
-                            </div>
+                            </div> */}
                         </div>
                         {tab === 1 || tab === '1' ?
                             <div className='tableContainerWrapper'>

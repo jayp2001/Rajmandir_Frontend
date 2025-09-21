@@ -736,7 +736,7 @@ function FinalProductDetails() {
         }
     };
     const deleteStockIn = async (id) => {
-        await axios.delete(`${BACKEND_BASE_URL}mfProductrouter/removeStockInTransaction?stockInId=${id}`, config)
+        await axios.delete(`${BACKEND_BASE_URL}mfProductrouter/removeMfProductStockInData?mfStockInId=${id}`, config)
             .then((res) => {
                 setSuccess(true)
                 getStatistics();

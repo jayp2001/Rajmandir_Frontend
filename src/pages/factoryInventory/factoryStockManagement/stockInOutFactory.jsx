@@ -137,7 +137,7 @@ function StockInOutFactory() {
             totalPrice: "",
             mfStockInComment: "",
             mfStockInDate: dayjs(),
-            isAuto: true
+            isAuto: false
         })
         setStockInFormDataError({
             mfProductQty: false,
@@ -208,7 +208,7 @@ function StockInOutFactory() {
             ...perv,
             mfProductId: row.mfProductId,
             mfProductName: row.mfProductName,
-            isAuto: true
+            isAuto: false
         }))
         setOpenStockIn(true);
     }
@@ -263,7 +263,7 @@ function StockInOutFactory() {
             totalPrice: "",
             mfStockInComment: "",
             mfStockInDate: dayjs(),
-            isAuto: true
+            isAuto: false
         });
         setStockInFormDataError({
             mfProductQty: false,
@@ -429,7 +429,7 @@ function StockInOutFactory() {
         totalPrice: "",
         mfStockInComment: "",
         mfStockInDate: dayjs(),
-        isAuto: true
+        isAuto: false
     })
     const [stockInFormDataError, setStockInFormDataError] = React.useState({
         mfProductQty: false,
