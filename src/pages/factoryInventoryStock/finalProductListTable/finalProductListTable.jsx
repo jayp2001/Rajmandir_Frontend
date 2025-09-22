@@ -136,7 +136,7 @@ function FinalProductListTableStock() {
     const [batchFormDataError, setBatchFormDataError] = React.useState({
         batchQty: false,
     });
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = React.useState(100);
     const [totalRows, setTotalRows] = React.useState(0);
     const [unitsForProduct, setUnitsForProduct] = React.useState(0);
     const [totalRowsOut, setTotalRowsOut] = React.useState(0);
@@ -955,7 +955,7 @@ function FinalProductListTableStock() {
         setViewData(data)
     }
     const getAllData = async () => {
-        await axios.get(`${BACKEND_BASE_URL}mfProductrouter/getManufactureProductTable?productStatus=${tab}&page=${1}&numPerPage=${10}`, config)
+        await axios.get(`${BACKEND_BASE_URL}mfProductrouter/getManufactureProductTable?productStatus=${tab}&page=${1}&numPerPage=${100}`, config)
             .then((res) => {
                 setAllData(res.data.rows);
                 setTotalRows(res.data.numRows)
@@ -966,7 +966,7 @@ function FinalProductListTableStock() {
             })
     }
     const getAllDataByTab = async (tab) => {
-        await axios.get(`${BACKEND_BASE_URL}mfProductrouter/getManufactureProductTable?productStatus=${tab}&page=${1}&numPerPage=${10}`, config)
+        await axios.get(`${BACKEND_BASE_URL}mfProductrouter/getManufactureProductTable?productStatus=${tab}&page=${1}&numPerPage=${100}`, config)
             .then((res) => {
                 setAllData(res.data.rows);
                 setTotalRows(res.data.numRows)
@@ -977,7 +977,7 @@ function FinalProductListTableStock() {
             })
     }
     const getAllDataByFilter = async () => {
-        await axios.get(`${BACKEND_BASE_URL}mfProductrouter/getManufactureProductTable?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productStatus=${tab}&page=${1}&numPerPage=${10}&searchProduct=${searchWord}`, config)
+        await axios.get(`${BACKEND_BASE_URL}mfProductrouter/getManufactureProductTable?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productStatus=${tab}&page=${1}&numPerPage=${100}&searchProduct=${searchWord}`, config)
             .then((res) => {
                 setAllData(res.data.rows);
                 setTotalRows(res.data.numRows)
@@ -1002,7 +1002,7 @@ function FinalProductListTableStock() {
                 setSuccess(true)
                 setPage(0);
                 setTab('')
-                setRowsPerPage(10);
+                setRowsPerPage(100);
                 setFilter(false);
                 setState([
                     {
@@ -1067,7 +1067,7 @@ function FinalProductListTableStock() {
                 setUnitConversation([]);
                 setUnitConversationError([]);
                 setPage(0);
-                setRowsPerPage(10);
+                setRowsPerPage(100);
                 setFilter(false);
                 setState([
                     {
@@ -1161,7 +1161,7 @@ function FinalProductListTableStock() {
                 setLoading(false);
                 setTab('')
                 setPage(0);
-                setRowsPerPage(10);
+                setRowsPerPage(100);
                 setFilter(false);
                 setState([
                     {
@@ -1187,7 +1187,7 @@ function FinalProductListTableStock() {
                 setLoading(false)
                 setTab('')
                 setPage(0);
-                setRowsPerPage(10);
+                setRowsPerPage(100);
                 setFilter(false);
                 setState([
                     {
@@ -1882,7 +1882,7 @@ function FinalProductListTableStock() {
         setError(false);
     }
     const search = async (searchWord) => {
-        await axios.get(filter ? `${BACKEND_BASE_URL}mfProductrouter/getManufactureProductTable?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productStatus=${tab}&page=${1}&numPerPage=${10}&searchProduct=${searchWord}` : `${BACKEND_BASE_URL}mfProductrouter/getManufactureProductTable?productStatus=${tab}&page=${1}&numPerPage=${10}&searchProduct=${searchWord}`, config)
+        await axios.get(filter ? `${BACKEND_BASE_URL}mfProductrouter/getManufactureProductTable?startDate=${state[0].startDate}&endDate=${state[0].endDate}&productStatus=${tab}&page=${1}&numPerPage=${100}&searchProduct=${searchWord}` : `${BACKEND_BASE_URL}mfProductrouter/getManufactureProductTable?productStatus=${tab}&page=${1}&numPerPage=${100}&searchProduct=${searchWord}`, config)
             .then((res) => {
                 setAllData(res.data.rows);
                 setTotalRows(res.data.numRows)
@@ -1924,7 +1924,7 @@ function FinalProductListTableStock() {
                                     <div className={`flex col-span-3 justify-center ${tab === null || tab === '' || !tab ? 'productTabAll' : 'productTab'}`} onClick={() => {
                                         setTab('');
                                         setPage(0);
-                                        setRowsPerPage(10);
+                                        setRowsPerPage(100);
                                         setSearchWord('')
                                         setFilter(false);
                                         getAllDataByTab('');
@@ -1942,7 +1942,7 @@ function FinalProductListTableStock() {
                                         setTab(1);
                                         setFilter(false);
                                         setPage(0);
-                                        setRowsPerPage(10);
+                                        setRowsPerPage(100);
                                         setSearchWord('')
                                         getAllDataByTab(1);
                                         setState([
@@ -1959,7 +1959,7 @@ function FinalProductListTableStock() {
                                         setTab(2);
                                         setFilter(false);
                                         setPage(0);
-                                        setRowsPerPage(10);
+                                        setRowsPerPage(100);
                                         setSearchWord('')
                                         getAllDataByTab(2);
                                         setState([
@@ -1976,7 +1976,7 @@ function FinalProductListTableStock() {
                                         setTab(3);
                                         setFilter(false);
                                         setPage(0);
-                                        setRowsPerPage(10);
+                                        setRowsPerPage(100);
                                         setSearchWord('')
                                         getAllDataByTab(3);
                                         setState([
@@ -2067,7 +2067,7 @@ function FinalProductListTableStock() {
                                         </TableBody>
                                     </Table>
                                     <TablePagination
-                                        rowsPerPageOptions={[10, 25, 50]}
+                                        rowsPerPageOptions={[100, 200, 300]}
                                         component="div"
                                         count={totalRows}
                                         rowsPerPage={rowsPerPage}
@@ -2121,7 +2121,7 @@ function FinalProductListTableStock() {
                                         </TableBody>
                                     </Table>
                                     <TablePagination
-                                        rowsPerPageOptions={[10, 25, 50]}
+                                        rowsPerPageOptions={[100, 200, 300]}
                                         component="div"
                                         count={totalRows}
                                         rowsPerPage={rowsPerPage}
