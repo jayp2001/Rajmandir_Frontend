@@ -112,3 +112,36 @@
     transform: scale(1.011);
     box-shadow: 0 3px 9px 0 rgba(0, 0, 0, 0.15);
 }
+
+/* Smaller button variants */
+.addCategorySaveBtnSmall {
+    height: 36px;
+    width: 100%;
+    padding: 4px 12px;
+    text-align: center;
+    border-radius: 5px;
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(0, 122, 255, 1) 0%, rgba(0, 156, 255, 1) 78%);
+    color: #fff;
+    font-size: 14px;
+}
+
+.addCategorySaveBtnSmall:hover {
+    transform: scale(1.011);
+    box-shadow: 0 3px 9px 0 rgba(0, 0, 0, 0.15);
+}
+
+.addCategoryCancelBtnSmall {
+    height: 36px;
+    width: 100%;
+    padding: 4px 12px;
+    text-align: center;
+    border-radius: 5px;
+    color: #fff;
+    background: linear-gradient(195deg, #42424a, #191919);
+    font-size: 14px;
+}
+
+.addCategoryCancelBtnSmall:hover {
+    transform: scale(1.011);
+    box-shadow: 0 3px 9px 0 rgba(0, 0, 0, 0.15);
+}

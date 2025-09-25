@@ -4,8 +4,8 @@
 // export const BACKEND_BASE_URL = "http://192.168.1.224:8000/";
 // export const BACKEND_BASE_URL = "http://192.168.0.109:8008/";
 // export const BACKEND_BASE_URL = "http://192.168.0.114:8008/";
-export const BACKEND_BASE_URL = "https://invmfg.com/api/"
-// export const BACKEND_BASE_URL = "http://192.168.1.51:8000/";
+// export const BACKEND_BASE_URL = "https://invmfg.com/api/"
+export const BACKEND_BASE_URL = "http://192.168.0.114:8008/";
 // export const BACKEND_BASE_URL = "http://192.168.1.59:8000/";
 // export const BACKEND_BASE_URL = "http://192.168.0.173:8008/";
 // export const BACKEND_BASE_URL = "http://192.168.151.171:8008/";

@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import PageNotFoundRedirect from "./pageNotFound";
-import { BrowserRouter ,Route,Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from './pages/login/login';
 import Dashboard from './pages/inventory/dashboard/dashboard';
 import ProtectedUserRoutes from './protectedUserRoutes';
@@ -93,37 +93,38 @@ import AddFactoryDistributerInOut from './pages/factoryInventoryInOut/addDistrib
 import FactoryDistributerTableInOut from './pages/factoryInventoryInOut/distributerTable/distributerTable';
 import EditFactoryDistributerInOut from './pages/factoryInventoryInOut/editDistributer/editDistributer';
 import FactoryDistributerDetailInOut from './pages/factoryInventoryInOut/distributerDetails/distributerDetails';
+import MenuDashboard from './pages/inventory/menu/Dashboard';
 // import SetPrinter from './setPrinter';
 function App() {
   return (
     <div className="">
       <BrowserRouter>
-       <NavBar/>
-            <div className='mainBody'>
-              <Routes>
-                <Route path="/" element={<ProtectedStockManagerRoutes/>}>
-                  <Route path="/stockOut" element={<StockOut />}/>
-                  <Route path="/stockManager/productDetail/:id/:name/:unit/:remainingQty" element={<ProductDetailsManager />}/>
-                  <Route path='*' element={<PageNotFoundRedirect/>}/>
-                </Route>
-                 <Route path="/" element={<ProtectedInOutRoutes/>}>
-                  <Route path="/InOut/productTable" element={<ProductListTableInOut />}/>
-                  <Route path="/InOut/productDetail/:id/:name/:unit/:remainingQty" element={<ProductDetailsInOut />}/>
-                  <Route path="/InOut/stockInOut" element={<StockInOutInOut />}/>
-                  <Route path='*' element={<PageNotFoundRedirect/>}/>
-                </Route>
-                <Route path="/" element={<ProtactedInOutNpaymentRoutes/>}>
-                  <Route path="/InOutNpayment/addSupplier" element={<AddSupplierInOutNpayment />}/>
-                  <Route path="/InOutNpayment/supplierTable" element={<SupplierTableInOutNpayment />}/>
-                  <Route path="/InOutNpayment/editSupplier/:id" element={<EditSupplierInOutNpayment/>}/>
-                  <Route path="/InOutNpayment/supplierDetails/:id" element={<SupplierDetailInOutNpayment/>}/>
-                  <Route path='*' element={<PageNotFoundRedirect/>}/>
-                </Route>
-                <Route path="/" element={<ProtectedOwnerRoutes/>}>
-                  <Route path="/dashboardOwner" element={<BranchDashboard/>}/>
-                  <Route path="/units" element={<UnitsTable/>}/>
-                </Route>
-                 {/* <Route path="/" element={<ProtectedAdminRoutes />}>
+        <NavBar />
+        <div className='mainBody'>
+          <Routes>
+            <Route path="/" element={<ProtectedStockManagerRoutes />}>
+              <Route path="/stockOut" element={<StockOut />} />
+              <Route path="/stockManager/productDetail/:id/:name/:unit/:remainingQty" element={<ProductDetailsManager />} />
+              <Route path='*' element={<PageNotFoundRedirect />} />
+            </Route>
+            <Route path="/" element={<ProtectedInOutRoutes />}>
+              <Route path="/InOut/productTable" element={<ProductListTableInOut />} />
+              <Route path="/InOut/productDetail/:id/:name/:unit/:remainingQty" element={<ProductDetailsInOut />} />
+              <Route path="/InOut/stockInOut" element={<StockInOutInOut />} />
+              <Route path='*' element={<PageNotFoundRedirect />} />
+            </Route>
+            <Route path="/" element={<ProtactedInOutNpaymentRoutes />}>
+              <Route path="/InOutNpayment/addSupplier" element={<AddSupplierInOutNpayment />} />
+              <Route path="/InOutNpayment/supplierTable" element={<SupplierTableInOutNpayment />} />
+              <Route path="/InOutNpayment/editSupplier/:id" element={<EditSupplierInOutNpayment />} />
+              <Route path="/InOutNpayment/supplierDetails/:id" element={<SupplierDetailInOutNpayment />} />
+              <Route path='*' element={<PageNotFoundRedirect />} />
+            </Route>
+            <Route path="/" element={<ProtectedOwnerRoutes />}>
+              <Route path="/dashboardOwner" element={<BranchDashboard />} />
+              <Route path="/units" element={<UnitsTable />} />
+            </Route>
+            {/* <Route path="/" element={<ProtectedAdminRoutes />}>
                   <Route path="/staff/addStaff" element={<AddEditStaff/>}/>
                   <Route path="/staff/staffList" element={<StaffList/>}/>
                   <Route path="/staff/staffCategory" element={<StaffCategoryTable/>}/>
@@ -132,90 +133,91 @@ function App() {
                   <Route path="/staff/editStaff/:id" element={<AddEditStaff/>}/>
                   <Route path="/staff/employeeDetail/:id" element={<EmployeeDetails/>}/>
                 </Route> */}
-                <Route path="/" element={<ProtectedFactoryManagerRoutes/>}>
-                  <Route path="/dashboardFactory" element={<FactoryDashboard/>}/>
-                  <Route path="/inOut/material/addSupplier" element={<AddFactorySupplierInOut />}/>
-                  <Route path="/inOut/material/editSupplier/:id" element={<EditFactorySupplierInOut/>}/>
-                  <Route path="/inOut/material/supplierTable" element={<FactorySupplierTableInOut />}/>
-                  <Route path="/inOut/material/supplierDetails/:id" element={<FactorySupplierDetailInOut/>}/>
-                  <Route path="/inOut/material/stockOutByCategory/:category/:categoryId" element={<StockOutByCategoryMaterialInOut/>}/>
-                  <Route path="/inOut/material/stockInByCategory/:category/:categoryId" element={<StockOutByCategoryStockInMaterialInOut/>}/>
-                  <Route path="/inOut/material/materialTable" element={<MaterialListTableInOut />}/>
-                  <Route path="/inOut/material/materialDetails/:id/:name/:unit/:remainingQty/:status" element={<MaterialDetailsInOut/>}/>
-                  <Route path="/inOut/material/transactionTable" element={<TransactionTableMaterialInOut />}/>
-                  <Route path="/inOut/material/categories" element={<CategoriesTableMaterialInOut />}/>
-                  <Route path="/inOut/material/materialInOut" element={<StockInOutMaterialInOut />}/>
-                  <Route path="/inOut/factory/productTable" element={<FinalProductListTableInOut />}/>
-                  <Route path="/inOut/factory/categoryWiseOut" element={<CategoryWiseOutInOut />}/>
-                  <Route path="/inOut/factory/productDetails/:id/:name/:unit/:remainingQty" element={<FinalProductDetailsInOut/>}/>
-                  <Route path="/inOut/factory/production" element={<StockInOutFactoryInOut/>}/>
-                  <Route path="/inOut/factory/rawMaterialTable" element={<MaterialTableByDepartmentInOut />}/>
-                  <Route path="/inOut/distributor/transactionTable" element={<TransactionTableDistributerInOut />}/>
-                  <Route path="/inOut/distributor/addDistributor" element={<AddFactoryDistributerInOut />}/>
-                  <Route path="/inOut/distributor/distributorTable" element={<FactoryDistributerTableInOut />}/>
-                  <Route path="/inOut/distributor/editDistributor/:id" element={<EditFactoryDistributerInOut/>}/>
-                  <Route path="/inOut/distributor/distributorDetails/:id" element={<FactoryDistributerDetailInOut/>}/>
-                  
-                  
-                  <Route path="/stock/material/materialTable" element={<MaterialListTableStock />}/>
-                  <Route path="/stock/material/materialDetails/:id/:name/:unit/:remainingQty/:status" element={<MaterialDetailsStock/>}/>
-                  <Route path="/stock/factory/productTable" element={<FinalProductListTableStock />}/>
-                  <Route path="/stock/factory/productDetails/:id/:name/:unit/:remainingQty" element={<FinalProductDetailsStock/>}/>                  
-                  <Route path="/stock/factory/rawMaterialTable" element={<MaterialTableByDepartmentStock />}/>
-                </Route>
-                <Route path="/" element={<ProtectedFactoryRoutes/>}>
-                  <Route path="/dashboardFactory" element={<FactoryDashboard/>}/>
-                   <Route path="/material/addSupplier" element={<AddFactorySupplier />}/>
-                  <Route path="/material/editSupplier/:id" element={<EditFactorySupplier/>}/>
-                  <Route path="/material/supplierTable" element={<FactorySupplierTable />}/>
-                  <Route path="/material/supplierDetails/:id" element={<FactorySupplierDetail/>}/>
-                  <Route path="/material/stockOutByCategory/:category/:categoryId" element={<StockOutByCategoryMaterial/>}/>
-                  <Route path="/material/stockInByCategory/:category/:categoryId" element={<StockOutByCategoryStockInMaterial/>}/>
-                  <Route path="/material/materialTable" element={<MaterialListTable />}/>
-                  <Route path="/material/materialDetails/:id/:name/:unit/:remainingQty/:status" element={<MaterialDetails/>}/>
-                  <Route path="/material/transactionTable" element={<TransactionTableMaterial />}/>
-                  <Route path="/material/categories" element={<CategoriesTableMaterial />}/>
-                  <Route path="/material/materialInOut" element={<StockInOutMaterial />}/>
-                  <Route path="/material/editHistory/:id" element={<EditHistoryMaterial/>}/>
-                  <Route path="/factory/productTable" element={<FinalProductListTable />}/>
-                  <Route path="/factory/categoryWiseOut" element={<CategoryWiseOut />}/>
-                  <Route path="/factory/productDetails/:id/:name/:unit/:remainingQty" element={<FinalProductDetails/>}/>
-                  <Route path="/factory/production" element={<StockInOutFactory/>}/>
-                  <Route path="/factory/rawMaterialTable" element={<MaterialTableByDepartment />}/>
-                  <Route path="/distributor/transactionTable" element={<TransactionTableDistributer />}/>
-                  <Route path="/distributor/addDistributor" element={<AddFactoryDistributer />}/>
-                  <Route path="/distributor/distributorTable" element={<FactoryDistributerTable />}/>
-                  <Route path="/distributor/editDistributor/:id" element={<EditFactoryDistributer/>}/>
-                  <Route path="/distributor/distributorDetails/:id" element={<FactoryDistributerDetail/>}/>
-                </Route>
-                <Route path="/" element={<ProtectedUserRoutes/>}>
-                  <Route path="/dashboard" element={<Dashboard/>}/>
-                  <Route path="/addUser" element={<AddUser />}/>
-                  <Route path="/addSupplier" element={<AddSupplier />}/>
-                  <Route path="/userTable" element={<UserTable />}/>
-                  <Route path="/userTableOwner" element={<UserTableOwner />}/>
-                  {/* <Route path="/productList" element={<ProductList />}/> */}
-                  <Route path="/productTable" element={<ProductListTable />}/>
-                  <Route path="/stockInOut" element={<StockInOut />}/>
-                  <Route path="/transactionTable" element={<TransactionTable />}/>
-                  <Route path="/supplierTable" element={<SupplierTable />}/>
-                  <Route path="/categories" element={<CategoriesTable />}/>
-                  <Route path="/editUser/:id" element={<EditUser/>}/>
-                  <Route path="/editHistory/:id" element={<EditHistory/>}/>
-                  <Route path="/editSupplier/:id" element={<EditSupplier/>}/>
-                  <Route path="/supplierDetails/:id" element={<SupplierDetail/>}/>
-                  <Route path="/supplierDetailsOwner/:id" element={<SupplierDetailOwner/>}/>
-                  <Route path="/stockOutByCategory/:category/:categoryId" element={<StockOutByCategory/>}/>
-                  <Route path="/stockInByCategory/:category/:categoryId" element={<StockOutByCategoryStockIn/>}/>
-                  <Route path="/productDetails/:id/:name/:unit/:remainingQty" element={<ProductDetails/>}/>
-                </Route>
-                {/* <Route path='/thermal' exact element={<PrintButton />}/> */}
-                {/* <Route path='/setPrinter' exact element={<SetPrinter />}/> */}
-                <Route path='/login' exact element={<LoginPage />}/>
-                <Route path='*' element={<PageNotFoundRedirect/>}/>
-              </Routes>
-            </div>
-    </BrowserRouter>
+            <Route path="/" element={<ProtectedFactoryManagerRoutes />}>
+              <Route path="/dashboardFactory" element={<FactoryDashboard />} />
+              <Route path="/inOut/material/addSupplier" element={<AddFactorySupplierInOut />} />
+              <Route path="/inOut/material/editSupplier/:id" element={<EditFactorySupplierInOut />} />
+              <Route path="/inOut/material/supplierTable" element={<FactorySupplierTableInOut />} />
+              <Route path="/inOut/material/supplierDetails/:id" element={<FactorySupplierDetailInOut />} />
+              <Route path="/inOut/material/stockOutByCategory/:category/:categoryId" element={<StockOutByCategoryMaterialInOut />} />
+              <Route path="/inOut/material/stockInByCategory/:category/:categoryId" element={<StockOutByCategoryStockInMaterialInOut />} />
+              <Route path="/inOut/material/materialTable" element={<MaterialListTableInOut />} />
+              <Route path="/inOut/material/materialDetails/:id/:name/:unit/:remainingQty/:status" element={<MaterialDetailsInOut />} />
+              <Route path="/inOut/material/transactionTable" element={<TransactionTableMaterialInOut />} />
+              <Route path="/inOut/material/categories" element={<CategoriesTableMaterialInOut />} />
+              <Route path="/inOut/material/materialInOut" element={<StockInOutMaterialInOut />} />
+              <Route path="/inOut/factory/productTable" element={<FinalProductListTableInOut />} />
+              <Route path="/inOut/factory/categoryWiseOut" element={<CategoryWiseOutInOut />} />
+              <Route path="/inOut/factory/productDetails/:id/:name/:unit/:remainingQty" element={<FinalProductDetailsInOut />} />
+              <Route path="/inOut/factory/production" element={<StockInOutFactoryInOut />} />
+              <Route path="/inOut/factory/rawMaterialTable" element={<MaterialTableByDepartmentInOut />} />
+              <Route path="/inOut/distributor/transactionTable" element={<TransactionTableDistributerInOut />} />
+              <Route path="/inOut/distributor/addDistributor" element={<AddFactoryDistributerInOut />} />
+              <Route path="/inOut/distributor/distributorTable" element={<FactoryDistributerTableInOut />} />
+              <Route path="/inOut/distributor/editDistributor/:id" element={<EditFactoryDistributerInOut />} />
+              <Route path="/inOut/distributor/distributorDetails/:id" element={<FactoryDistributerDetailInOut />} />
+
+
+              <Route path="/stock/material/materialTable" element={<MaterialListTableStock />} />
+              <Route path="/stock/material/materialDetails/:id/:name/:unit/:remainingQty/:status" element={<MaterialDetailsStock />} />
+              <Route path="/stock/factory/productTable" element={<FinalProductListTableStock />} />
+              <Route path="/stock/factory/productDetails/:id/:name/:unit/:remainingQty" element={<FinalProductDetailsStock />} />
+              <Route path="/stock/factory/rawMaterialTable" element={<MaterialTableByDepartmentStock />} />
+            </Route>
+            <Route path="/" element={<ProtectedFactoryRoutes />}>
+              <Route path="/dashboardFactory" element={<FactoryDashboard />} />
+              <Route path="/material/addSupplier" element={<AddFactorySupplier />} />
+              <Route path="/material/editSupplier/:id" element={<EditFactorySupplier />} />
+              <Route path="/material/supplierTable" element={<FactorySupplierTable />} />
+              <Route path="/material/supplierDetails/:id" element={<FactorySupplierDetail />} />
+              <Route path="/material/stockOutByCategory/:category/:categoryId" element={<StockOutByCategoryMaterial />} />
+              <Route path="/material/stockInByCategory/:category/:categoryId" element={<StockOutByCategoryStockInMaterial />} />
+              <Route path="/material/materialTable" element={<MaterialListTable />} />
+              <Route path="/material/materialDetails/:id/:name/:unit/:remainingQty/:status" element={<MaterialDetails />} />
+              <Route path="/material/transactionTable" element={<TransactionTableMaterial />} />
+              <Route path="/material/categories" element={<CategoriesTableMaterial />} />
+              <Route path="/material/materialInOut" element={<StockInOutMaterial />} />
+              <Route path="/material/editHistory/:id" element={<EditHistoryMaterial />} />
+              <Route path="/factory/productTable" element={<FinalProductListTable />} />
+              <Route path="/factory/categoryWiseOut" element={<CategoryWiseOut />} />
+              <Route path="/factory/productDetails/:id/:name/:unit/:remainingQty" element={<FinalProductDetails />} />
+              <Route path="/factory/production" element={<StockInOutFactory />} />
+              <Route path="/factory/rawMaterialTable" element={<MaterialTableByDepartment />} />
+              <Route path="/distributor/transactionTable" element={<TransactionTableDistributer />} />
+              <Route path="/distributor/addDistributor" element={<AddFactoryDistributer />} />
+              <Route path="/distributor/distributorTable" element={<FactoryDistributerTable />} />
+              <Route path="/distributor/editDistributor/:id" element={<EditFactoryDistributer />} />
+              <Route path="/distributor/distributorDetails/:id" element={<FactoryDistributerDetail />} />
+            </Route>
+            <Route path="/" element={<ProtectedUserRoutes />}>
+              <Route path='/menu/Dashboard' element={<MenuDashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/addUser" element={<AddUser />} />
+              <Route path="/addSupplier" element={<AddSupplier />} />
+              <Route path="/userTable" element={<UserTable />} />
+              <Route path="/userTableOwner" element={<UserTableOwner />} />
+              {/* <Route path="/productList" element={<ProductList />}/> */}
+              <Route path="/productTable" element={<ProductListTable />} />
+              <Route path="/stockInOut" element={<StockInOut />} />
+              <Route path="/transactionTable" element={<TransactionTable />} />
+              <Route path="/supplierTable" element={<SupplierTable />} />
+              <Route path="/categories" element={<CategoriesTable />} />
+              <Route path="/editUser/:id" element={<EditUser />} />
+              <Route path="/editHistory/:id" element={<EditHistory />} />
+              <Route path="/editSupplier/:id" element={<EditSupplier />} />
+              <Route path="/supplierDetails/:id" element={<SupplierDetail />} />
+              <Route path="/supplierDetailsOwner/:id" element={<SupplierDetailOwner />} />
+              <Route path="/stockOutByCategory/:category/:categoryId" element={<StockOutByCategory />} />
+              <Route path="/stockInByCategory/:category/:categoryId" element={<StockOutByCategoryStockIn />} />
+              <Route path="/productDetails/:id/:name/:unit/:remainingQty" element={<ProductDetails />} />
+            </Route>
+            {/* <Route path='/thermal' exact element={<PrintButton />}/> */}
+            {/* <Route path='/setPrinter' exact element={<SetPrinter />}/> */}
+            <Route path='/login' exact element={<LoginPage />} />
+            <Route path='*' element={<PageNotFoundRedirect />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
     </div>
   );
 }
