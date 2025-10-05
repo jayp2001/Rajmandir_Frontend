@@ -94,6 +94,8 @@ import FactoryDistributerTableInOut from './pages/factoryInventoryInOut/distribu
 import EditFactoryDistributerInOut from './pages/factoryInventoryInOut/editDistributer/editDistributer';
 import FactoryDistributerDetailInOut from './pages/factoryInventoryInOut/distributerDetails/distributerDetails';
 import MenuDashboard from './pages/inventory/menu/Dashboard';
+import AddOns from './pages/addOns/addOns';
+import AssignAddonGroup from './pages/assignAddonGroup/AssignAddonGroup';
 // import SetPrinter from './setPrinter';
 function App() {
   return (
@@ -191,6 +193,8 @@ function App() {
             </Route>
             <Route path="/" element={<ProtectedUserRoutes />}>
               <Route path='/menu/Dashboard' element={<MenuDashboard />} />
+              <Route path='/menu/addOns' element={<AddOns />} />
+              <Route path='/menu/assignAddonGroup/:groupId/:groupName' element={<AssignAddonGroup />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/addUser" element={<AddUser />} />
               <Route path="/addSupplier" element={<AddSupplier />} />

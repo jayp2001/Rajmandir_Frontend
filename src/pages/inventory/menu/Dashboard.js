@@ -466,7 +466,7 @@ function MenuDashboard() {
                 itemShortKey: fullData.itemShortKey.trim().length === 0,
                 spicyLevel: !fullData?.spicyLevel,
                 itemSubCategory: !fullData.itemSubCategory,
-                variantsList: variantFields.length === 0 || variantFields.some(variant => variant.unit.trim().length === 0 || variant.price.trim().length === 0)
+                variantsList: variantFields.length === 0 || variantFields.some(variant => variant.unit.trim().length === 0 || String(variant.price).trim().length === 0)
             };
             setAllFormValidation(formValidation);
         } else {
@@ -476,7 +476,7 @@ function MenuDashboard() {
                 itemCode: editData.itemCode === null,
                 itemShortKey: editData.itemShortKey.trim().length === 0,
                 itemSubCategory: !editData.itemSubCategory,
-                variantsList: variantFields.length === 0 || variantFields.some(variant => variant.unit.trim().length === 0 || variant.price === null || variant.price.trim().length === 0)
+                variantsList: variantFields.length === 0 || variantFields.some(variant => variant.unit.trim().length === 0 || variant.price === null || String(variant.price).trim().length === 0)
             };
             setAllFormValidation(formValidation);
         }
@@ -740,7 +740,10 @@ function MenuDashboard() {
             if (!variantUpdated) {
                 updatedVariantFields.push({
                     unit: defaultUnit,
-                    price: defaultPrice
+                    price: defaultPrice,
+                    status: true,
+                    preferredName: '',
+                    preferredNameIsGujarati: true
                 });
             }
 
@@ -757,7 +760,7 @@ function MenuDashboard() {
                     ? prevState.variantsList.filter(v => v.unit !== defaultUnit)
                     : [
                         ...prevState.variantsList.filter(v => v.unit !== defaultUnit),
-                        { unit: defaultUnit, price: defaultPrice, status: true }
+                        { unit: defaultUnit, price: defaultPrice, status: true, preferredName: '', preferredNameIsGujarati: true }
                     ]
             }));
             console.log('State Management', editData)
@@ -769,7 +772,7 @@ function MenuDashboard() {
                     ? prevState.variantsList.filter(v => v.unit !== defaultUnit)
                     : [
                         ...prevState.variantsList.filter(v => v.unit !== defaultUnit),
-                        { unit: defaultUnit, price: defaultPrice, status: true }
+                        { unit: defaultUnit, price: defaultPrice, status: true, preferredName: '', preferredNameIsGujarati: true }
                     ]
             }));
         }
@@ -868,7 +871,15 @@ function MenuDashboard() {
         setVariantEditData(item.variantsList);
         setSubCategoryName(item.subCategoryName);
         setEditItem(true);
-        setVariantFields(item.variantsList);
+
+        // Ensure variants have the new preferredName fields with defaults
+        const variantsWithDefaults = item.variantsList.map(variant => ({
+            ...variant,
+            preferredName: variant.preferredName || '',
+            preferredNameIsGujarati: variant.preferredNameIsGujarati !== undefined ? variant.preferredNameIsGujarati : true
+        }));
+
+        setVariantFields(variantsWithDefaults);
         setGetAllUnit(prevUnits => prevUnits.filter(u => !item.allVariantsList.some(variant => variant.unit === u)));
     };
 
@@ -1004,7 +1015,15 @@ function MenuDashboard() {
     const handleManualVariantsname = (data) => {
         console.log('Data', data)
         setVariantsItemObject(data);
-        setVariantEditData(data.allVariantsList);
+
+        // Ensure variants have the new preferredName fields with defaults
+        const variantsWithDefaults = data.allVariantsList.map(variant => ({
+            ...variant,
+            preferredName: variant.preferredName || '',
+            preferredNameIsGujarati: variant.preferredNameIsGujarati !== undefined ? variant.preferredNameIsGujarati : true
+        }));
+
+        setVariantEditData(variantsWithDefaults);
         setManualVariantsPopUp(true);
     };
 

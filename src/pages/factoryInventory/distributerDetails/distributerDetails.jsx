@@ -436,7 +436,7 @@ function FactoryDistributerDetail() {
         }
     }
     const deleteStockIn = async (id) => {
-        await axios.delete(`${BACKEND_BASE_URL}mfProductrouter/removeRawMaterialStockInTransaction?rmStockInId=${id}`, config)
+        await axios.delete(`${BACKEND_BASE_URL}mfProductrouter/removeMfProductStockOutTransaction?mfStockOutId=${id}`, config)
             .then((res) => {
                 setSuccess(true)
             })
@@ -445,7 +445,7 @@ function FactoryDistributerDetail() {
             })
     }
     const handleDeleteStockIn = (id) => {
-        if (window.confirm("Are you sure you want to delete Stock In?")) {
+        if (window.confirm("Are you sure you want to delete Transaction?")) {
             deleteStockIn(id);
             setTimeout(() => {
                 getStockInData();
@@ -453,7 +453,7 @@ function FactoryDistributerDetail() {
         }
     }
     const deleteData = async (id) => {
-        await axios.delete(`${BACKEND_BASE_URL}mfProductrouter/removeFactorySupplierTransactionDetails?supplierTransactionId=${id}`, config)
+        await axios.delete(`${BACKEND_BASE_URL}mfProductrouter/removeFactoryDistributorTransactionDetails?distributorTransactionId=${id}`, config)
             .then((res) => {
                 getStatistics();
                 setSuccess(true)
@@ -1098,7 +1098,7 @@ function FactoryDistributerDetail() {
                                                     <Tooltip title={row.stockInComment} placement="top-start" arrow><TableCell align="left" ><div className='Comment'>{row.stockInComment}</div></TableCell></Tooltip>
                                                     <TableCell align="left" >{row.sellDate}</TableCell>
                                                     <TableCell align="right">
-                                                        <MenuStockInOut stockInOutId={row.rmStockInId} data={row} deleteStockInOut={handleDeleteStockIn} />
+                                                        <MenuStockInOut stockInOutId={row.mfStockOutId} data={row} deleteStockInOut={handleDeleteStockIn} />
                                                     </TableCell>
                                                 </TableRow> :
                                                 <TableRow
