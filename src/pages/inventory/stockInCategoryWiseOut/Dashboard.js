@@ -32,6 +32,7 @@ import Popover from '@mui/material/Popover';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CloseIcon from '@mui/icons-material/Close';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { DateRangePicker } from 'react-date-range';
@@ -283,6 +284,42 @@ function StockInCategoryWiseOutDashboard() {
         }
     };
 
+    const handleExportExcel = async () => {
+        if (window.confirm('Are you sure you want to export Excel ... ?')) {
+            if (!selectedCategoryId || !selectedStockOutCategoryId) {
+                setError('Please select a category and stock out category');
+                return;
+            }
+
+            let url = filter
+                ? `${BACKEND_BASE_URL}inventoryrouter/exportExcelOutStockByCategory?productCategory=${selectedCategoryId}&outCategory=${selectedStockOutCategoryId}&startDate=${state[0].startDate.toDateString()}&endDate=${state[0].endDate.toDateString()}`
+                : `${BACKEND_BASE_URL}inventoryrouter/exportExcelOutStockByCategory?productCategory=${selectedCategoryId}&outCategory=${selectedStockOutCategoryId}&startDate=${new Date('2001-01-10').toDateString()}&endDate=${new Date('2030-01-10').toDateString()}`;
+
+            await axios({
+                url: url,
+                method: 'GET',
+                headers: { Authorization: `Bearer ${userInfo.token}` },
+                responseType: 'blob', // important
+            }).then((response) => {
+                // create file link in browser's memory
+                const href = URL.createObjectURL(response.data);
+                // create "a" HTML element with href to file & click
+                const link = document.createElement('a');
+                const name = 'Stock_Out_List_' + new Date().toLocaleDateString() + '.xlsx'
+                link.href = href;
+                link.setAttribute('download', name); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+
+                // clean up "a" element & remove ObjectURL
+                document.body.removeChild(link);
+                URL.revokeObjectURL(href);
+            }).catch((error) => {
+                setError("Error No Data...!!!")
+            })
+        }
+    };
+
     if (success) {
         toast('success', {
             type: 'success',
@@ -330,7 +367,11 @@ function StockInCategoryWiseOutDashboard() {
                             </div>
                         </div>
                         <div className='flex gap-4 col-span-3 justify-self-end w-full pr-3 h-full justify-end'>
-                            <div className='self-center'>
+                            <div className='self-center flex gap-2'>
+                                <button className='addProductBtn' onClick={handleExportExcel}>
+                                    <FileDownloadIcon style={{ marginRight: '8px', fontSize: '20px' }} />
+                                    Export Excel
+                                </button>
                                 <button className='addProductBtn' onClick={handleExportPDF}>
                                     <PictureAsPdfIcon style={{ marginRight: '8px', fontSize: '20px' }} />
                                     Export PDF
