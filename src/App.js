@@ -93,7 +93,7 @@ import FactoryDistributerTableInOut from './pages/factoryInventoryInOut/distribu
 import EditFactoryDistributerInOut from './pages/factoryInventoryInOut/editDistributer/editDistributer';
 import FactoryDistributerDetailInOut from './pages/factoryInventoryInOut/distributerDetails/distributerDetails';
 import MenuDashboard from './pages/menuItemPages/Dashboard/Dashboard';
-import AddOns from './pages/addOns/addOns';
+import AddOns from './pages/menuItemPages/addOns/addOns';
 import AssignAddonGroup from './pages/assignAddonGroup/AssignAddonGroup';
 import StockInCategoryWiseOutDashboard from './pages/inventory/stockInCategoryWiseOut/Dashboard';
 import BillingDashboard from './pages/billing/dashboard/billingDashboard';

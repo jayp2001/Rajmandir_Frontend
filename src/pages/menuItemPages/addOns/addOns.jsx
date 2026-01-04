@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './addOns.css'
 import axios from 'axios'
-import { BACKEND_BASE_URL } from '../../url'
+import { BACKEND_BASE_URL } from '../../../url'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import {

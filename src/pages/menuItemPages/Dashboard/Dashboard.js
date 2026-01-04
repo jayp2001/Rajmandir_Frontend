@@ -335,7 +335,7 @@ function MenuDashboard() {
             preferredName: '',
             preferredNameIsGujarati: true
         })
-        setUnit({ unit: '', price: '1', status: true, preferredName: '', preferredNameIsGujarati: true });
+        setUnit({ unit: '', price: '', status: true, preferredName: '', preferredNameIsGujarati: true });
         setPrice(null)
         setSubCategoryId('')
         setCopyMenuCheckBox(false)
@@ -356,7 +356,7 @@ function MenuDashboard() {
     const [variantFieldsMap, setVariantFieldsMap] = useState({});
     const [subCategories, setSubCategories] = useState([]);
     const [getAllUnit, setGetAllUnit] = useState();
-    const [unit, setUnit] = React.useState({ unit: '', price: '1', status: true, preferredName: '', preferredNameIsGujarati: true });
+    const [unit, setUnit] = React.useState({ unit: '', price: '', status: true, preferredName: '', preferredNameIsGujarati: true });
     const [commonPreferredNameIsGujarati, setCommonPreferredNameIsGujarati] = useState(true);
     const [subCategoryId, setSubCategoryId] = useState(null);
     const priceInputRef = useRef(null);
@@ -773,7 +773,7 @@ function MenuDashboard() {
         }
 
         setGetAllUnit(prevUnits => prevUnits.filter(u => u !== unit.unit));
-        setUnit({ unit: '', price: '1', status: true, preferredName: '', preferredNameIsGujarati: commonPreferredNameIsGujarati });
+        setUnit({ unit: '', price: '', status: true, preferredName: '', preferredNameIsGujarati: commonPreferredNameIsGujarati });
         setAddVariant(true);
         addingUnitName.current && addingUnitName.current.focus();
     };
@@ -2534,12 +2534,6 @@ function MenuDashboard() {
                                         error={allFormValidation.unitPrice ? true : false}
                                         helperText={allFormValidation.unitPrice ? 'Price is required' : ''}
                                         inputRef={priceInputRef}
-                                        onFocus={() => {
-                                            // Auto-select first available unit if none is selected
-                                            if (!unit.unit && getAllUnit && getAllUnit.length > 0) {
-                                                setUnit(prev => ({ ...prev, unit: getAllUnit[0] }));
-                                            }
-                                        }}
                                         onKeyPress={(e) => {
                                             if (e.key === 'Enter') {
                                                 e.preventDefault();
