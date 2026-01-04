@@ -140,12 +140,18 @@ function StockInCategoryWiseOutDashboard() {
     }, [selectedCategoryId, selectedStockOutCategoryId, filter]);
 
     useEffect(() => {
+        if (!Array.isArray(tableData)) {
+            setFilteredData([]);
+            return;
+        }
+
         if (searchTerm) {
             const lowerCaseSearchTerm = searchTerm.toLowerCase();
             const filtered = tableData.filter(item => {
                 return (
                     item?.productName?.toLowerCase()?.includes(lowerCaseSearchTerm) ||
-                    item?.remainingStock?.toLowerCase()?.includes(lowerCaseSearchTerm)
+                    String(item?.remainingStock || '').toLowerCase()?.includes(lowerCaseSearchTerm) ||
+                    String(item?.totalOutPrice || '').toLowerCase()?.includes(lowerCaseSearchTerm)
                 );
             });
             setFilteredData(filtered);
@@ -199,11 +205,14 @@ function StockInCategoryWiseOutDashboard() {
             }
 
             const response = await axios.get(url, config);
-            setTableData(response.data || []);
-            setFilteredData(response.data || []);
-            setItemDataNull(response.data?.length === 0);
+            const data = Array.isArray(response.data) ? response.data : [];
+            setTableData(data);
+            setFilteredData(data);
+            setItemDataNull(data.length === 0);
         } catch (error) {
             setError(error?.response?.data || 'Network Error!!!...');
+            setTableData([]);
+            setFilteredData([]);
             setItemDataNull(true);
         }
     };
@@ -448,22 +457,36 @@ function StockInCategoryWiseOutDashboard() {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody className=''>
-                                            {filteredData.map((item, index) => (
-                                                <TableRow key={index}>
-                                                    <TableCell style={{ maxWidth: '15px', width: '15px' }}>
-                                                        {index + 1}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {item.productName || '-'}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {item.remainingStock || '-'}
-                                                    </TableCell>
-                                                    <TableCell align="right">
-                                                        {item.totalOutPrice ? `₹${item.totalOutPrice.toLocaleString()}` : '₹0'}
+                                            {Array.isArray(filteredData) && filteredData.length > 0 ? (
+                                                filteredData.map((item, index) => (
+                                                    <TableRow key={index}>
+                                                        <TableCell style={{ maxWidth: '15px', width: '15px' }}>
+                                                            {index + 1}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {item.productName || '-'}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {item.remainingStock || '-'}
+                                                        </TableCell>
+                                                        <TableCell align="right">
+                                                            {item.totalOutPrice ? `₹${item.totalOutPrice.toLocaleString()}` : '₹0'}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))
+                                            ) : (
+                                                <TableRow>
+                                                    <TableCell colSpan={4} align="center" style={{ padding: '40px' }}>
+                                                        <div className="text-center">
+                                                            <RestaurantMenuIcon className='restaurantMenu' />
+                                                            <br />
+                                                            <div className="text-2xl text-gray">
+                                                                No Data Found
+                                                            </div>
+                                                        </div>
                                                     </TableCell>
                                                 </TableRow>
-                                            ))}
+                                            )}
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
