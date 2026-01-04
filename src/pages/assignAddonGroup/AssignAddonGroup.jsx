@@ -438,7 +438,7 @@ function AssignAddonGroup() {
             setError("Please Fill All Fields");
             return;
         }
-        const token = localStorage.getItem("token");
+        const token = userInfo.token;
         console.log("Full Form Data", fullData);
 
         if (!editItem) {
@@ -567,7 +567,7 @@ function AssignAddonGroup() {
     };
 
     const getAllCategory = async () => {
-        const token = localStorage.getItem("token");
+        const token = userInfo.token;
         try {
             const response = await axios.get(
                 `${BACKEND_BASE_URL}menuItemrouter/getMenuCategory`,
@@ -603,7 +603,7 @@ function AssignAddonGroup() {
 
         if (enteredPassword === password) {
             try {
-                const token = localStorage.getItem("token");
+                const token = userInfo.token;
                 const response = await axios.delete(
                     `${BACKEND_BASE_URL}menuItemrouter/removeItemData?itemId=${id}`,
                     config
@@ -824,7 +824,7 @@ function AssignAddonGroup() {
     const getSubCategory = async (menu) => {
         console.log("sub Category MenuId ===>>", menu);
         try {
-            const token = localStorage.getItem("token");
+            const token = userInfo.token;
             const response = await axios.get(
                 `${BACKEND_BASE_URL}menuItemrouter/ddlSubCategory?menuId=${menu}`,
                 config
@@ -854,7 +854,7 @@ function AssignAddonGroup() {
     };
     const updatedSubCategory = async (menu) => {
         try {
-            const token = localStorage.getItem("token");
+            const token = userInfo.token;
             const response = await axios.get(
                 `${BACKEND_BASE_URL}menuItemrouter/ddlSubCategory?menuId=${menu}`,
                 config
@@ -900,7 +900,7 @@ function AssignAddonGroup() {
 
     const getAllUnits = async () => {
         try {
-            const token = localStorage.getItem("token");
+            const token = userInfo.token;
             const response = await axios.get(
                 `${BACKEND_BASE_URL}menuItemrouter/getUnit`,
                 config
@@ -924,7 +924,7 @@ function AssignAddonGroup() {
         setSubCategoryStatus(status);
         setSearchTerm("");
 
-        const token = localStorage.getItem("token");
+        const token = userInfo.token;
         try {
             setSideBarColor(true);
             const response = await axios.get(
@@ -1090,7 +1090,7 @@ function AssignAddonGroup() {
         handleSubCategoryClick(finalSelected, menuId);
     };
     const handleEditPrice = async () => {
-        const token = localStorage.getItem("token");
+        const token = userInfo.token;
         const isConfirm = window.confirm(
             "Are you sure You want to Save this change"
         );
@@ -1150,7 +1150,7 @@ function AssignAddonGroup() {
         setGetAllUnit((prevGetAllUnit) => [...prevGetAllUnit]);
     };
     const handleUpdateVariantsData = async () => {
-        const token = localStorage.getItem("token");
+        const token = userInfo.token;
         const newData = {
             itemName: varinatsItemObject.itemName,
             itemDescription: varinatsItemObject.itemDescription,
@@ -1245,7 +1245,7 @@ function AssignAddonGroup() {
         }
     };
     const handleItemStatusChange = async (item) => {
-        const token = localStorage.getItem("token");
+        const token = userInfo.token;
         const userEnteredPassword = prompt("Enter password to continue:");
         const correctPassword = "123";
 
@@ -1282,7 +1282,7 @@ function AssignAddonGroup() {
         setVariantMode({ isEdit: true });
     };
     const handleSubCategoryStatusChange = async () => {
-        const token = localStorage.getItem("token");
+        const token = userInfo.token;
         const userEnteredPassword = prompt("Enter password to continue:");
         const correctPassword = "123";
 
@@ -1331,7 +1331,7 @@ function AssignAddonGroup() {
         }
         console.log("==>Menu Name <<===", menuName);
         console.log("==>Source id <<===", copySource);
-        const token = localStorage.getItem("token");
+        const token = userInfo.token;
         const mainMenuId = menuName?.menuCategoryId;
         const sourceId = copySource?.menuCategoryId;
         let url = `${BACKEND_BASE_URL}menuItemrouter/copyPriceAndStatusByMenuId?sourceId=${sourceId}&targetId=${mainMenuId}`;

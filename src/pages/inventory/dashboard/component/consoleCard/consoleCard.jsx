@@ -10,6 +10,12 @@ import bank from '../../../../../assets/bank.png';
 import report from '../../../../../assets/report.png';
 import factory from '../../../../../assets/factory/factory.png'
 import units from '../../../../../assets/factory/unit.png'
+import Menu from '../../../../../assets/menu.png'
+import comment from '../../../../../assets/comment.png'
+import gst from '../../../../../assets/gst.png'
+import upi from '../../../../../assets/upi.svg'
+import billcategory from '../../../../../assets/billcategory.png'
+import checkout from '../../../../../assets/checkout.png'
 function ConsoleCard(props) {
     const getImg = (imgname) => {
         switch (imgname) {
@@ -25,10 +31,27 @@ function ConsoleCard(props) {
                 return bank;
             case 'report':
                 return report;
+            case 'sales':
+                return report;
+            case 'Menu':
+                return Menu;
+            case 'comment':
+                return comment;
+            case 'upi':
+                return upi;
+            case 'firm':
+                return gst;
+            case 'customer':
+                return userList;
+            case 'category':
+                return billcategory;
             case 'factory':
                 return factory;
             case 'units':
                 return units;
+            case 'checkout':
+            case 'billing':
+                return checkout;
             default:
                 return userAdd;
         }

@@ -558,6 +558,14 @@ function NavBar() {
                                                             <ListItemText primary={'Transaction History'} />
                                                         </ListItemButton>
                                                     </ListItem>
+                                                    <ListItem key={7}>
+                                                        <ListItemButton to="/stockInCategoryWiseOut">
+                                                            <ListItemIcon>
+                                                                <AssessmentIcon />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary={'Out Report'} />
+                                                        </ListItemButton>
+                                                    </ListItem>
                                                 </>
                 }
             </List>
@@ -2240,12 +2248,752 @@ function NavBar() {
         </Box>
     );
 
+    const billingDashboard = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, color: 'gray' }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#333', color: '#fff' }}>
+                <div style={{ fontSize: 30 }}><InventoryIcon fontSize='large' />&nbsp;&nbsp;Billing</div>
+                <Button onClick={toggleDrawer(anchor, false)} color="inherit">
+                    <ArrowBackIcon fontSize='small' />
+                </Button>
+            </Box>
+            <Divider />
+            <List>
+                <ListItem key={1}>
+                    <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Dashboard'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={2}>
+                    <ListItemButton to="/billingDashboardOwner">
+                        <ListItemIcon>
+                            <WorkspacesIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Branches'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        </Box>
+    );
+
+    const billingBranchDashboard = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, color: 'gray' }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#333', color: '#fff' }}>
+                <div style={{ fontSize: 30 }}><InventoryIcon fontSize='large' />&nbsp;&nbsp;Billing</div>
+                <Button onClick={toggleDrawer(anchor, false)} color="inherit">
+                    <ArrowBackIcon fontSize='small' />
+                </Button>
+            </Box>
+            <Divider />
+            <List>
+                <ListItem key={1}>
+                    <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Dashboard'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={2}>
+                    <ListItemButton to="/billingDashboardOwner">
+                        <ListItemIcon>
+                            <WorkspacesIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Branches'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        </Box>
+    );
+
+    const menu = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, color: 'gray' }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#333', color: '#fff' }}>
+                <div style={{ fontSize: 35 }}><InventoryIcon fontSize='large' />&nbsp;&nbsp;Menu</div>
+                <Button onClick={toggleDrawer(anchor, false)} color="inherit">
+                    <ArrowBackIcon fontSize='small' />
+                </Button>
+            </Box>
+            <Divider />
+            <List>
+                <ListItem key={1}>
+                    <ListItemButton to="/billingDashboard">
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Billing Dashboard'} />
+                    </ListItemButton>
+                </ListItem>
+                {role == 1 && <ListItem key={2}>
+                    <ListItemButton to="/billingDashboardOwner">
+                        <ListItemIcon>
+                            <WorkspacesIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Branches'} />
+                    </ListItemButton>
+                </ListItem>}
+                <ListItem key={3}>
+                    <ListItemButton to="/menu/Dashboard">
+                        <ListItemIcon>
+                            <StyleOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Menu Dashboard'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={4}>
+                    <ListItemButton to="/menu/addOns">
+                        <ListItemIcon>
+                            <ListAltOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Add-Ons'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={5}>
+                    <ListItemButton to="/menu/SubCategory">
+                        <ListItemIcon>
+                            <DomainAddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Sub-Category'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={6}>
+                    <ListItemButton to="/menu/MenuCategory">
+                        <ListItemIcon>
+                            <CategoryIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Menu-Category'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        </Box>
+    );
+
+    const salesReport = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, color: 'gray' }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#333', color: '#fff' }}>
+                <div style={{ fontSize: 30 }}><InventoryIcon fontSize='large' />&nbsp;&nbsp;Sales Report</div>
+                <Button onClick={toggleDrawer(anchor, false)} color="inherit">
+                    <ArrowBackIcon fontSize='small' />
+                </Button>
+            </Box>
+            <Divider />
+            <List>
+                <ListItem key={1}>
+                    <ListItemButton to="/billingDashboard">
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Billing Dashboard'} />
+                    </ListItemButton>
+                </ListItem>
+                {role == 1 && <ListItem key={2}>
+                    <ListItemButton to="/billingDashboardOwner">
+                        <ListItemIcon>
+                            <WorkspacesIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Branches'} />
+                    </ListItemButton>
+                </ListItem>}
+                <ListItem key={3}>
+                    <ListItemButton to="/menu/Dashboard">
+                        <ListItemIcon>
+                            <StyleOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Menu'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={4}>
+                    <ListItemButton to="/comment">
+                        <ListItemIcon>
+                            <ListAltOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Comments'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={5}>
+                    <ListItemButton to="/upi">
+                        <ListItemIcon>
+                            <AccountBalanceWalletIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'UPI'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={6}>
+                    <ListItemButton to="/firmList">
+                        <ListItemIcon>
+                            <DomainAddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Firm List'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={7}>
+                    <ListItemButton to="/customerList">
+                        <ListItemIcon>
+                            <GroupAddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Customer List'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={8}>
+                    <ListItemButton to="/billCategories">
+                        <ListItemIcon>
+                            <CategoryIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Bill Categories'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        </Box>
+    );
+
+    const comment = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, color: 'gray' }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#333', color: '#fff' }}>
+                <div style={{ fontSize: 35 }}><InventoryIcon fontSize='large' />&nbsp;&nbsp;Comments</div>
+                <Button onClick={toggleDrawer(anchor, false)} color="inherit">
+                    <ArrowBackIcon fontSize='small' />
+                </Button>
+            </Box>
+            <Divider />
+            <List>
+                <ListItem key={1}>
+                    <ListItemButton to="/billingDashboard">
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Billing Dashboard'} />
+                    </ListItemButton>
+                </ListItem>
+                {role == 1 && <ListItem key={2}>
+                    <ListItemButton to="/billingDashboardOwner">
+                        <ListItemIcon>
+                            <WorkspacesIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Branches'} />
+                    </ListItemButton>
+                </ListItem>}
+                <ListItem key={3}>
+                    <ListItemButton to="/menu/Dashboard">
+                        <ListItemIcon>
+                            <StyleOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Menu'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={4}>
+                    <ListItemButton to="/menu/salesReport">
+                        <ListItemIcon>
+                            <AssessmentIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Sales Report'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={5}>
+                    <ListItemButton to="/upi">
+                        <ListItemIcon>
+                            <AccountBalanceWalletIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'UPI'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={6}>
+                    <ListItemButton to="/firmList">
+                        <ListItemIcon>
+                            <DomainAddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Firm List'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={7}>
+                    <ListItemButton to="/customerList">
+                        <ListItemIcon>
+                            <GroupAddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Customer List'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={8}>
+                    <ListItemButton to="/billCategories">
+                        <ListItemIcon>
+                            <CategoryIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Bill Categories'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        </Box>
+    );
+
+    const billCategories = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, color: 'gray' }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#333', color: '#fff' }}>
+                <div style={{ fontSize: 25 }}><InventoryIcon fontSize='large' />&nbsp;&nbsp;Bill Categories</div>
+                <Button onClick={toggleDrawer(anchor, false)} color="inherit">
+                    <ArrowBackIcon fontSize='small' />
+                </Button>
+            </Box>
+            <Divider />
+            <List>
+                <ListItem key={1}>
+                    <ListItemButton to="/billingDashboard">
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Billing Dashboard'} />
+                    </ListItemButton>
+                </ListItem>
+                {role == 1 && <ListItem key={2}>
+                    <ListItemButton to="/billingDashboardOwner">
+                        <ListItemIcon>
+                            <WorkspacesIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Branches'} />
+                    </ListItemButton>
+                </ListItem>}
+                <ListItem key={3}>
+                    <ListItemButton to="/menu/Dashboard">
+                        <ListItemIcon>
+                            <StyleOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Menu'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={4}>
+                    <ListItemButton to="/menu/salesReport">
+                        <ListItemIcon>
+                            <AssessmentIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Sales Report'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={5}>
+                    <ListItemButton to="/comment">
+                        <ListItemIcon>
+                            <ListAltOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Comments'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={6}>
+                    <ListItemButton to="/upi">
+                        <ListItemIcon>
+                            <AccountBalanceWalletIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'UPI'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={7}>
+                    <ListItemButton to="/firmList">
+                        <ListItemIcon>
+                            <DomainAddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Firm List'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={8}>
+                    <ListItemButton to="/customerList">
+                        <ListItemIcon>
+                            <GroupAddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Customer List'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        </Box>
+    );
+
+    const customerList = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, color: 'gray' }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#333', color: '#fff' }}>
+                <div style={{ fontSize: 28 }}><InventoryIcon fontSize='large' />&nbsp;&nbsp;Customer List</div>
+                <Button onClick={toggleDrawer(anchor, false)} color="inherit">
+                    <ArrowBackIcon fontSize='small' />
+                </Button>
+            </Box>
+            <Divider />
+            <List>
+                <ListItem key={1}>
+                    <ListItemButton to="/billingDashboard">
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Billing Dashboard'} />
+                    </ListItemButton>
+                </ListItem>
+                {role == 1 && <ListItem key={2}>
+                    <ListItemButton to="/billingDashboardOwner">
+                        <ListItemIcon>
+                            <WorkspacesIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Branches'} />
+                    </ListItemButton>
+                </ListItem>}
+                <ListItem key={3}>
+                    <ListItemButton to="/menu/Dashboard">
+                        <ListItemIcon>
+                            <StyleOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Menu'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={4}>
+                    <ListItemButton to="/menu/salesReport">
+                        <ListItemIcon>
+                            <AssessmentIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Sales Report'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={5}>
+                    <ListItemButton to="/comment">
+                        <ListItemIcon>
+                            <ListAltOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Comments'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={6}>
+                    <ListItemButton to="/upi">
+                        <ListItemIcon>
+                            <AccountBalanceWalletIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'UPI'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={7}>
+                    <ListItemButton to="/firmList">
+                        <ListItemIcon>
+                            <DomainAddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Firm List'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={8}>
+                    <ListItemButton to="/billCategories">
+                        <ListItemIcon>
+                            <CategoryIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Bill Categories'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        </Box>
+    );
+
+    const upi = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, color: 'gray' }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#333', color: '#fff' }}>
+                <div style={{ fontSize: 35 }}><InventoryIcon fontSize='large' />&nbsp;&nbsp;UPI</div>
+                <Button onClick={toggleDrawer(anchor, false)} color="inherit">
+                    <ArrowBackIcon fontSize='small' />
+                </Button>
+            </Box>
+            <Divider />
+            <List>
+                <ListItem key={1}>
+                    <ListItemButton to="/billingDashboard">
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Billing Dashboard'} />
+                    </ListItemButton>
+                </ListItem>
+                {role == 1 && <ListItem key={2}>
+                    <ListItemButton to="/billingDashboardOwner">
+                        <ListItemIcon>
+                            <WorkspacesIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Branches'} />
+                    </ListItemButton>
+                </ListItem>}
+                <ListItem key={3}>
+                    <ListItemButton to="/menu/Dashboard">
+                        <ListItemIcon>
+                            <StyleOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Menu'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={4}>
+                    <ListItemButton to="/menu/salesReport">
+                        <ListItemIcon>
+                            <AssessmentIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Sales Report'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={5}>
+                    <ListItemButton to="/comment">
+                        <ListItemIcon>
+                            <ListAltOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Comments'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={6}>
+                    <ListItemButton to="/firmList">
+                        <ListItemIcon>
+                            <DomainAddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Firm List'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={7}>
+                    <ListItemButton to="/customerList">
+                        <ListItemIcon>
+                            <GroupAddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Customer List'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={8}>
+                    <ListItemButton to="/billCategories">
+                        <ListItemIcon>
+                            <CategoryIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Bill Categories'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        </Box>
+    );
+
+    const firmList = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, color: 'gray' }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#333', color: '#fff' }}>
+                <div style={{ fontSize: 35 }}><InventoryIcon fontSize='large' />&nbsp;&nbsp;Firm List</div>
+                <Button onClick={toggleDrawer(anchor, false)} color="inherit">
+                    <ArrowBackIcon fontSize='small' />
+                </Button>
+            </Box>
+            <Divider />
+            <List>
+                <ListItem key={1}>
+                    <ListItemButton to="/billingDashboard">
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Billing Dashboard'} />
+                    </ListItemButton>
+                </ListItem>
+                {role == 1 && <ListItem key={2}>
+                    <ListItemButton to="/billingDashboardOwner">
+                        <ListItemIcon>
+                            <WorkspacesIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Branches'} />
+                    </ListItemButton>
+                </ListItem>}
+                <ListItem key={3}>
+                    <ListItemButton to="/menu/Dashboard">
+                        <ListItemIcon>
+                            <StyleOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Menu'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={4}>
+                    <ListItemButton to="/menu/salesReport">
+                        <ListItemIcon>
+                            <AssessmentIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Sales Report'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={5}>
+                    <ListItemButton to="/comment">
+                        <ListItemIcon>
+                            <ListAltOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Comments'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={6}>
+                    <ListItemButton to="/upi">
+                        <ListItemIcon>
+                            <AccountBalanceWalletIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'UPI'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={7}>
+                    <ListItemButton to="/customerList">
+                        <ListItemIcon>
+                            <GroupAddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Customer List'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={8}>
+                    <ListItemButton to="/billCategories">
+                        <ListItemIcon>
+                            <CategoryIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Bill Categories'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        </Box>
+    );
+
+    const customerDetail = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, color: 'gray' }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#333', color: '#fff' }}>
+                <div style={{ fontSize: 25 }}><InventoryIcon fontSize='large' />&nbsp;&nbsp;Customer Info</div>
+                <Button onClick={toggleDrawer(anchor, false)} color="inherit">
+                    <ArrowBackIcon fontSize='small' />
+                </Button>
+            </Box>
+            <Divider />
+            <List>
+                <ListItem key={1}>
+                    <ListItemButton to="/billingDashboard">
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Billing Dashboard'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={2}>
+                    <ListItemButton to="/customerList">
+                        <ListItemIcon>
+                            <GroupAddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Customer List'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        </Box>
+    );
+
+    const upiDetail = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, color: 'gray' }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#333', color: '#fff' }}>
+                <div style={{ fontSize: 35 }}><InventoryIcon fontSize='large' />&nbsp;&nbsp;UPI Detail</div>
+                <Button onClick={toggleDrawer(anchor, false)} color="inherit">
+                    <ArrowBackIcon fontSize='small' />
+                </Button>
+            </Box>
+            <Divider />
+            <List>
+                <ListItem key={1}>
+                    <ListItemButton to="/billingDashboard">
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Billing Dashboard'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={2}>
+                    <ListItemButton to="/upi">
+                        <ListItemIcon>
+                            <AccountBalanceWalletIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'UPI'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        </Box>
+    );
+
+    const firmDetail = (anchor) => (
+        <Box
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 300, color: 'gray' }}
+            role="presentation"
+            onClick={toggleDrawer(anchor, false)}
+            onKeyDown={toggleDrawer(anchor, false)}
+        >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#333', color: '#fff' }}>
+                <div style={{ fontSize: 35 }}><InventoryIcon fontSize='large' />&nbsp;&nbsp;Firm Detail</div>
+                <Button onClick={toggleDrawer(anchor, false)} color="inherit">
+                    <ArrowBackIcon fontSize='small' />
+                </Button>
+            </Box>
+            <Divider />
+            <List>
+                <ListItem key={1}>
+                    <ListItemButton to={role !== 6 ? "/dashboard" : "/dashboardFactory"}>
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Dashboard'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={2}>
+                    <ListItemButton to="/firmList">
+                        <ListItemIcon>
+                            <DomainAddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Firm List'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        </Box>
+    );
+
     return (
         <div className="navBar grid content-center">
             <div className='flex justify-between h-full'>
                 <div className='logoWrp flex h-full'>
                     {
-                        location.pathname.split('/')[1] != 'dashboard' ?
+                        location.pathname.split('/')[1] != 'dashboard' && location.pathname != '/billingDashboardOwner' ?
                             <div className='h-full grid content-center'>
                                 <div>
                                     {['left'].map((anchor) => (
@@ -2257,14 +3005,26 @@ function NavBar() {
                                                 onClose={toggleDrawer(anchor, false)}
                                             >
                                                 {
-                                                    (location.pathname.split('/')[1] == 'inOut' && location.pathname.split('/')[2] == 'distributor')
-                                                        ? distributorListOwner(anchor) : (location.pathname.split('/')[1] == 'inOut' && location.pathname.split('/')[2] == 'material')
-                                                            ? materialListOwner(anchor) : (location.pathname.split('/')[1] == 'inOut' && location.pathname.split('/')[2] == 'factory')
-                                                                ? factoryListOwner(anchor) : (location.pathname.split('/')[1] == 'stock' && location.pathname.split('/')[2] == 'factory')
-                                                                    ? factoryProductListStock(anchor) : (location.pathname.split('/')[1] == 'stock' && location.pathname.split('/')[2] == 'material')
-                                                                        ? factoryMaterialListStock(anchor) : location.pathname.split('/')[1] == 'factory' || location.pathname.split('/')[1] == 'dashboardFactory'
-                                                                            ? factoryList(anchor) : location.pathname.split('/')[1] == 'material' ? materialList(anchor) : location.pathname.split('/')[1] == 'distributor'
-                                                                                ? distributorList() : list(anchor)
+                                                    location.pathname.startsWith('/customerList/customerDetail') ? customerDetail(anchor) :
+                                                        location.pathname.startsWith('/upi/detail') ? upiDetail(anchor) :
+                                                            location.pathname.startsWith('/firmList/firmDetail') ? firmDetail(anchor) :
+                                                                location.pathname == '/comment' ? comment(anchor) :
+                                                                    location.pathname == '/billCategories' ? billCategories(anchor) :
+                                                                        location.pathname == '/customerList' ? customerList(anchor) :
+                                                                            location.pathname == '/upi' ? upi(anchor) :
+                                                                                location.pathname == '/firmList' ? firmList(anchor) :
+                                                                                    location.pathname.split('/')[1] == 'menu' && location.pathname.split('/')[2] == 'salesReport' ? salesReport(anchor) :
+                                                                                        location.pathname.split('/')[1] == 'menu' ? menu(anchor) :
+                                                                                            location.pathname == '/billingDashboard' ? billingDashboard(anchor) :
+                                                                                                location.pathname == '/billingDashboardOwner' ? billingBranchDashboard(anchor) :
+                                                                                                    (location.pathname.split('/')[1] == 'inOut' && location.pathname.split('/')[2] == 'distributor')
+                                                                                                        ? distributorListOwner(anchor) : (location.pathname.split('/')[1] == 'inOut' && location.pathname.split('/')[2] == 'material')
+                                                                                                            ? materialListOwner(anchor) : (location.pathname.split('/')[1] == 'inOut' && location.pathname.split('/')[2] == 'factory')
+                                                                                                                ? factoryListOwner(anchor) : (location.pathname.split('/')[1] == 'stock' && location.pathname.split('/')[2] == 'factory')
+                                                                                                                    ? factoryProductListStock(anchor) : (location.pathname.split('/')[1] == 'stock' && location.pathname.split('/')[2] == 'material')
+                                                                                                                        ? factoryMaterialListStock(anchor) : location.pathname.split('/')[1] == 'factory' || location.pathname.split('/')[1] == 'dashboardFactory'
+                                                                                                                            ? factoryList(anchor) : location.pathname.split('/')[1] == 'material' ? materialList(anchor) : location.pathname.split('/')[1] == 'distributor'
+                                                                                                                                ? distributorList() : list(anchor)
                                                 }
                                             </Drawer>
                                         </React.Fragment>
@@ -2278,7 +3038,7 @@ function NavBar() {
                     </div>
                 </div>
                 {
-                    !(location.pathname.split('/')[1] == 'dashboardOwner' || (location.pathname.split('/')[1] == 'dashboard' && role == 1) || location.pathname.split('/')[1] == 'material' || location.pathname.split('/')[1] == 'factory' || location.pathname.split('/')[1] == 'stock' || location.pathname.split('/')[1] == 'distributor' || location.pathname.split('/')[1] == 'dashboardFactory') ? <div className='BranchName flex'>
+                    !(location.pathname.split('/')[1] == 'dashboardOwner' || (location.pathname.split('/')[1] == 'dashboard' && role == 1) || location.pathname.split('/')[1] == 'material' || location.pathname.split('/')[1] == 'factory' || location.pathname.split('/')[1] == 'stock' || location.pathname.split('/')[1] == 'distributor' || location.pathname.split('/')[1] == 'dashboardFactory' || location.pathname == '/billingDashboardOwner' || (location.pathname == '/billingDashboard' && role == 1)) ? <div className='BranchName flex'>
                         <div className='self-center'>
                             {userInfo.branchName}
                         </div>

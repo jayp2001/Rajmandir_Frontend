@@ -1040,22 +1040,26 @@ function FinalProductDetails() {
 
     const fillStockInEdit = async (id) => {
         await axios.get(`${BACKEND_BASE_URL}mfProductrouter/fillMfProductStockInData?mfStockInId=${id}`, config)
-            .then((res) => {
+            .then(async (res) => {
+                // First get units for the product
+                await getUnitForProduct(res.data.mfProductId);
+
+                // Then set the form data with the unit value
                 setStockInFormData((perv) => ({
                     ...perv,
                     mfStockInId: id,
                     mfProductId: res.data.mfProductId,
                     mfProductName: res.data.mfProductName,
                     mfProductQty: parseFloat(res.data.mfStockInDisplayQty),
-                    mfProductUnit: res.data.mfStockInDisplayUnit,
+                    mfProductUnit: res.data.mfStockInDisplayUnit || res.data.mfProductUnit || '',
                     totalPrice: res.data.totalPrice,
                     mfStockInComment: res.data.mfStockInComment,
                     mfStockInDate: dayjs(res.data.mfStockInDate),
                     isAuto: res.data.isAuto
                 }))
-                setRecipeStockIn(res.data.autoJson.recipeMaterial);
-                setRecipeExpenseStockIn(res.data.autoJson.otherExpense);
-                setRecipeProductStockIn(res.data.autoJson.produceProductdata);
+                setRecipeStockIn(res.data.autoJson && res.data.autoJson.recipeMaterial ? res.data.autoJson.recipeMaterial : []);
+                setRecipeExpenseStockIn(res.data.autoJson && res.data.autoJson.otherExpense ? res.data.autoJson.otherExpense : []);
+                setRecipeProductStockIn(res.data.autoJson && res.data.autoJson.produceProductdata ? res.data.autoJson.produceProductdata : []);
                 setRecipeErrorStockIn(res && res.data.autoJson && res.data.autoJson.recipeMaterial ? res.data.autoJson.recipeMaterial?.map((data, index) => (
                     {
                         usedMaterial: false,
@@ -1072,7 +1076,6 @@ function FinalProductDetails() {
                     }
                 )) : null)
                 setOpenStockIn(true);
-                getUnitForProduct(res.data.mfProductId);
             })
             .catch((error) => {
                 //  setError(error.response && error.response.data ? error.response.data : "Network Error ...!!!");
@@ -1174,7 +1177,7 @@ function FinalProductDetails() {
             })
     }
     const getUnitForProduct = async (id) => {
-        await axios.get(`${BACKEND_BASE_URL}mfProductrouter/ddlUnitById?mfProductId=${id}`, config)
+        await axios.get(`${BACKEND_BASE_URL}mfProductrouter/ddlmfProductUnitById?mfProductId=${id}`, config)
             .then((res) => {
                 setUnitsForProduct(res.data);
                 setStockInFormDataError((perv) => ({

@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import PageNotFoundRedirect from "./pageNotFound";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -93,9 +92,23 @@ import AddFactoryDistributerInOut from './pages/factoryInventoryInOut/addDistrib
 import FactoryDistributerTableInOut from './pages/factoryInventoryInOut/distributerTable/distributerTable';
 import EditFactoryDistributerInOut from './pages/factoryInventoryInOut/editDistributer/editDistributer';
 import FactoryDistributerDetailInOut from './pages/factoryInventoryInOut/distributerDetails/distributerDetails';
-import MenuDashboard from './pages/inventory/menu/Dashboard';
+import MenuDashboard from './pages/menuItemPages/Dashboard/Dashboard';
 import AddOns from './pages/addOns/addOns';
 import AssignAddonGroup from './pages/assignAddonGroup/AssignAddonGroup';
+import StockInCategoryWiseOutDashboard from './pages/inventory/stockInCategoryWiseOut/Dashboard';
+import BillingDashboard from './pages/billing/dashboard/billingDashboard';
+import BillingBranchDashboard from './pages/billing/dashboard/billingBranchDashboard';
+import CategoryBusinessReport from './billingPages/categoryBusinessReport/categoryBusinssReport';
+import CommentListTable from './pages/commentData/comment';
+import UPI from './pages/upi/upiDashboard';
+import UpiDetailPage from './pages/upi/upiDetailPage';
+import Firm from './pages/firm/firmList';
+import FirmDetail from './pages/firm/firmDetail';
+import CustomerList from './pages/menuItemPages/CustomerList/CustomerList';
+import CustomerDetails from './pages/menuItemPages/customerDetailPage/customerDetails';
+import BillCategories from './pages/menuItemPages/billCategories/BillCategories';
+import SubCategory from './pages/menuItemPages/SubCategory/SubCategory';
+import MenuCategory from './billingPages/MenuCategory/MenuCategory';
 // import SetPrinter from './setPrinter';
 function App() {
   return (
@@ -124,6 +137,7 @@ function App() {
             </Route>
             <Route path="/" element={<ProtectedOwnerRoutes />}>
               <Route path="/dashboardOwner" element={<BranchDashboard />} />
+              <Route path="/billingDashboardOwner" element={<BillingBranchDashboard />} />
               <Route path="/units" element={<UnitsTable />} />
             </Route>
             {/* <Route path="/" element={<ProtectedAdminRoutes />}>
@@ -195,7 +209,19 @@ function App() {
               <Route path='/menu/Dashboard' element={<MenuDashboard />} />
               <Route path='/menu/addOns' element={<AddOns />} />
               <Route path='/menu/assignAddonGroup/:groupId/:groupName' element={<AssignAddonGroup />} />
+              <Route path='/menu/salesReport' element={<CategoryBusinessReport />} />
+              <Route path='/menu/SubCategory' element={<SubCategory />} />
+              <Route path='/menu/MenuCategory' element={<MenuCategory />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/billingDashboard" element={<BillingDashboard />} />
+              <Route path="/comment" element={<CommentListTable />} />
+              <Route path="/upi" element={<UPI />} />
+              <Route path="/upi/detail/:onlineId/:holderName" element={<UpiDetailPage />} />
+              <Route path="/firmList" element={<Firm />} />
+              <Route path="/firmList/firmDetail/:id" element={<FirmDetail />} />
+              <Route path="/customerList" element={<CustomerList />} />
+              <Route path="/customerList/customerDetail/:id" element={<CustomerDetails />} />
+              <Route path="/billCategories" element={<BillCategories />} />
               <Route path="/addUser" element={<AddUser />} />
               <Route path="/addSupplier" element={<AddSupplier />} />
               <Route path="/userTable" element={<UserTable />} />
@@ -203,6 +229,7 @@ function App() {
               {/* <Route path="/productList" element={<ProductList />}/> */}
               <Route path="/productTable" element={<ProductListTable />} />
               <Route path="/stockInOut" element={<StockInOut />} />
+              <Route path="/stockInCategoryWiseOut" element={<StockInCategoryWiseOutDashboard />} />
               <Route path="/transactionTable" element={<TransactionTable />} />
               <Route path="/supplierTable" element={<SupplierTable />} />
               <Route path="/categories" element={<CategoriesTable />} />

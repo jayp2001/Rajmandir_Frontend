@@ -485,7 +485,7 @@ function MenuDashboard() {
             setError('Please Fill All Fields');
             return;
         }
-        const token = localStorage.getItem('token');
+        const token = userInfo.token;
         console.log('Full Form Data', fullData)
 
         if (!editItem) {
@@ -616,7 +616,7 @@ function MenuDashboard() {
     };
 
     const getAllCategory = async () => {
-        const token = localStorage.getItem('token');
+        const token = userInfo.token;
         try {
             const response = await axios.get(`${BACKEND_BASE_URL}menuItemrouter/getMenuCategory`, config);
             setMenuCategory(response.data)
@@ -628,7 +628,7 @@ function MenuDashboard() {
     // const getAllItems = async (menu) => {
     //     console.log('==>Menu Id Gett All Items <<==', menu)
     //     try {
-    //         const token = localStorage.getItem('token');
+    //         const token = userInfo.token;
     //         if (!token) {
     //             throw new Error("Token not found");
     //         }
@@ -649,7 +649,7 @@ function MenuDashboard() {
 
         if (enteredPassword === password) {
             try {
-                const token = localStorage.getItem('token');
+                const token = userInfo.token;
                 const response = await axios.delete(`${BACKEND_BASE_URL}menuItemrouter/removeItemData?itemId=${id}`, config)
                 setSuccess(response.data)
                 getAllUnits();
@@ -811,7 +811,7 @@ function MenuDashboard() {
     const getSubCategory = async (menu) => {
         console.log('sub Category MenuId ===>>', menu)
         try {
-            const token = localStorage.getItem('token');
+            const token = userInfo.token;
             const response = await axios.get(`${BACKEND_BASE_URL}menuItemrouter/ddlSubCategory?menuId=${menu}`, config);
             const subCategories = response.data;
             setSubCategories(subCategories);
@@ -839,7 +839,7 @@ function MenuDashboard() {
     };
     const updatedSubCategory = async (menu) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = userInfo.token;
             const response = await axios.get(`${BACKEND_BASE_URL}menuItemrouter/ddlSubCategory?menuId=${menu}`, config);
             const subCategories = response.data;
             setSubCategories(subCategories);
@@ -885,7 +885,7 @@ function MenuDashboard() {
 
     const getAllUnits = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = userInfo.token;
             const response = await axios.get(`${BACKEND_BASE_URL}userrouter/getUnit`, config);
             setGetAllUnit(response.data);
         } catch (error) {
@@ -910,7 +910,7 @@ function MenuDashboard() {
         //     setSubCategoryStatus(false)
         // }
         // console.log('===>>>handle sub category ===>',subCategoryData)
-        const token = localStorage.getItem('token');
+        const token = userInfo.token;
         try {
             setSideBarColor(true)
             await axios.get(`${BACKEND_BASE_URL}menuItemrouter/getItemData?menuId=${menuCategory}&subCategoryId=${subCategoryId}`, config)
@@ -987,7 +987,7 @@ function MenuDashboard() {
         handleSubCategoryClick(finalSelected, menuId);
     }
     const handleEditPrice = async () => {
-        const token = localStorage.getItem('token');
+        const token = userInfo.token;
         const isConfirm = window.confirm('Are you sure You want to Save this change')
         if (!isConfirm) {
             return
@@ -1056,7 +1056,7 @@ function MenuDashboard() {
         setGetAllUnit(prevGetAllUnit => [...prevGetAllUnit]);
     };
     const handleUpdateVariantsData = async () => {
-        const token = localStorage.getItem('token');
+        const token = userInfo.token;
         const newData = {
             itemName: varinatsItemObject.itemName,
             itemDescription: varinatsItemObject.itemDescription,
@@ -1145,7 +1145,7 @@ function MenuDashboard() {
         }
     }
     const handleItemStatusChange = async (item) => {
-        const token = localStorage.getItem('token');
+        const token = userInfo.token;
         const userEnteredPassword = prompt('Enter password to continue:');
         const correctPassword = '123';
 
@@ -1178,7 +1178,7 @@ function MenuDashboard() {
         setVariantMode({ isEdit: true })
     }
     const handleSubCategoryStatusChange = async () => {
-        const token = localStorage.getItem('token');
+        const token = userInfo.token;
         const userEnteredPassword = prompt('Enter password to continue:');
         const correctPassword = '123';
 
@@ -1221,7 +1221,7 @@ function MenuDashboard() {
         }
         console.log('==>Menu Name <<===', menuName);
         console.log('==>Source id <<===', copySource);
-        const token = localStorage.getItem('token');
+        const token = userInfo.token;
         const mainMenuId = menuName?.menuCategoryId;
         const sourceId = copySource?.menuCategoryId;
         let url = `${BACKEND_BASE_URL}menuItemrouter/copyPriceAndStatusByMenuId?sourceId=${sourceId}&targetId=${mainMenuId}`;
