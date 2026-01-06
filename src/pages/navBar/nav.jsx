@@ -2271,14 +2271,14 @@ function NavBar() {
                         <ListItemText primary={'Dashboard'} />
                     </ListItemButton>
                 </ListItem>
-                <ListItem key={2}>
+                {role == 1 && <ListItem key={2}>
                     <ListItemButton to="/billingDashboardOwner">
                         <ListItemIcon>
                             <WorkspacesIcon />
                         </ListItemIcon>
                         <ListItemText primary={'Branches'} />
                     </ListItemButton>
-                </ListItem>
+                </ListItem>}
             </List>
         </Box>
     );
@@ -2491,62 +2491,66 @@ function NavBar() {
                         <ListItemText primary={'Billing Dashboard'} />
                     </ListItemButton>
                 </ListItem>
-                {role == 1 && <ListItem key={2}>
-                    <ListItemButton to="/billingDashboardOwner">
-                        <ListItemIcon>
-                            <WorkspacesIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={'Branches'} />
-                    </ListItemButton>
-                </ListItem>}
-                <ListItem key={3}>
-                    <ListItemButton to="/menu/Dashboard">
-                        <ListItemIcon>
-                            <StyleOutlinedIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={'Menu'} />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem key={4}>
-                    <ListItemButton to="/menu/salesReport">
-                        <ListItemIcon>
-                            <AssessmentIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={'Sales Report'} />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem key={5}>
-                    <ListItemButton to="/upi">
-                        <ListItemIcon>
-                            <AccountBalanceWalletIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={'UPI'} />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem key={6}>
-                    <ListItemButton to="/firmList">
-                        <ListItemIcon>
-                            <DomainAddIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={'Firm List'} />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem key={7}>
-                    <ListItemButton to="/customerList">
-                        <ListItemIcon>
-                            <GroupAddIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={'Customer List'} />
-                    </ListItemButton>
-                </ListItem>
-                <ListItem key={8}>
-                    <ListItemButton to="/billCategories">
-                        <ListItemIcon>
-                            <CategoryIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={'Bill Categories'} />
-                    </ListItemButton>
-                </ListItem>
+                {role == 1 ? (
+                    <>
+                        <ListItem key={2}>
+                            <ListItemButton to="/billingDashboardOwner">
+                                <ListItemIcon>
+                                    <WorkspacesIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'Branches'} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem key={3}>
+                            <ListItemButton to="/menu/Dashboard">
+                                <ListItemIcon>
+                                    <StyleOutlinedIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'Menu'} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem key={4}>
+                            <ListItemButton to="/menu/salesReport">
+                                <ListItemIcon>
+                                    <AssessmentIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'Sales Report'} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem key={5}>
+                            <ListItemButton to="/upi">
+                                <ListItemIcon>
+                                    <AccountBalanceWalletIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'UPI'} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem key={6}>
+                            <ListItemButton to="/firmList">
+                                <ListItemIcon>
+                                    <DomainAddIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'Firm List'} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem key={7}>
+                            <ListItemButton to="/customerList">
+                                <ListItemIcon>
+                                    <GroupAddIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'Customer List'} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem key={8}>
+                            <ListItemButton to="/billCategories">
+                                <ListItemIcon>
+                                    <CategoryIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={'Bill Categories'} />
+                            </ListItemButton>
+                        </ListItem>
+                    </>
+                ) : null}
             </List>
         </Box>
     );

@@ -221,7 +221,11 @@ function MenuDashboard() {
             .react-transliterate-suggestions,
             [class*="react-transliterate-suggestions"],
             div[class*="suggestions"],
-            ul[class*="suggestions"] {
+            ul[class*="suggestions"],
+            .react-transliterate-suggestions-container,
+            [class*="react-transliterate-suggestions-container"],
+            div[id*="react-transliterate"],
+            ul[id*="react-transliterate"] {
                 position: fixed !important;
                 z-index: 99999 !important;
                 background: white !important;
@@ -230,6 +234,13 @@ function MenuDashboard() {
                 max-height: 200px !important;
                 overflow-y: auto !important;
                 pointer-events: auto !important;
+            }
+            /* Ensure Gujarati suggestions in table appear above other Gujarati fields */
+            .units-table-container .react-transliterate-suggestions,
+            .units-table-container [class*="react-transliterate-suggestions"],
+            .units-table-container div[class*="suggestions"],
+            .units-table-container ul[class*="suggestions"] {
+                z-index: 10000 !important;
             }
             .MuiModal-root {
                 overflow: visible !important;
@@ -241,6 +252,10 @@ function MenuDashboard() {
             .addProdutModal {
                 z-index: 1301 !important;
                 position: relative !important;
+                overflow: visible !important;
+            }
+            .addProdutModal > * {
+                overflow: visible !important;
             }
             .MuiPopover-root,
             .MuiMenu-root {
@@ -2238,8 +2253,8 @@ function MenuDashboard() {
                     </div>
                     <div style={{ flex: 1, minHeight: 0, overflow: 'hidden', display: 'flex', flexDirection: 'row', gap: '12px', width: '100%' }}>
                         {/* Left Side - Form Fields */}
-                        <div style={{ flex: '0 0 40%', overflow: 'hidden', position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '12px', minWidth: 0, maxWidth: '40%' }}>
-                            <div className="grid grid-cols-12 gap-3" style={{ width: '100%', overflow: 'hidden', maxWidth: '100%' }}>
+                        <div style={{ flex: '0 0 40%', overflow: 'hidden', position: 'relative', paddingTop: '5px', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '12px', minWidth: 0, maxWidth: '40%' }}>
+                            <div className="grid grid-cols-12 gap-3" style={{ width: '100%', maxWidth: '100%' }}>
                                 <div className="col-span-6">
                                     <TextField
                                         size='small'
@@ -2271,6 +2286,28 @@ function MenuDashboard() {
                                     <TextField
                                         size='small'
                                         id="outlined-basic"
+                                        className={`w-full ${allFormValidation.itemShortKey ? 'border-red-500' : ''}`}
+                                        error={allFormValidation.itemShortKey}
+                                        helperText={allFormValidation.itemShortKey ? 'Short Code required' : ''}
+                                        label="Short Code"
+                                        variant="outlined"
+                                        autoComplete="off"
+                                        value={editData ? editData.itemShortKey : fullData.itemShortKey}
+                                        onChange={(e) => {
+                                            const uppercaseValue = e.target.value.toUpperCase();
+                                            if (editData) {
+                                                setEditData({ ...editData, itemShortKey: uppercaseValue });
+                                            } else {
+                                                setFullData({ ...fullData, itemShortKey: uppercaseValue });
+                                            }
+                                            setAllFormValidation({ ...allFormValidation, itemShortKey: false });
+                                        }}
+                                    />
+                                </div>
+                                <div className="col-span-12">
+                                    <TextField
+                                        size='small'
+                                        id="outlined-basic"
                                         label="Item Name"
                                         variant="outlined"
                                         className={`w-full ${allFormValidation.itemName ? 'border-red-500' : ''}`}
@@ -2288,7 +2325,7 @@ function MenuDashboard() {
                                         autoComplete="off"
                                     />
                                 </div>
-                                <div className="col-span-12" style={{ overflow: 'visible', position: 'relative', zIndex: 100 }}>
+                                <div className="col-span-12" style={{ overflow: 'visible', position: 'relative', zIndex: 1400 }}>
                                     <ReactTransliterate
                                         id="outlined-basic"
                                         value={editData ? editData.itemGujaratiName : fullData.itemGujaratiName}
@@ -2302,35 +2339,13 @@ function MenuDashboard() {
                                         }}
                                         variant="outlined"
                                         className={`w-full border p-2.5 rounded-md border-gray-300 text-sm ${allFormValidation.itemGujaratiName ? 'border-red-500' : ''}`}
-                                        style={{ fontSize: '14px', height: '40px' }}
+                                        style={{ fontSize: '14px', height: '40px', position: 'relative', zIndex: 1400 }}
                                         placeholder='ગુજરાતી નામ'
                                         error={allFormValidation.itemGujaratiName}
                                         helperText={allFormValidation.itemGujaratiName ? 'Gujarati Name is required' : ''}
                                         label="Item Gujarati Name"
                                         lang="gu"
                                         autoComplete="off"
-                                    />
-                                </div>
-                                <div className="col-span-12">
-                                    <TextField
-                                        size='small'
-                                        id="outlined-basic"
-                                        className={`w-full ${allFormValidation.itemShortKey ? 'border-red-500' : ''}`}
-                                        error={allFormValidation.itemShortKey}
-                                        helperText={allFormValidation.itemShortKey ? 'Short Code required' : ''}
-                                        label="Short Code"
-                                        variant="outlined"
-                                        autoComplete="off"
-                                        value={editData ? editData.itemShortKey : fullData.itemShortKey}
-                                        onChange={(e) => {
-                                            const uppercaseValue = e.target.value.toUpperCase();
-                                            if (editData) {
-                                                setEditData({ ...editData, itemShortKey: uppercaseValue });
-                                            } else {
-                                                setFullData({ ...fullData, itemShortKey: uppercaseValue });
-                                            }
-                                            setAllFormValidation({ ...allFormValidation, itemShortKey: false });
-                                        }}
                                     />
                                 </div>
                                 <div className="col-span-12">
@@ -2465,13 +2480,13 @@ function MenuDashboard() {
                         </div>
 
                         {/* Right Side - Add Unit Section and Units Table */}
-                        <div style={{ flex: '0 0 58%', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '12px', minWidth: 0, maxWidth: '58%' }}>
-                            <div style={{ flexShrink: 0, overflow: 'hidden', width: '100%' }}>
+                        <div style={{ flex: '0 0 58%', overflow: 'visible', display: 'flex', flexDirection: 'column', gap: '12px', minWidth: 0, maxWidth: '58%' }}>
+                            <div style={{ flexShrink: 0, overflow: 'visible', width: '100%' }}>
                                 <div className="text-lg p-1" style={{ padding: '4px 8px' }}>
                                     {editData ? 'Edit Unit' : 'Add Unit'}
                                 </div>
 
-                                <div className='grid grid-cols-12 gap-2 mt-2' style={{ width: '100%', maxWidth: '100%' }}>
+                                <div className='grid grid-cols-12 gap-2 mt-2' style={{ width: '100%', maxWidth: '100%', overflow: 'visible' }}>
                                     <div className='col-span-3'>
                                         <FormControl fullWidth>
                                             <InputLabel id="demo-simple-select-label" size='small'>Unit</InputLabel>
@@ -2503,8 +2518,8 @@ function MenuDashboard() {
                                             </Select>
                                         </FormControl>
                                     </div>
-                                    <div className='col-span-4' style={{ overflow: 'visible', position: 'relative', zIndex: 200 }}>
-                                        <div className="relative" style={{ overflow: 'visible', zIndex: 200 }}>
+                                    <div className='col-span-4' style={{ overflow: 'visible', position: 'relative', zIndex: 1400 }}>
+                                        <div className="relative" style={{ overflow: 'visible', zIndex: 1400, position: 'relative' }}>
                                             <ReactTransliterate
                                                 value={unit.preferredName}
                                                 onChangeText={(text) => {
@@ -2514,7 +2529,7 @@ function MenuDashboard() {
                                                 className={`w-full border p-2.5 rounded-md text-sm ${allFormValidation.preferredName ? 'border-red-500' : 'border-gray-300'}`}
                                                 placeholder='પસંદગીનું નામ'
                                                 lang='gu'
-                                                style={{ fontSize: '14px', height: '40px' }}
+                                                style={{ fontSize: '14px', height: '40px', position: 'relative', zIndex: 1400 }}
                                             />
                                             {allFormValidation.preferredName && (
                                                 <div className="text-red-500 text-xs mt-1">Preferred Name is required</div>
@@ -2554,7 +2569,7 @@ function MenuDashboard() {
                                 </div>
                             </div>
                             {variantFields.length > 0 && (
-                                <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden', width: '100%' }}>
+                                <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'visible', width: '100%' }}>
                                     <div className='mb-1' style={{ flexShrink: 0 }}>
                                         <div className='text-base font-semibold p-1' style={{ padding: '4px 8px' }}>Units in Product</div>
                                     </div>
@@ -2567,7 +2582,8 @@ function MenuDashboard() {
                                         border: '1px solid #e5e7eb',
                                         borderRadius: 8,
                                         width: '100%',
-                                        maxWidth: '100%'
+                                        maxWidth: '100%',
+                                        position: 'relative'
                                     }}>
                                         <div
                                             className='px-2 py-2 sticky top-0 bg-white'
@@ -2577,11 +2593,12 @@ function MenuDashboard() {
                                                 gridTemplateColumns: '30px 1fr 1.5fr 1fr 1fr',
                                                 columnGap: '8px',
                                                 alignItems: 'center',
-                                                zIndex: 50,
+                                                zIndex: 100,
                                                 backgroundColor: '#ffffff',
                                                 boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
                                                 width: '100%',
-                                                maxWidth: '100%'
+                                                maxWidth: '100%',
+                                                position: 'sticky'
                                             }}
                                         >
                                             <div className='text-xs font-semibold text-gray-600 text-center'>#</div>
@@ -2619,7 +2636,7 @@ function MenuDashboard() {
                                                         inputProps={{ style: { whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' } }}
                                                     />
                                                 </div>
-                                                <div style={{ minWidth: 0, overflow: 'visible' }}>
+                                                <div style={{ minWidth: 0, overflow: 'visible', position: 'relative', zIndex: variantFields.length - index + 1 }}>
                                                     <ReactTransliterate
                                                         value={variant.preferredName || ''}
                                                         onChangeText={(text) => {
@@ -2642,7 +2659,7 @@ function MenuDashboard() {
                                                         className='w-full border p-2 rounded-md border-gray-300 text-sm'
                                                         placeholder='પસંદગીનું નામ'
                                                         lang='gu'
-                                                        style={{ fontSize: '14px', height: '40px' }}
+                                                        style={{ fontSize: '14px', height: '40px', position: 'relative', zIndex: variantFields.length - index + 1 }}
                                                     />
                                                 </div>
                                                 <div>
